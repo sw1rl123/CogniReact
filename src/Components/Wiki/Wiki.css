@@ -1,0 +1,83 @@
+.wiki__wrapper {
+    max-width: 800px;
+    width: 100%;
+    display: flex;
+    gap: 60px;
+}
+
+.wiki__main {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 520px;
+}
+
+.wiki__heading {
+    padding: 20px;
+    background: #16171b;
+    border-radius: 20px;
+    color: white;
+    font-family: Montserrat;
+    font-weight: 800;
+    font-size: 38px;
+}
+
+.wiki__posts {
+    padding: 20px;
+    color: white;
+    font-family: Montserrat;
+    background: #16171b;
+    border-radius: 20px;
+}
+
+.wiki__posts--heading {
+    font-weight: 600;
+    font-size: 19px;
+    margin-bottom: 30px;
+}
+
+.wiki__list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: 1000px;
+}
+
+.wiki__item {
+    padding: 20px 40px;
+    background: #2c2f38;
+    border-radius: 20px;
+    font-size: 17px;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+}
+
+.types {
+    background: #16171b;
+    width: 240px;
+    border-radius: 20px;
+    padding: 20px;
+    color: white;
+    font-family: Montserrat;
+}
+
+.types__heading {
+    font-size: 19px;
+    font-weight: 600;
+    margin-bottom: 30px;
+}
+
+.types__list {
+    display: grid;
+    grid-template-columns: repeat(2, 90px);
+    gap: 20px;
+}
+
+.types__item {
+    text-align: center;
+    padding: 25px 20px;
+    background: #2c2f38;
+    border-radius: 20px;
+    cursor: pointer;
+}

@@ -44,7 +44,6 @@ $api.interceptors.response.use((config) => {
 export const getUserById = async (userId) => {
     try {
         let response = await $api.get("/User/GetUserById", { params: { id: userId } });
-        console.log(response);
         return response;
     } catch(e) {
         console.error();

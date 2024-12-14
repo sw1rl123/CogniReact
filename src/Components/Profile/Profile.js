@@ -94,6 +94,7 @@ function Profile() {
 
   const hideModel = () => {
     setIsModalShow(false);
+    setValidText(false); 
   }
 
   const onCreatePost = async (post, postImages) => {
