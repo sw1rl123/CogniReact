@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ReactComponent as LogoSvg } from './img/logo.svg';
 import { ReactComponent as InfoIcon } from './img/info-icon.svg';
@@ -94,6 +94,20 @@ function RegisterForm() {
     const [validPassword, setValidPassword] = React.useState(false);
     const [validPasswordRepeat, setValidPasswordRepeat] = React.useState(false);
     const [validMBTI, setValidMBTI] = React.useState(false);
+
+    useEffect(() => {
+
+        localStorage.removeItem('name');
+        localStorage.removeItem('surname');
+        localStorage.removeItem('email');
+        localStorage.removeItem('password');
+        localStorage.removeItem('mbtiType');
+    
+        if ((localStorage.getItem('userId') && (localStorage.getItem('aToken') || localStorage.getItem('rToken')))) {
+            navigate('/');
+        }
+
+    }, []);
 
 
   return (

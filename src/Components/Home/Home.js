@@ -15,6 +15,20 @@ function Home() {
 
     const navigate = useNavigate();
 
+    useEffect(() => {
+        
+        localStorage.removeItem('name');
+        localStorage.removeItem('surname');
+        localStorage.removeItem('email');
+        localStorage.removeItem('password');
+        localStorage.removeItem('mbtiType');
+
+        if (!(localStorage.getItem('userId') && (localStorage.getItem('aToken') || localStorage.getItem('rToken')))) {
+            navigate('/login');
+        }
+
+    }, []);
+
     return (
         <div className="home">
             <Header></Header>

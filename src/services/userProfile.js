@@ -13,7 +13,7 @@ $api.interceptors.request.use((config) => {
     return config;
 });
 
-const refreshAccessToken = async (userId) => {
+const refreshAccessToken = async () => {
     try {
         const userId = localStorage.getItem('userId');
         const response = await $api.get(`${API_URL}/Token/Refresh`, { params: { id: userId} });

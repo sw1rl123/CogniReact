@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ReactComponent as LogoSvg } from './img/logo.svg';
 import './LoginForm.css';
@@ -31,6 +31,20 @@ function LoginForm() {
     e.preventDefault();
     login(user);
   }
+
+  useEffect(() => {
+
+    localStorage.removeItem('name');
+    localStorage.removeItem('surname');
+    localStorage.removeItem('email');
+    localStorage.removeItem('password');
+    localStorage.removeItem('mbtiType');
+    
+    if ((localStorage.getItem('userId') && (localStorage.getItem('aToken') || localStorage.getItem('rToken')))) {
+        navigate('/');
+    }
+
+    }, []);
 
   return (
     <div className='login__wrapper'>
