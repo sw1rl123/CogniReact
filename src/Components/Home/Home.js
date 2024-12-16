@@ -35,7 +35,7 @@ function Home() {
             <div className="home__bg">
             <div className="home__wrapper">
                 <Navigation></Navigation>
-                {location.pathname === "/profile" && <Profile />}
+                {location.pathname === '/profile' && <Profile />}
                 {location.pathname === "/settings" && <Settings />}
                 {location.pathname === "/about" && <About />}
                 {location.pathname === "/wiki" && <Wiki/>}

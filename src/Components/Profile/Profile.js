@@ -1,10 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import './Profile.css';
 import { ReactComponent as CloseSvg } from './img/close.svg';
 import { Context } from '../..';
+import { useNavigate } from 'react-router-dom';
 
 function Profile() {
 
+  const navigate = useNavigate()
 
   const {store} = useContext(Context);
 
@@ -23,10 +25,11 @@ function Profile() {
   const [userFriendsAmount, setUserFriendsAmount] = useState([]);
 
   useEffect(() => {
+
+    const userId = localStorage.userId; 
+    
     const fetchUserData = async () => {
       setIsLoading(true);
-      const userId = localStorage.userId; 
-      
 
       try {
         const userInfo = await store.userInfo(userId);
@@ -98,6 +101,7 @@ function Profile() {
   }
 
   const onCreatePost = async (post, postImages) => {
+    console.log(post, postImages);
     var response = await store.createPost(post, postImages);
     if(response) {
       hideModel();
@@ -109,9 +113,12 @@ const [newPost, setNewPost] = useState('');
 const [newPostImages, setNewPostImages] = useState([]);
 const [validText, setValidText] = useState(false);
 
+const inputRef = useRef();
+
   const onSubmitPost = (e) => {
           e.preventDefault();
-          if (newPost.length > 0) {
+          console.log(newPostImages);
+          if (newPost.length > 0 || newPostImages.length > 0) {
             onCreatePost(newPost, newPostImages);
             setValidText(false); 
           } else {
@@ -140,7 +147,7 @@ const [validText, setValidText] = useState(false);
             <textarea onChange={(e) => setNewPost(e.target.value)} className='modal__input' placeholder='Расскажите нам!'/>
           </div>
           <div className='modal__photos'>
-            <span className='modal__photo'>Хотите добавить фото?</span>
+            <label className='modal__photo'>Хотите добавить фото?<input multiple onChange={(e) => setNewPostImages(Object.values(e.target.files))} ref={inputRef} type="file" className='modal__input--image'/></label>
           </div>
           <button type="submit" className='modal__button'>Опубликовать пост</button>
         </form>

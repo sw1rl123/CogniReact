@@ -82,11 +82,14 @@ export const getUserFriendsAmount = async (userId) => {
 
 export const createPost = async (postText, postImg) => {
     try {
-        const post = {
-            postBody: postText,
-            postImages: postImg
+        let formData = new FormData();
+        formData.append('postBody', postText);
+        
+        if(postImg) {
+            postImg.map(file => formData.append('Files', file))
         }
-        let response = await $api.post("/Post/CreatePost", post);
+
+        let response = await $api.post("/Post/CreatePost", formData, { headers: { "Content-type": "multipart/form-data" },});
         return response;
     } catch(e) {
         console.log(e);

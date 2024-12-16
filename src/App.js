@@ -19,10 +19,10 @@ function App() {
           <Route path="register" element={<RegisterForm />}/>
           <Route path="test" element={<Test />}/>
           <Route path="/" element={<Home />}>
-            <Route path="profile" element={<Profile />}/>
-            {/* <Route path="settings" element={<Settings />}/> */}
-            <Route path="about" element={<About />}/>
-            <Route path="wiki" element={<Wiki />}/>
+          <Route exact path="profile" element={<Profile />}/>
+          <Route path="about" element={<About />}/>
+          <Route path="wiki" element={<Wiki />}/>
+          <Route path="settings" element={<Settings />}/>
           </Route>
         </Routes>
       </BrowserRouter>
