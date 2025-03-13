@@ -1,60 +1,318 @@
-.human--settings {
+.settings__wrapper {
+    max-width: 840px;
+    width: 100%;
+    display: flex;
+    gap: 40px;
+}
+
+.settings__main {
+    max-width: 560px;
+    width: 100%;
+}
+
+.settings__bg {
+    width: 100%;
+    height: 120px;
+    background: var(--col-bg-profile);
+    border-radius: 20px;
+    margin-bottom: 10px;
+    position: relative;
+    overflow: hidden;
+    z-index: 0;
+    position: relative;
+}
+
+.settings__bg--img {
+    position: relative;
+    z-index: 1;
+}
+
+.settings__bg--text {
+    position: absolute;
+    right: 34px;
+    bottom: 0;
+    font-family: Catamaran;
+    font-weight: 800;
+    font-size: 75px;
+    color: var(--col-text-main);
+    opacity: 0.3;
+    line-height: 43px;
+    z-index: 0;
+}
+
+.settings__bg-edit {
+    position: absolute;
+    z-index: 2;
+    color: var(--col-text-main);
+    right: 10px;
+    bottom: 10px;
+    font-family: Montserrat;
+    font-weight: 600;
+    font-size: 19px;
+    background: var(--col-bg-alpha);
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.human {
+    width: 100%;
+    height: 120px;
+    background: var(--col-bg-sections);
+    border-radius: 20px;
+    padding: 15px 30px;
+    display: flex;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.settings__human {
     height: 150px;
 }
 
-.human__avatar--settings {
-    margin-left: 65px;
+.human__left {
+    margin-left: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.human__right--settings {
-    margin-left: 100px;
-}
-
-.human__right--settings .human__name {
-    background: #757C94;
-    padding: 10px;
-    border-radius: 15px;
-    width: 390px;
-}
-
-.human__right--settings .human__name:after {
-    content: 'Изменить';
-    position: absolute;
-    color: #81F0A1;
-    font-size: 15px;
-    margin-top: 4px;
+.human__right {
     margin-left: 20px;
-    cursor: pointer;
+    color: var(--col-text-main);
+    font-family: Montserrat;
 }
 
-.human--settings .human__description {
-    background: #757C94;
-    display: block;
-    margin-left: -150px;
-    width: 540px;
-    height: 60px;
-    border-radius: 20px;
-}
-
-.human--settings .human__description:after {
-    content: 'Изменить';
+.human__avatar-border {
+    margin-left: 0px;
     position: absolute;
-    color: #81F0A1;
-    font-size: 15px;
-    margin-top: 30px;
-    margin-left: 450px;
-    cursor: pointer;
-    font-weight: 600;
+    margin-top: -80px;
+    display: block;
+    width: 112px;
+    height: 112px;
+    padding: 2px;
+    background: rgba(0, 0, 0, 0);
+    border: 4px solid var(--col-highlight);
+    border-radius: 100%;
 }
 
-.settings__mbti {
-    width: 560px;
-    height: 500px;
-    background: #16171B;
-    border-radius: 20px;
-    color: white;
+.human__avatar {
+    display: block;
+    width: 100px;
+    height: 100px;
+    background: url("./img/placeholder.png") center / cover;
+    border-radius: 100%;
+}
+
+.human__avatar-border:has(.human__avatar-edit) .human__avatar {
+    cursor: pointer;
+}
+
+.human__avatar-edit {
+    position: absolute;
+    width: 75px;
+    height: 75px;
+    border-radius: 100%;
+    display: block;
+    background: var(--col-bg-alpha);
+    left: 14px;
+    bottom: 14px;
+    text-align: center;
+    padding-top: 17px;
+    color: var(--col-text-main);
+    font-size: 40px;
+    font-weight: 700;
+    pointer-events: none;
+    font-family: Montserrat;
+}
+
+.human__mbti {
+    margin-top: 60px;
+    display: block;
+    color: var(--col-highlight);
+    width: 110px;
+    text-align: center;
     font-family: Montserrat;
     font-weight: 600;
     font-size: 23px;
-    padding: 20px;
+}
+
+.human__name {
+    font-weight: 600;
+    margin-bottom: 20px;
+    font-size: 23px;
+}
+
+.human__name:has(.human__name-edit) {
+    background: var(--col-bg-edit);
+    padding: 7px 14px;
+    border-radius: 20px;
+    width: 380px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.human__name-edit {
+    color: var(--col-text-edit);
+    cursor: pointer;
+}
+
+.human__description {
+    color: var(--col-text-desc);
+    font-size: 16px;
+    width: 100%;
+    line-height: 1.2em;
+}
+
+.human__description:has(.human__description-edit) {
+    color: var(--col-text-main);
+    position: absolute;
+    margin-top: -10px;
+    height: 75px;
+    left: 20px;
+    width: 525px;
+    background: var(--col-bg-edit);
+    padding: 5px 15px;
+    border-radius: 20px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+
+.human__description-text {
+    width: 360px;
+}
+
+.human__description-edit {
+    width: 125px;
+    color: var(--col-text-edit);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 23px;
+}
+
+.settings__info {
+    width: 100%;
+    background: var(--col-bg-sections);
+    padding: 20px 40px;
+    border-radius: 20px;
+    height: 390px;
+    position: relative;
+}
+
+.settings__type {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+}
+
+.settings__type-heading {
+    color: var(--col-text-main);
+    font-family: Montserrat;
+    font-weight: 600;
+    font-size: 19px;
+    width: 150px;
+    padding-top: 8px;
+}
+
+.settings__type-mbti {
+    width: 230px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.mbti-letter {
+    background: var(--col-bg-edit);
+    color: var(--col-bg-sections);
+    font-size: 23px;
+    padding: 10px;
+    border-radius: 20px;
+    width: 50px;
+    height: 50px;
+    padding-top: 14px;
+    font-family: Montserrat;
+    font-weight: 600;
+    text-align: center;
+}
+
+.settings__type-button {
+    background: var(--col-text-edit);
+    color: var(--col-text-main);
+    font-size: 19px;
+    font-family: Montserrat;
+    padding: 8px 12px;
+    border-radius: 20px;
+    width: 100%;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.settings__password {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.settings__password-heading {
+    color: var(--col-text-main);
+    font-family: Montserrat;
+    font-weight: 600;
+    font-size: 19px;
+    width: 150px;
+    padding-top: 8px;
+}
+
+.settings__password-edit {
+    width: 230px;
+}
+
+.settings__password-input {
+    padding: 11px 19px;
+    border-radius: 20px;
+    background: var(--col-bg-edit);
+    color: var(--col-bg-main);
+    margin-bottom: 10px;
+    font-family: Montserrat;
+}
+
+.settings__password-input::placeholder {
+    color: var(--col-bg-main)
+}
+
+
+.settings__save-button {
+    background: var(--col-text-edit);
+    color: var(--col-text-main);
+    font-size: 19px;
+    font-family: Montserrat;
+    padding: 8px 12px;
+    border-radius: 20px;
+    width: 240px;
+    font-weight: 600;
+    cursor: pointer;
+    position: absolute;
+    left: calc(50% - 120px);
+    bottom: 20px;
+}
+
+.human__name-input,
+.human__description-input {
+    background: none;
+    color: var(--col-text-main);
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    width: 230px;
+    display: block;
+    pointer-events: none;
+}
+
+.human__description-input {
+    width: 100%;
+    height: 100%;
+    border: none;
+    outline: none;
+    resize: none;
 }

@@ -51,7 +51,7 @@ function RegisterForm() {
     const onCreate = async (user) => {
         var response = await store.register(user);
         if(response) {
-         navigate('/profile');
+         navigate('/profile/' + localStorage.getItem('userId'));
         }
 	};
 
@@ -75,6 +75,7 @@ function RegisterForm() {
         localStorage.setItem('surname', user.surname);
         localStorage.setItem('email', user.email);
         localStorage.setItem('password', user.password);
+        localStorage.setItem('onTest', true);
         navigate('/test');
     }
 
@@ -102,6 +103,8 @@ function RegisterForm() {
         localStorage.removeItem('email');
         localStorage.removeItem('password');
         localStorage.removeItem('mbtiType');
+        localStorage.removeItem('onTest');
+        localStorage.removeItem('onTestAgain');
     
         if ((localStorage.getItem('userId') && (localStorage.getItem('aToken') || localStorage.getItem('rToken')))) {
             navigate('/');

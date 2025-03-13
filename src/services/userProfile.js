@@ -5,6 +5,9 @@ const API_URL = "https://localhost:7055";
 const $api = axios.create({
     baseURL: API_URL,
     withCredentials: true,
+    headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
 });
 
 $api.interceptors.request.use((config) => {
@@ -70,6 +73,48 @@ export const getUserFriends = async (userId) => {
     }
 }
 
+export const getUserFriendsFull = async (userId) => {
+    try {
+        var URL = "/Friend/GetUserFriends?id=" + userId;
+        let response = await $api.get(URL);
+        return response;
+    } catch(e) {
+        console.error();
+    }
+}
+
+export const getAllUsers = async () => {
+    try {
+        var URL = "/User/GetRandomUsers";
+
+        var data = {
+            "startsFrom": 0,
+            "limit": 25
+          };
+
+        let response = await $api.post(URL, data);
+        return response;
+    } catch(e) {
+        console.error();
+    }
+}
+
+export const getUsersFromName = async (text, mbti) => {
+    try {
+        var URL = "/User/SearchUserByNameAndMbti";
+
+        var data = {
+            "name":  text,
+            "mbtiType": mbti
+          };
+
+        let response = await $api.post(URL, data);
+        return response;
+    } catch(e) {
+        console.error();
+    }
+}
+
 export const getUserFriendsAmount = async (userId) => {
     try {
         var URL = "/Friend/GetNumOfFriends?id=" + userId;
@@ -95,3 +140,83 @@ export const createPost = async (postText, postImg) => {
         console.log(e);
     }
 }
+
+export const updateImageAvatar = async (Img) => {
+    try {
+        let formData = new FormData();
+
+        formData.append('Picture', Img[0]);
+
+        let response = await $api.put("/User/ChangeAvatar", formData, { headers: { "Content-type": "multipart/form-data" },});
+        return response;
+    } catch(e) {
+        console.log(e);
+    }
+}
+
+export const updateImageBanner = async (Img) => {
+    try {
+        let formData = new FormData();
+
+        formData.append('Picture', Img[0]);
+
+        let response = await $api.put("/User/ChangeBanner", formData, { headers: { "Content-type": "multipart/form-data" },});
+        return response;
+    } catch(e) {
+        console.log(e);
+    }
+}
+
+export const updateUserNickname = async (userName, userSurname) => {
+    try {
+        let formData = new FormData();
+
+        formData.append("name", userName);
+        formData.append("surname", userSurname);
+
+        let response = await $api.put("/User/ChangeName", formData);
+        return response;
+    } catch(e) {
+        console.log(e);
+    }
+}
+
+export const updateUserDescription = async (userDesc) => {
+    try {
+        let formData = new FormData();
+
+        formData.append("description", userDesc);
+
+        let response = await $api.put("/User/ChangeDescription", formData);
+        return response;
+    } catch(e) {
+        console.log(e);
+    }
+}
+
+export const updateUserPassword = async (userOldPassword, userNewPassword) => {
+    try {
+        let formData = new FormData();
+
+        formData.append("oldPassword", userOldPassword);
+        formData.append("newPassword", userNewPassword);
+
+        let response = await $api.put("/User/ChangePassword", formData);
+        return response;
+    } catch(e) {
+        console.log(e);
+    }
+}
+
+export const updateUserMbti = async (mbti) => {
+    try {
+        let formData = new FormData();
+        formData.append("mbtiType", mbti);
+
+        let response = await $api.post("/User/SetTestResult", formData);
+        return response;
+    } catch(e) {
+        console.log(e);
+    }
+}
+

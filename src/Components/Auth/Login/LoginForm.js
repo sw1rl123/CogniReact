@@ -21,7 +21,7 @@ function LoginForm() {
   const login = async (user) => {
     var response = await store.login(user);
     if(response) {
-      navigate('/profile');
+      navigate('/profile/' + localStorage.getItem('userId'));
     } else {
       setValidEnter(true);
     }

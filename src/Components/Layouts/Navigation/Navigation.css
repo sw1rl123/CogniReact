@@ -10,7 +10,7 @@
     font-family: Montserrat;
     font-weight: 600;
     color: white;
-    background: #16171B;
+    background: var(--col-bg-sections);
     width: 180px;
     padding: 15px 15px;
     border-radius: 15px;
@@ -18,8 +18,4 @@
     text-align: center;
     margin-right: 40px;
     cursor: pointer;
-}
-
-.navigation__link--red {
-    background: #c04242;
 }

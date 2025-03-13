@@ -1,5 +1,5 @@
 import { createUser, loginUser } from "../services/auth.js";
-import { getUserById, getUserPosts, getUserFriends, getUserFriendsAmount, createPost } from "../services/userProfile.js";
+import { getUserById, getUserPosts, getUserFriends, getAllUsers, updateUserNickname, getUserFriendsFull, getUsersFromName, getUserFriendsAmount, createPost, updateImageAvatar, updateImageBanner, updateUserDescription, updateUserPassword, updateUserMbti } from "../services/userProfile.js";
 
 export default class Store {
 
@@ -65,6 +65,33 @@ export default class Store {
         }
     }
 
+    async getFriendsFull(userId) {
+        try {
+            const response = await getUserFriendsFull(userId);
+            return response.data;
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    async getAllUsers() {
+        try {
+            const response = await getAllUsers();
+            return response.data;
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    async getUsersFromName(text, mbti) {
+        try {
+            const response = await getUsersFromName(text, mbti);
+            return response.data;
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
     async getFriendsAmount(userId) {
         try {
             const response = await getUserFriendsAmount(userId);
@@ -77,6 +104,60 @@ export default class Store {
     async createPost(post, postImages) {
         try {
             const response = await createPost(post, postImages);
+            return true;
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    async updateImageAvatar(newImage) {
+        try {
+            const response = await updateImageAvatar(newImage);
+            return true;
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    async updateImageBanner(newImage) {
+        try {
+            const response = await updateImageBanner(newImage);
+            return true;
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    async updateUserName(userName, userSurname) {
+        try {
+            const response = await updateUserNickname(userName, userSurname);
+            return true;
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    async updateUserDesc(userDesc) {
+        try {
+            const response = await updateUserDescription(userDesc);
+            return true;
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    async updatePassword(userOldPassword, userNewPassword) {
+        try {
+            const response = await updateUserPassword(userOldPassword, userNewPassword);
+            return true;
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    async updateMbti(mbti) {
+        try {
+            const response = await updateUserMbti(mbti);
             return true;
         } catch (e) {
             console.log(e);
