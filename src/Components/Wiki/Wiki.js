@@ -9,11 +9,47 @@ function Wiki() {
                 <section className="wiki__main">
                     <h1 className="wiki__heading">ВИКИ «Cogni»</h1>
                     <div className="wiki__posts">
-                        <h2 className="wiki__posts--heading">Публикации(?)</h2>
+                        <h2 className="wiki__posts--heading">Публикации</h2>
                         <ul className="wiki__list">
-                            <li className="wiki__item">Как определить свой тип личности: методы типирования</li>
-                            <li className="wiki__item">MBTI и Сенсорика</li>
-                            <li className="wiki__item">Тайные страхи и инстинкты: что такое эннеаграмма</li>
+                            <li className="wiki__item article">
+                                <span className="article__banner"><img className="article__img"></img></span>
+                                <div className="article__author author">
+                                    <img className="author__avatar" alt=""></img>
+                                    <span className="author__info">
+                                        <p className="author__name">Настя</p>
+                                        <span className="author__readers">388 читали | 1 месяц назад</span>
+                                        <p className="author__mbti">INFT</p>
+                                    </span>
+                                </div>
+                                <h2 className="article__heading">Как определить свой тип личности: методы типирования</h2>
+                                <p className="article__description">В этой статье разберем как определить свой тип личности самостоятельно</p>
+                            </li>
+                            <li className="wiki__item article">
+                                <span className="article__banner"><img className="article__img"></img></span>
+                                <div className="article__author author">
+                                    <img className="author__avatar" alt=""></img>
+                                    <span className="author__info">
+                                        <p className="author__name">Настя</p>
+                                        <span className="author__readers">388 читали | 1 месяц назад</span>
+                                        <p className="author__mbti">INFT</p>
+                                    </span>
+                                </div>
+                                <h2 className="article__heading">Как определить свой тип личности: методы типирования</h2>
+                                <p className="article__description">В этой статье разберем как определить свой тип личности самостоятельно</p>
+                            </li>
+                            <li className="wiki__item article">
+                                <span className="article__banner"><img className="article__img"></img></span>
+                                <div className="article__author author">
+                                    <img className="author__avatar" alt=""></img>
+                                    <span className="author__info">
+                                        <p className="author__name">Настя</p>
+                                        <span className="author__readers">388 читали | 1 месяц назад</span>
+                                        <p className="author__mbti">INFT</p>
+                                    </span>
+                                </div>
+                                <h2 className="article__heading">Как определить свой тип личности: методы типирования</h2>
+                                <p className="article__description">В этой статье разберем как определить свой тип личности самостоятельно</p>
+                            </li>
                         </ul>
                     </div>
                 </section>

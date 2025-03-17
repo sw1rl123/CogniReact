@@ -10,6 +10,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import {observer} from "mobx-react-lite";
 import './Home.css';
 import Wiki from "../Wiki/Wiki";
+import Messages from "../Messages/Messages";
 
 function Home() {
     const location = useLocation();
@@ -46,6 +47,7 @@ function Home() {
                 {location.pathname === '/friends' && <Friends />}
                 {location.pathname === "/settings" && <Settings />}
                 {location.pathname === "/about" && <About />}
+                {location.pathname === "/messages" && <Messages/>}
                 {location.pathname === "/wiki" && <Wiki/>}
             </div>
             </div>

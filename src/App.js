@@ -10,6 +10,7 @@ import About from "./Components/About/About";
 import Wiki from "./Components/Wiki/Wiki";
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
+import Messages from "./Components/Messages/Messages";
 function App() {
 
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="profile/:userId/friends" element={<Friends />}/>
           <Route path="friends" element={<Friends />}/>
           <Route path="about" element={<About />}/>
+          <Route path="messages" element={<Messages />}/>
           <Route path="wiki" element={<Wiki />}/>
           <Route path="settings" element={<Settings />}/>
           </Route>
