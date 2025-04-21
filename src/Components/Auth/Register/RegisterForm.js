@@ -61,7 +61,6 @@ function RegisterForm() {
         let validStatus = isFormMbtiValid(user);
         setValidMBTI(false);
         if (validStatus.status) {
-            console.log(user);
             onCreate(user);
         } else {
             if(validStatus.mbti) {
@@ -106,9 +105,9 @@ function RegisterForm() {
         localStorage.removeItem('onTest');
         localStorage.removeItem('onTestAgain');
     
-        if ((localStorage.getItem('userId') && (localStorage.getItem('aToken') || localStorage.getItem('rToken')))) {
-            navigate('/');
-        }
+        // if ((localStorage.getItem('userId') && (localStorage.getItem('aToken') || localStorage.getItem('rToken')))) {
+        //     navigate('/');
+        // }
 
     }, []);
 

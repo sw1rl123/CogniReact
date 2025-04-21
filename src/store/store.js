@@ -6,8 +6,8 @@ export default class Store {
     async register(user) {
         try {
             const response = await createUser(user);
-            localStorage.setItem('aToken', response.data.aToken);
-            localStorage.setItem('rToken', response.data.rToken);
+            localStorage.setItem('aToken', response.data.accessToken);
+            localStorage.setItem('rToken', response.data.refreshToken);
             localStorage.setItem('userId', response.data.id);
             return true;
         } catch (e) {
@@ -22,8 +22,8 @@ export default class Store {
                 return false;
             }
             else {
-                localStorage.setItem('aToken', response.data.aToken);
-                localStorage.setItem('rToken', response.data.rToken);
+                localStorage.setItem('aToken', response.data.accessToken);
+                localStorage.setItem('rToken', response.data.refreshToken);
                 localStorage.setItem('userId', response.data.id);
                 return true;
             }

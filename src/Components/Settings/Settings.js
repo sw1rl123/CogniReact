@@ -151,7 +151,7 @@ function Settings() {
         } else {
           setUserDescription(userInfo.description);
         }
-        setUserImage(userInfo.image);
+        setUserImage(userInfo.activeAvatar);
         setUserBannerImage(userInfo.bannerImage);
         setUserTypeMBTI(userInfo.typeMbti);
       } catch (error) {

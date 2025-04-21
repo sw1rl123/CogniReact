@@ -11,8 +11,17 @@ const $api = axios.create({
 });
 
 $api.interceptors.request.use((config) => {
-    config.headers.Authorization = `Bearer ${localStorage.getItem('aToken')}`
-    config.headers["Refresh-Token"] = `${localStorage.getItem('rToken')}`
+    const accessToken = localStorage.getItem('aToken');
+    const refreshToken = localStorage.getItem('rToken');
+
+    if (accessToken) {
+        config.headers.Authorization = `Bearer ${accessToken}`;
+    }
+
+    if (refreshToken) {
+        config.headers["Refresh-Token"] = refreshToken;
+    }
+
     return config;
 });
 
@@ -20,7 +29,7 @@ const refreshAccessToken = async () => {
     try {
         const userId = localStorage.getItem('userId');
         const response = await $api.get(`${API_URL}/Token/Refresh`, { params: { id: userId} });
-        var aToken = response.data;
+        var aToken = response.data.accessToken;
         localStorage.setItem("aToken", aToken);
         return aToken;
     } catch (error) {
@@ -29,17 +38,21 @@ const refreshAccessToken = async () => {
 };
 
 $api.interceptors.response.use((config) => {
-    return config;
+    if(config) {
+        return config;
+    };
 }, async (error) => {
     const originalRequest = error.config;
-    if (error.response.status == 401 && !originalRequest._retry) {
-        originalRequest._retry = true;
-        try {
-            const newAccessToken = await refreshAccessToken();
-            originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-            return $api.request(originalRequest);
-        } catch (e) {
-            console.error("Не удалось обновить токен. Переход на логин.");
+    if (error.response && error.response.status === 401) {
+        if (!originalRequest._retry) {
+            originalRequest._retry = true;
+            try {
+                const newAccessToken = await refreshAccessToken();
+                originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+                return $api.request(originalRequest);
+            } catch (e) {
+                console.error("Не удалось обновить токен. Переход на логин.");
+            }
         }
     }
 });
@@ -48,7 +61,7 @@ export const getUserById = async (userId) => {
     try {
         let response = await $api.get("/User/GetUserById", { params: { id: userId } });
         return response;
-    } catch(e) {
+    } catch(error) {
         console.error();
     }
 }

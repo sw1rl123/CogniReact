@@ -51,7 +51,7 @@ function Profile() {
         setUserName(userInfo.name);
         setUserSurname(userInfo.surname);
         setUserDescription(userInfo.description);
-        setUserImage(userInfo.image);
+        setUserImage(userInfo.activeAvatar);
         setUserBannerImage(userInfo.bannerImage);
         setUserTypeMBTI(userInfo.typeMbti);
       } catch (error) {

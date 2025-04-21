@@ -51,23 +51,7 @@ function Header() {
 
   useEffect(() => {
   
-      const userId = localStorage.getItem('userId'); 
       
-      const fetchUserData = async () => {
-  
-        try {
-          const userInfo = await store.userInfo(userId);
-          setUserImage(userInfo.image);
-        } catch (error) {
-            console.error("Failed to fetch user data:", error);
-        } finally {
-            
-        }
-      };
-  
-      if(userId) {
-        fetchUserData();
-      }
     }, [])
 
   return (
