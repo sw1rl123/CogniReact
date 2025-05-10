@@ -1,5 +1,8 @@
 import { createUser, loginUser } from "../services/auth.js";
-import { getUserById, getUserPosts, getUserFriends, getAllUsers, updateUserNickname, getUserFriendsFull, getUsersFromName, getUserFriendsAmount, createPost, updateImageAvatar, updateImageBanner, updateUserDescription, updateUserPassword, updateUserMbti } from "../services/userProfile.js";
+import { getCurrentArticle } from "../services/user.js";
+import { getAllArticles } from "../services/user.js";
+import { createNewArticle } from "../services/user.js";
+import { getUserById, getUserPosts, getUserFriends, getAllUsers, updateUserNickname, getUserFriendsFull, getUsersFromName, getUserFriendsAmount, createPost, updateImageAvatar, updateImageBanner, updateUserDescription, updateUserPassword, updateUserMbti } from "../services/user.js";
 
 export default class Store {
 
@@ -105,6 +108,33 @@ export default class Store {
         try {
             const response = await createPost(post, postImages);
             return true;
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    async createArticle(userId, articleName, articleBody) {
+        try {
+            const response = await createNewArticle(userId, articleName, articleBody);
+            return true;
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    async getArticles() {
+        try {
+            const response = await getAllArticles();
+            return response.data;
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    async getArticle(id) {
+        try {
+            const response = await getCurrentArticle(id);
+            return response.data;
         } catch (e) {
             console.log(e);
         }

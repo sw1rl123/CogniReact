@@ -24,19 +24,22 @@
 
 :root {
   --col-bg-main: #282339;
+  --col-bg-buttons: #2B283B;
   --col-bg-header: #242132;
   --col-bg-sections: #191822;
+  --col-bg-sections-hover: #33313e;
   --col-bg-profile: linear-gradient(180deg, rgba(139,125,196,1) 0%, rgba(80,71,132,1) 100%);
   --col-bg-hobies: linear-gradient(267deg, rgba(143,105,196,1) 0%, rgba(114,123,193,1) 100%);
   --col-bg-alpha: rgba(25, 24, 34, 0.7);
   --col-bg-edit: rgba(117, 113, 140, 0.7);
 
   --col-text-little: #D8E0F4;
-  --col-text-main: white;
+  --col-text-main: #d7d3e3;
   --col-text-desc: #757C94;
   --col-text-edit: #988BCD;
 
   --col-addons: #7e6fbb;
+  --col-addons-dark: #443d6c;
   --col-rights: linear-gradient(180deg, rgba(170,213,160,1) 0%, rgba(118,183,103,1) 100%);
   --col-highlight: #F063A7;
 }

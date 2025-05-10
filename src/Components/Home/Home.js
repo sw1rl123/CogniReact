@@ -11,6 +11,8 @@ import {observer} from "mobx-react-lite";
 import './Home.css';
 import Wiki from "../Wiki/Wiki";
 import Messages from "../Messages/Messages";
+import WikiCreate from "../Wiki/WikiCreate";
+import WikiArticle from "../Wiki/WikiArticle";
 
 function Home() {
     const location = useLocation();
@@ -49,6 +51,8 @@ function Home() {
                 {location.pathname === "/about" && <About />}
                 {location.pathname === "/messages" && <Messages/>}
                 {location.pathname === "/wiki" && <Wiki/>}
+                {location.pathname === '/wiki/' + params.wikiId && <WikiArticle/>}
+                {location.pathname === "/wiki/create" && <WikiCreate/>}
             </div>
             </div>
         </div>

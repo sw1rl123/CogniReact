@@ -50,7 +50,19 @@ function Header() {
   };
 
   useEffect(() => {
-  
+    
+    const userId = localStorage.getItem('userId');
+
+    const fetchUserImage = async () => {
+      try {
+        const userInfo = await store.userInfo(userId);
+        setUserImage(userInfo.activeAvatar);
+      } catch (error) {
+          console.error("Failed to fetch user data:", error);
+      }
+    };
+
+    fetchUserImage();
       
     }, [])
 

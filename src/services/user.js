@@ -154,6 +154,46 @@ export const createPost = async (postText, postImg) => {
     }
 }
 
+export const createNewArticle = async (userId, articleName, articleBody, articleImg) => {
+    try {
+        let formData = new FormData();
+        formData.append('articleName', articleName);
+        formData.append('articleBody', articleBody);
+        formData.append('idUser', userId);
+
+        
+        if(articleImg) {
+            articleImg.map(file => formData.append('Files', file))
+        }
+
+        let response = await $api.post("/Article/CreateArticle", formData, { headers: { "Content-type": "multipart/form-data" },});
+        return response;
+    } catch(e) {
+        console.log(e);
+    }
+}
+
+export const getAllArticles = async () => {
+    try {
+        var URL = "/Article/GetAllArticleIdsAndNames";
+        let response = await $api.get(URL);
+        return response;
+    } catch(e) {
+        console.error();
+    }
+}
+
+export const getCurrentArticle = async (id) => {
+    try {
+        var URL = "/Article/GetArticleById?id=" + id;
+        let response = await $api.get(URL);
+        console.log(response);
+        return response;
+    } catch(e) {
+        console.error();
+    }
+}
+
 export const updateImageAvatar = async (Img) => {
     try {
         let formData = new FormData();

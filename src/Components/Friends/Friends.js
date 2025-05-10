@@ -47,13 +47,16 @@ function Frineds() {
     setUserId(userId);
     
     const fetchUserData = async () => {
+      
+      const userId = params.userId; 
+
       setIsLoading(true);
 
       try {
         const userInfo = await store.userInfo(userId);
         setUserName(userInfo.name);
         setUserSurname(userInfo.surname);
-        setUserImage(userInfo.image);
+        setUserImage(userInfo.activeAvatar);
         setUserTypeMBTI(userInfo.typeMbti);
       } catch (error) {
           console.error("Failed to fetch user data:", error);

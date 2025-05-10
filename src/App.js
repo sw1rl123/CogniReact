@@ -11,6 +11,8 @@ import Wiki from "./Components/Wiki/Wiki";
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Messages from "./Components/Messages/Messages";
+import WikiCreate from "./Components/Wiki/WikiCreate";
+import WikiArticle from "./Components/Wiki/WikiArticle";
 function App() {
 
   return (
@@ -27,6 +29,8 @@ function App() {
           <Route path="about" element={<About />}/>
           <Route path="messages" element={<Messages />}/>
           <Route path="wiki" element={<Wiki />}/>
+          <Route path="wiki/:wikiId" element={<WikiArticle />}/>
+          <Route path="wiki/create" element={<WikiCreate/>}/>
           <Route path="settings" element={<Settings />}/>
           </Route>
         </Routes>

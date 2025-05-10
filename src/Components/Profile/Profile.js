@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import './Profile.css';
 import { ReactComponent as CloseSvg } from './img/close.svg';
+import { ReactComponent as StarSvg } from './img/star.svg';
 import { Context } from '../..';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import Placeholder from './img/placeholder.png';
@@ -115,6 +116,16 @@ function Profile() {
     setValidText(false); 
   }
 
+  const [isTagsShow, setIsTagsShow] = useState(false);
+
+  const showTags = () => {
+    setIsTagsShow(true);
+  }
+
+  const hideTags = () => {
+    setIsTagsShow(false);
+  }
+
   const onCreatePost = async (post, postImages) => {
     var response = await store.createPost(post, postImages);
     if(response) {
@@ -171,6 +182,36 @@ const toProfile = async (id) => {
         </form>
         </div>
       }
+      {isTagsShow && 
+        <div className="modal--bg">
+          <form className="profile__tags tags">
+            <ul className="tags__pagination">
+              <li className="tags__pagination--item"><label><StarSvg/><input defaultChecked type="radio" name="tagsPage"></input></label></li>
+              <li className="tags__pagination--item"><label><StarSvg/><input type="radio" name="tagsPage"></input></label></li>
+              <li className="tags__pagination--item"><label><StarSvg/><input type="radio" name="tagsPage"></input></label></li>
+              <li className="tags__pagination--item"><label><StarSvg/><input type="radio" name="tagsPage"></input></label></li>
+              <li className="tags__pagination--item"><label><StarSvg/><input type="radio" name="tagsPage"></input></label></li>
+            </ul>
+            <div className="tags__wrapper">
+              <h2 className="tags__heading">МУЗЫКА</h2>
+              <button onClick={hideTags} type="button" className='modal__button--close'><CloseSvg className='modal__icon'/></button>
+              <ul className="tags__categories categories">
+                <li className="categories__item">альтернатива</li>
+                <li className="categories__item">метал</li>
+                <li className="categories__item">рок</li>
+              </ul>
+              <ul className="tags__list">
+                <li className="tags__item">#213123</li>
+                <li className="tags__item">#213123</li>
+                <li className="tags__item">#213123</li>
+                <li className="tags__item">#213123</li>
+                <li className="tags__item">#213123</li>
+              </ul>
+              {userId == currentUserId && <button className='tags__button'>редактировать</button>}
+            </div>
+          </form>
+        </div>
+      }
       <div className="profile__main">
         <section className="profile__bg">
           <img className="profile__bg--img" src={userBannerImage}/>
@@ -189,7 +230,7 @@ const toProfile = async (id) => {
         <section className='profile__hobbies hobbies'>
           <h2 className='hobbies__heading'>Увлечения</h2>
           <ul className="hobbies__list">
-            <li className='hobbies__button'>...</li>
+            <li className='hobbies__button' onClick={showTags}>...</li>
           </ul>
         </section>
         {userId == currentUserId &&
@@ -200,7 +241,7 @@ const toProfile = async (id) => {
         }
         <section className='profile__posts posts'>
           <ul className="posts__list">
-            {userPosts.map(post =>
+            {userPosts.slice(0).reverse().map(post =>
               <li key={post.id} className='posts__item'>
                 <div className='posts__author'>
                 <img src={userImage ? userImage : Placeholder} alt=" " className='posts__avatar'></img>

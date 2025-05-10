@@ -247,7 +247,7 @@ function Test() {
                     </div>
                     <div className="result-test__about">
                         <Humster/>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+                        <p>INFP – глубокомысленные и чувствительные личности, большие мечтатели и идеалисты. Они вечно ищут смысл жизни и стремятся создать гармонию в своем внутреннем мире. INFP часто чувствуют себя...</p>
                         <button>читать дальше</button>
                     </div>
                     </div>

@@ -9,8 +9,9 @@
     font-size: 19px;
     font-family: Montserrat;
     font-weight: 600;
-    color: white;
+    color: var(--col-text-main);
     background: var(--col-bg-sections);
+    border: 1px solid var(--col-bg-sections);
     width: 180px;
     padding: 15px 15px;
     border-radius: 15px;
@@ -18,4 +19,21 @@
     text-align: center;
     margin-right: 40px;
     cursor: pointer;
+}
+
+.navigation__link:hover {
+    border: 1px solid var(--col-text-main);
+    background: var(--col-bg-sections-hover);
+}
+
+.navigation__link--active {
+    border: 1px solid var(--col-text-edit);
+    color: var(--col-text-edit);
+    background: var(--col-bg-buttons);
+}
+
+.navigation__link--active:hover {
+    border: 1px solid var(--col-text-edit);
+    color: var(--col-text-edit);
+    background: var(--col-bg-buttons);
 }
