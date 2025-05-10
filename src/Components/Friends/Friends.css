@@ -23,7 +23,8 @@
   .friends__list{
     border-radius: 20px;
     width: 100%;
-    height: 574px;
+    height: 650px;
+    overflow-y: scroll;
     background-color: #191822;
     box-sizing: border-box;
     padding: 21px;

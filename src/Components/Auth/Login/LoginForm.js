@@ -66,7 +66,7 @@ function LoginForm() {
                 <input
                     value={user?.password}
                     onChange={(e) => setUser({ ...user, password: e.target.value })}
-                    type="password" placeholder='Придумайте пароль' className='loginform__input'/>
+                    type="password" placeholder='Введите пароль' className='loginform__input'/>
 
             <button type="submit" className='loginform__button'>Войти</button>
             <Link to="/register" className='loginform__link'>Зарегистрироваться</Link>

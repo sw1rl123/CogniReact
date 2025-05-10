@@ -31,6 +31,9 @@ function Profile() {
   const [userFriends, setUserFriends] = useState([]);
   const [userFriendsAmount, setUserFriendsAmount] = useState([]);
 
+  const [isFrinedsText, setIsFrinedsText] = useState('добавить в друзья');
+  const [isFrineds, setIsFrineds] = useState(false);
+
   useEffect(() => {
 
     localStorage.removeItem('onTest');
@@ -100,9 +103,40 @@ function Profile() {
       }
     };
 
+    const checkFriend = async () => {
+      setIsLoading(true);
+      const userId = params.userId; 
+      
+
+      try {
+        const response = await store.checkFriend(userId);
+        var count = 0;
+        setIsFrineds(response.youSubscribed)
+        if (response.youSubscribed) { count++ };
+        if (response.yourSubscriber) { count += 2 };
+        console.log(response);
+        switch (count) {
+          case 1:
+            setIsFrinedsText('отписаться');
+            break;
+          case 2:
+            setIsFrinedsText('добавить в ответ');
+            break;
+          case 3:
+            setIsFrinedsText('удалить из друзей');
+            break;
+        }
+      } catch (error) {
+          console.error("Failed to fetch user data:", error);
+      } finally {
+          setIsLoading(false);
+      }
+    };
+
     fetchUserData();
     fetchUserPosts();
     fetchUserFriends();
+    checkFriend();
   }, [])
 
   const [isModalShow, setIsModalShow] = useState(false);
@@ -142,6 +176,15 @@ const inputRef = useRef();
 
 const toProfile = async (id) => {
   navigate("/profile/" + id);
+  window.location.reload();
+};
+
+const subscribe = async (friendId) => {
+  if (isFrineds) {
+    var response = await store.dellFriend(friendId);
+  } else {
+    var response = await store.addFriend(friendId);
+  }
   window.location.reload();
 };
 
@@ -225,6 +268,7 @@ const toProfile = async (id) => {
           <div className="human__right">
             <h1 className='human__name'>{userName + " " + userSurname }</h1>
             <p className='human__description'>{userDescription}</p>
+            {userId != currentUserId && <button onClick={(e) => subscribe(userId)} className='human__button-addFriend'>{isFrinedsText}</button>}
           </div>
         </section>
         <section className='profile__hobbies hobbies'>

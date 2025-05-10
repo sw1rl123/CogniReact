@@ -60,6 +60,7 @@ $api.interceptors.response.use((config) => {
 export const getUserById = async (userId) => {
     try {
         let response = await $api.get("/User/GetUserById", { params: { id: userId } });
+        console.log(response);
         return response;
     } catch(error) {
         console.error();
@@ -154,6 +155,36 @@ export const createPost = async (postText, postImg) => {
     }
 }
 
+export const subscribe = async (friendId) => {
+    try {
+        var URL = "/Friend/Subscribe?friendId=" + friendId;
+        let response = await $api.post(URL);
+        return response;
+    } catch(e) {
+        console.log(e);
+    }
+}
+
+export const unSubscribe = async (friendId) => {
+    try {
+        var URL = "/Friend/Unsubscribe?friendId=" + friendId;
+        let response = await $api.post(URL);
+        return response;
+    } catch(e) {
+        console.log(e);
+    }
+}
+
+export const checkSubscribe = async (friendId) => {
+    try {
+        var URL = "Friend/CheckSubscribe?friendId=" + friendId;
+        let response = await $api.get(URL);
+        return response;
+    } catch(e) {
+        console.log(e);
+    }
+}
+
 export const createNewArticle = async (userId, articleName, articleBody, articleImg) => {
     try {
         let formData = new FormData();
@@ -187,7 +218,6 @@ export const getCurrentArticle = async (id) => {
     try {
         var URL = "/Article/GetArticleById?id=" + id;
         let response = await $api.get(URL);
-        console.log(response);
         return response;
     } catch(e) {
         console.error();
