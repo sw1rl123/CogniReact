@@ -1,25 +1,20 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import "./style.css"
-import ChatList from './ChatList';
 import MessageList from './MessageList';
 import * as signalR from "@microsoft/signalr";
 import { showToast } from '../../services/globals';
+import ChatItem from './ChatItem';
 
 
 
 class ChatObject {
-    id = null;
-    name = null;
-    isDm = null;
-    members = null;
-    lastMessage = null;
-    unreadCount = null;
-    constructor(id, name, isDm, members, lastMessage, unreadCount) {
+    constructor({ id = null, name = null, isDm = null, members = null, lastMessage = null, ownerId = null, unreadCount = null } = {}) {
         this.id = id;
         this.name = name;
         this.isDm = isDm;
         this.members = members;
         this.lastMessage = lastMessage;
+        this.ownerId = ownerId;
         this.unreadCount = unreadCount;
     }
 }
@@ -28,10 +23,13 @@ export default function Chats({connection, msg}) {
     const token = localStorage.getItem('aToken');
     const [chats, setChats] = useState([]);
 
+    const [chatOpen, setChatOpen] = useState(null);
+
     useEffect(() => {
         console.log(`Chats useEffect ${msg}`);
         if (connection == null) {
             console.error("Connection not found");
+            return;
         }
         const fetchChats = async () => {
             try {
@@ -58,21 +56,23 @@ export default function Chats({connection, msg}) {
     connection.on("ChatList", async function (notification) {
         for (const chat of notification) {
             console.log(chat)
-            await addChat(
-                ChatObject(
-                    chat.name, 
-                    chat.id, 
-                    chat.isDm, 
-                    chat.members,
-                    chat.lastMessage, 
-                    chat.unreadCount
-                )
-            );
+            const c = new ChatObject({
+                name: chat.name,
+                id: chat.id,
+                isDm: chat.isDm,
+                members: chat.members,
+                lastMessage: chat.lastMessage,
+                ownerId: chat.ownerId,
+                unreadCount: chat.unreadCount
+            });
+            await addChat(c);
         }
     });
 
     const addChat = async (chatObject) => {
+        console.log("Chats:", chats);
         setChats(prevChats => [...prevChats, chatObject]);
+        console.log("Chats:", chats);
     }
 
     const currentUserId = localStorage.getItem('userId');
@@ -83,13 +83,23 @@ export default function Chats({connection, msg}) {
             
         }
     }
-     
 
+
+
+    const closeChat = () => {
+
+    }
+     
+    //style={chatOpen != null ? {display: "hidden"} : {display: "block"}}
     return (
         <div id="chats">
-            <button onClick={() => connection.invoke("CreateChat", currentUserId, "test")}>Create Chat</button>
-            <ChatList connection={connection} chats={chats} />
-            <MessageList connection={connection} />
+            <button onClick={() => connection.invoke("createGroup", "test", [currentUserId])}>Create Chat</button>
+            <div id="chats_container" >
+                {chats.map((chat, index) => (
+                    <ChatItem key={chat.id} id={chat.id} chat={chat} connection={connection} />
+                ))}
+            </div>
+            {chatOpen == null && <MessageList connection={connection}/>}
         </div>
     );
 }

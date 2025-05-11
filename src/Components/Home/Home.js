@@ -15,7 +15,6 @@ import Messages from "../Messages/Messages";
 import WikiCreate from "../Wiki/WikiCreate";
 import WikiArticle from "../Wiki/WikiArticle";
 import { startSignalRConnection } from "../../services/signalR";
-import ChatList from "../Chat/ChatList";
 function Home() {
     const location = useLocation();
     const [signalRConn, setSignalRConn] = useState(null);
