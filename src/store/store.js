@@ -1,4 +1,5 @@
 import { createUser, loginUser } from "../services/auth.js";
+import { startSignalRConnection } from "../services/signalR.js";
 import { getCurrentArticle } from "../services/user.js";
 import { getAllArticles } from "../services/user.js";
 import { createNewArticle } from "../services/user.js";
@@ -28,6 +29,7 @@ export default class Store {
                 localStorage.setItem('aToken', response.data.accessToken);
                 localStorage.setItem('rToken', response.data.refreshToken);
                 localStorage.setItem('userId', response.data.id);
+                // startSignalRConnection(response.data.accessToken);
                 return true;
             }
         } catch (e) {

@@ -1,8 +1,7 @@
 import React from "react";
 import './Messages.css';
 
-function Messages() {
-
+function Message() {
     return (
         <div className="messages">
            
@@ -10,5 +9,5 @@ function Messages() {
     );
 };
 
-export default Messages;
+export default Message;
 
