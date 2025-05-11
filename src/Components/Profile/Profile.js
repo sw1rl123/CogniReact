@@ -114,7 +114,6 @@ function Profile() {
         setIsFrineds(response.youSubscribed)
         if (response.youSubscribed) { count++ };
         if (response.yourSubscriber) { count += 2 };
-        console.log(response);
         switch (count) {
           case 1:
             setIsFrinedsText('отписаться');

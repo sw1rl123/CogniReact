@@ -135,6 +135,7 @@
 
 .human__button-addFriend {
     background: var(--col-addons);
+    width: 200px;
     color: white;
     font-size: 17px;
     font-family: Montserrat;

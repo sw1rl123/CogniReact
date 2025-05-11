@@ -104,10 +104,6 @@ function RegisterForm() {
         localStorage.removeItem('mbtiType');
         localStorage.removeItem('onTest');
         localStorage.removeItem('onTestAgain');
-    
-        // if ((localStorage.getItem('userId') && (localStorage.getItem('aToken') || localStorage.getItem('rToken')))) {
-        //     navigate('/');
-        // }
 
     }, []);
 
@@ -183,7 +179,7 @@ function RegisterForm() {
                 </select>
                 {(validMBTI) && <span className='loginform__error'><InfoIcon></InfoIcon><p>Вы не выбрали MBTI</p></span>}
 
-                <button type="submit" className='loginform__button'>Зарегистрироваться</button>
+                <button type="submit" className='loginform__button-other'>Зарегистрироваться</button>
                 <p className='loginform__text'>или</p>
                 <button onClick={onTest} type="button" className='loginform__button-other'>Пройти тест <br/> и узнать свой тип</button>
             </section>
