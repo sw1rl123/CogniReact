@@ -301,4 +301,3 @@ export const updateUserMbti = async (mbti) => {
         console.log(e);
     }
 }
-

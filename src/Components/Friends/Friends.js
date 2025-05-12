@@ -110,7 +110,7 @@ function Frineds() {
     fetchUsers();
 
   }
-  }, [])
+  }, []);
 
   useEffect(() => {
     const urlData = decodeURIComponent(location.search);
@@ -135,7 +135,8 @@ function Frineds() {
 
     fetchUsers();
 
-  }, [location.search])
+  }, [location.search]);
+  
 
   return (
     <div className='friends__wrapper'>

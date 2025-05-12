@@ -7,6 +7,7 @@ import Profile from "./Components/Profile/Profile";
 import Friends from "./Components/Friends/Friends";
 import Settings from "./Components/Settings/Settings";
 import About from "./Components/About/About";
+import Chats from "./Components/Chat/Chats";
 import Wiki from "./Components/Wiki/Wiki";
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
@@ -27,8 +28,8 @@ function App() {
           <Route path="profile/:userId/friends" element={<Friends />}/>
           <Route path="friends" element={<Friends />}/>
           <Route path="about" element={<About />}/>
-          <Route path="messages" element={<Messages />}/>
-          <Route path="messages/:userId" element={<Messages />}/>
+          {/* <Route path="messages" element={<Messages />}/> */}
+          <Route path="messages" element={<Chats/>}/>
           <Route path="wiki" element={<Wiki />}/>
           <Route path="wiki/:wikiId" element={<WikiArticle />}/>
           <Route path="wiki/create" element={<WikiCreate/>}/>

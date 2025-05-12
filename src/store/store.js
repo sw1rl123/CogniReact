@@ -28,9 +28,11 @@ export default class Store {
                 localStorage.setItem('aToken', response.data.accessToken);
                 localStorage.setItem('rToken', response.data.refreshToken);
                 localStorage.setItem('userId', response.data.id);
+                // startSignalRConnection(response.data.accessToken);
                 return true;
             }
         } catch (e) {
+            console.error(e);
             console.log(e.response.data);
         }
     }

@@ -32,7 +32,6 @@ export async function startSignalRConnection(token) {
     });
 
     console.log("SignalR Connected");
-    console.log(connection);
     return connection;
 }
 

@@ -82,7 +82,6 @@ function Profile() {
     const fetchUserFriends = async () => {
       setIsLoading(true);
       const userId = params.userId; 
-      
 
       try {
         const friends = await store.getFriends(userId);

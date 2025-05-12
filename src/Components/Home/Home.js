@@ -4,7 +4,8 @@ import Header from "../Layouts/Header/Header";
 import Navigation from "../Layouts/Navigation/Navigation";
 import Settings from "../Settings/Settings";
 import About from "../About/About";
-import React, { useEffect, useContext, useState} from "react";
+import Chats from "../Chat/Chats";
+import React, { useEffect, useState} from "react";
 import {Context} from "../../index";
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import {observer} from "mobx-react-lite";
@@ -14,14 +15,12 @@ import Messages from "../Messages/Messages";
 import WikiCreate from "../Wiki/WikiCreate";
 import WikiArticle from "../Wiki/WikiArticle";
 import { startSignalRConnection } from "../../services/signalR";
-import Chats from "../Chat/Chats";
 
 function Home() {
 
-    const [signalRConn, setSignalRConn] = useState(null);
-
     const location = useLocation();
-
+    const [signalRConn, setSignalRConn] = useState(null);
+    
     let params = useParams()
 
     const navigate = useNavigate();
@@ -40,18 +39,15 @@ function Home() {
         if (location.pathname == "/") {
             navigate('/profile/' + localStorage.getItem('userId'));
         }
+        let token = localStorage.getItem('aToken');
+        const startConn = async (token) => {
+            let c = await startSignalRConnection(token);
+            setSignalRConn(c);
+        }
 
-        // let token = localStorage.getItem('aToken');
-
-        // const startConn = async (token) => {
-        //     let c = await startSignalRConnection(token);
-        //     setSignalRConn(c);
-        // }
-
-        // if (token != null) {
-        //     startConn(token);
-        // }
-
+        if (token != null) {
+            startConn(token);
+        }
     }, []);
 
     return (
@@ -65,15 +61,12 @@ function Home() {
                 {location.pathname === '/friends' && <Friends />}
                 {location.pathname === "/settings" && <Settings />}
                 {location.pathname === "/about" && <About />}
-
-                {location.pathname === "/messages" && <Messages/>}
-                {location.pathname === "/messages/1" && <Messages/>}
-                {location.pathname === "/messages/2" && <Messages/>}
-                {/* {location.pathname === "/messages" && signalRConn !== null && <Chats connection={signalRConn} />} */}
-
+                {/* {location.pathname === "/messages" && <Messages/>} */}
                 {location.pathname === "/wiki" && <Wiki/>}
                 {location.pathname === '/wiki/' + params.wikiId && <WikiArticle/>}
                 {location.pathname === "/wiki/create" && <WikiCreate/>}
+
+                {location.pathname === "/messages" && <Chats connection={signalRConn} />}
             </div>
             </div>
         </div>
