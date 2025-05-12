@@ -1,6 +1,5 @@
 import { createUser, loginUser } from "../services/auth.js";
-import { startSignalRConnection } from "../services/signalR.js";
-import { getCurrentArticle } from "../services/user.js";
+import { checkSubscribe, getCurrentArticle, subscribe, unSubscribe } from "../services/user.js";
 import { getAllArticles } from "../services/user.js";
 import { createNewArticle } from "../services/user.js";
 import { getUserById, getUserPosts, getUserFriends, getAllUsers, updateUserNickname, getUserFriendsFull, getUsersFromName, getUserFriendsAmount, createPost, updateImageAvatar, updateImageBanner, updateUserDescription, updateUserPassword, updateUserMbti } from "../services/user.js";
@@ -111,6 +110,34 @@ export default class Store {
         try {
             const response = await createPost(post, postImages);
             return true;
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    async addFriend(friendId) {
+        try {
+            const response = await subscribe(friendId);
+            return true;
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+
+    async dellFriend(friendId) {
+        try {
+            const response = await unSubscribe(friendId);
+            return true;
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    async checkFriend(friendId) {
+        try {
+            const response = await checkSubscribe(friendId);
+            return response.data;
         } catch (e) {
             console.log(e);
         }

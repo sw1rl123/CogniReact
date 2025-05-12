@@ -48,12 +48,12 @@ function LoginForm() {
 
   return (
     <div className='login__wrapper'>
-        <div className='login__blur'>
+        {/* <div className='login__blur'>
             <div className='login__ball'></div>
             <div className='login__ball'></div>
             <div className='login__ball'></div>
             <div className='login__ball'></div>
-        </div>
+        </div> */}
 
         {(validEnter) && <span className='loginform__error--enter'><p>Неверный логин или пароль</p></span>}
         <form onSubmit={onSubmit} className='login__form loginform'>
@@ -66,7 +66,7 @@ function LoginForm() {
                 <input
                     value={user?.password}
                     onChange={(e) => setUser({ ...user, password: e.target.value })}
-                    type="password" placeholder='Придумайте пароль' className='loginform__input'/>
+                    type="password" placeholder='Введите пароль' className='loginform__input'/>
 
             <button type="submit" className='loginform__button'>Войти</button>
             <Link to="/register" className='loginform__link'>Зарегистрироваться</Link>

@@ -124,7 +124,7 @@
     width: 200px;
     border-radius: 20px;
     color: white;
-    background: linear-gradient(90deg, rgba(28,92,128,1) 0%, rgba(113,212,104,1) 100%);
+    background: var(--col-bg-login);
     font-size: 19px;
     font-family: Montserrat;
     font-weight: bold;

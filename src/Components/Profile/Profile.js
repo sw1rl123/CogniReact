@@ -31,6 +31,9 @@ function Profile() {
   const [userFriends, setUserFriends] = useState([]);
   const [userFriendsAmount, setUserFriendsAmount] = useState([]);
 
+  const [isFrinedsText, setIsFrinedsText] = useState('добавить в друзья');
+  const [isFrineds, setIsFrineds] = useState(false);
+
   useEffect(() => {
 
     localStorage.removeItem('onTest');
@@ -99,9 +102,39 @@ function Profile() {
       }
     };
 
+    const checkFriend = async () => {
+      setIsLoading(true);
+      const userId = params.userId; 
+      
+
+      try {
+        const response = await store.checkFriend(userId);
+        var count = 0;
+        setIsFrineds(response.youSubscribed)
+        if (response.youSubscribed) { count++ };
+        if (response.yourSubscriber) { count += 2 };
+        switch (count) {
+          case 1:
+            setIsFrinedsText('отписаться');
+            break;
+          case 2:
+            setIsFrinedsText('добавить в ответ');
+            break;
+          case 3:
+            setIsFrinedsText('удалить из друзей');
+            break;
+        }
+      } catch (error) {
+          console.error("Failed to fetch user data:", error);
+      } finally {
+          setIsLoading(false);
+      }
+    };
+
     fetchUserData();
     fetchUserPosts();
     fetchUserFriends();
+    checkFriend();
   }, [])
 
   const [isModalShow, setIsModalShow] = useState(false);
@@ -142,6 +175,19 @@ const inputRef = useRef();
 const toProfile = async (id) => {
   navigate("/profile/" + id);
   window.location.reload();
+};
+
+const subscribe = async (friendId) => {
+  if (isFrineds) {
+    var response = await store.dellFriend(friendId);
+  } else {
+    var response = await store.addFriend(friendId);
+  }
+  window.location.reload();
+};
+
+const sendMessage = async (friendId) => {
+  navigate("/messages?dm=" + friendId);
 };
 
   const onSubmitPost = (e) => {
@@ -194,17 +240,19 @@ const toProfile = async (id) => {
             <div className="tags__wrapper">
               <h2 className="tags__heading">МУЗЫКА</h2>
               <button onClick={hideTags} type="button" className='modal__button--close'><CloseSvg className='modal__icon'/></button>
+              <ul className='tags__pages'>
+                <li><label className='tags__pages-label'>1<input defaultChecked type="radio" name="tagsEdit"></input></label></li>
+                <li><label className='tags__pages-label'>2<input defaultChecked type="radio" name="tagsEdit"></input></label></li>
+                <li><label className='tags__pages-label'>3<input defaultChecked type="radio" name="tagsEdit"></input></label></li>
+              </ul>
               <ul className="tags__categories categories">
                 <li className="categories__item">альтернатива</li>
                 <li className="categories__item">метал</li>
                 <li className="categories__item">рок</li>
               </ul>
               <ul className="tags__list">
-                <li className="tags__item">#213123</li>
-                <li className="tags__item">#213123</li>
-                <li className="tags__item">#213123</li>
-                <li className="tags__item">#213123</li>
-                <li className="tags__item">#213123</li>
+                <li className="tags__item">#TheBeatles</li>
+                <li className="tags__item">#Nirvana</li>
               </ul>
               {userId == currentUserId && <button className='tags__button'>редактировать</button>}
             </div>
@@ -224,11 +272,14 @@ const toProfile = async (id) => {
           <div className="human__right">
             <h1 className='human__name'>{userName + " " + userSurname }</h1>
             <p className='human__description'>{userDescription}</p>
+            {userId != currentUserId && <div className='human__buttons'><button onClick={(e) => subscribe(userId)} className='human__button-addFriend'>{isFrinedsText}</button><button onClick={(e) => sendMessage(userId)} className='human__button-sendMessage'>сообщение</button></div>}
           </div>
         </section>
         <section className='profile__hobbies hobbies'>
           <h2 className='hobbies__heading'>Увлечения</h2>
           <ul className="hobbies__list">
+            {userId == currentUserId && <li className='hobbies__button'>#TheBeatles</li>}
+            {userId == currentUserId && <li className='hobbies__button'>#Nirvana</li>}
             <li className='hobbies__button' onClick={showTags}>...</li>
           </ul>
         </section>

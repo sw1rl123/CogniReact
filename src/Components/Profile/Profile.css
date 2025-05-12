@@ -130,6 +130,34 @@
     font-size: 16px;
     width: 100%;
     line-height: 1.2em;
+    margin-bottom: 30px;
+}
+
+.human__buttons {
+    display: flex;
+    gap: 20px;
+}
+
+.human__button-addFriend {
+    background: var(--col-addons);
+    color: white;
+    font-size: 17px;
+    font-family: Montserrat;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.human__button-sendMessage {
+    background: var(--col-bg-green-button);
+    color: white;
+    font-size: 17px;
+    font-family: Montserrat;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    cursor: pointer;
 }
 
 .hobbies {
@@ -516,5 +544,71 @@
 }
 
 .tags__pagination--item input {
+    display: none;
+}
+
+.tags__pages {
+    display: flex;
+    gap: 10px;
+    position: relative;
+    width: 125px;
+    margin-bottom: 20px;
+}
+
+.tags__pages li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 35px;
+    height: 35px;
+    border-radius: 100%;
+    position: relative;
+    z-index: 1;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+}
+
+.tags__pages li:nth-child(1) {
+    background: linear-gradient(90deg,rgba(114, 123, 193, 1) 0%, rgba(122, 118, 194, 1) 100%);
+}
+
+.tags__pages li:nth-child(2) {
+    background: linear-gradient(90deg,rgba(125, 116, 194, 1) 0%, rgba(133, 112, 195, 1) 100%);
+}
+
+.tags__pages li:nth-child(3) {
+    background: linear-gradient(90deg,rgba(135, 110, 195, 1) 0%, rgba(144, 106, 197, 1) 100%);
+}
+
+.tags__pages::after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 100px;
+    height: 5px;
+    background: linear-gradient(90deg,rgba(122, 118, 194, 1) 0%, rgba(135, 110, 195, 1) 100%);
+    left: 10px;
+    z-index: 0;
+    top: 15px;
+}
+
+.tags__pages-label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 100%;
+    border: 2px solid rgba(255, 255, 255, 0);
+    transition: 0.3;
+    cursor: pointer;
+}
+
+.tags__pages-label:has(input:checked){
+    border: 2px solid white;
+}
+
+.tags__pages-label input {
     display: none;
 }
