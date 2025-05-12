@@ -111,6 +111,7 @@ function Frineds() {
 
   }
   }, []);
+  }, []);
 
   useEffect(() => {
     const urlData = decodeURIComponent(location.search);
@@ -135,6 +136,8 @@ function Frineds() {
 
     fetchUsers();
 
+  }, [location.search]);
+  
   }, [location.search]);
   
 
