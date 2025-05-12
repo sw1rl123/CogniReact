@@ -12,6 +12,7 @@ function Header() {
   const location = useLocation();
 
   const [userImage, setUserImage] = useState(null);
+  const [onTest, setOnTest] = useState(false);
 
   const navigate = useNavigate();
 
@@ -50,6 +51,10 @@ function Header() {
   };
 
   useEffect(() => {
+
+    if (location.pathname == '/test') {
+      setOnTest(true);
+    }
     
     const userId = localStorage.getItem('userId');
 
@@ -78,12 +83,14 @@ function Header() {
             </div>
           </div>
           <input onClick={(e) => toFriends(e.target.value)} onChange={(e) => search(e.target.value)} className='header__search' placeholder='Найти друга'></input>
-            <button onClick={logout} className="header__logout">
-              <div className="logout__button">
-                <img src={userImage ? userImage : Placeholder} alt=" " className="logout__avatar"/>
-                <span className="logout__text">выйти</span>
-              </div>
-            </button>
+          {!onTest &&
+          <button onClick={logout} className="header__logout">
+            <div className="logout__button">
+              <img src={userImage ? userImage : Placeholder} alt=" " className="logout__avatar"/>
+              <span className="logout__text">выйти</span>
+            </div>
+          </button>
+          }
         </nav>
       </div>
     </header>

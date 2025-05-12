@@ -114,7 +114,6 @@ function Profile() {
         setIsFrineds(response.youSubscribed)
         if (response.youSubscribed) { count++ };
         if (response.yourSubscriber) { count += 2 };
-        console.log(response);
         switch (count) {
           case 1:
             setIsFrinedsText('отписаться');
@@ -188,6 +187,10 @@ const subscribe = async (friendId) => {
   window.location.reload();
 };
 
+const sendMessage = async (friendId) => {
+  navigate("/messages?dm=" + friendId);
+};
+
   const onSubmitPost = (e) => {
           e.preventDefault();
           if (newPost.length > 0 || newPostImages.length > 0) {
@@ -238,17 +241,19 @@ const subscribe = async (friendId) => {
             <div className="tags__wrapper">
               <h2 className="tags__heading">МУЗЫКА</h2>
               <button onClick={hideTags} type="button" className='modal__button--close'><CloseSvg className='modal__icon'/></button>
+              <ul className='tags__pages'>
+                <li><label className='tags__pages-label'>1<input defaultChecked type="radio" name="tagsEdit"></input></label></li>
+                <li><label className='tags__pages-label'>2<input defaultChecked type="radio" name="tagsEdit"></input></label></li>
+                <li><label className='tags__pages-label'>3<input defaultChecked type="radio" name="tagsEdit"></input></label></li>
+              </ul>
               <ul className="tags__categories categories">
                 <li className="categories__item">альтернатива</li>
                 <li className="categories__item">метал</li>
                 <li className="categories__item">рок</li>
               </ul>
               <ul className="tags__list">
-                <li className="tags__item">#213123</li>
-                <li className="tags__item">#213123</li>
-                <li className="tags__item">#213123</li>
-                <li className="tags__item">#213123</li>
-                <li className="tags__item">#213123</li>
+                <li className="tags__item">#TheBeatles</li>
+                <li className="tags__item">#Nirvana</li>
               </ul>
               {userId == currentUserId && <button className='tags__button'>редактировать</button>}
             </div>
@@ -268,12 +273,14 @@ const subscribe = async (friendId) => {
           <div className="human__right">
             <h1 className='human__name'>{userName + " " + userSurname }</h1>
             <p className='human__description'>{userDescription}</p>
-            {userId != currentUserId && <button onClick={(e) => subscribe(userId)} className='human__button-addFriend'>{isFrinedsText}</button>}
+            {userId != currentUserId && <div className='human__buttons'><button onClick={(e) => subscribe(userId)} className='human__button-addFriend'>{isFrinedsText}</button><button onClick={(e) => sendMessage(userId)} className='human__button-sendMessage'>сообщение</button></div>}
           </div>
         </section>
         <section className='profile__hobbies hobbies'>
           <h2 className='hobbies__heading'>Увлечения</h2>
           <ul className="hobbies__list">
+            {userId == currentUserId && <li className='hobbies__button'>#TheBeatles</li>}
+            {userId == currentUserId && <li className='hobbies__button'>#Nirvana</li>}
             <li className='hobbies__button' onClick={showTags}>...</li>
           </ul>
         </section>

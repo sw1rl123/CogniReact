@@ -114,12 +114,12 @@ function RegisterForm() {
 
   return (
     <div className='login__wrapper'>
-        <div className='login__blur'>
+        {/* <div className='login__blur'>
             <div className='login__ball'></div>
             <div className='login__ball'></div>
             <div className='login__ball'></div>
             <div className='login__ball'></div>
-        </div>
+        </div> */}
         
         <form onSubmit={onSubmit} className='login__form loginform'>
             {formStep === 0 &&  (<section>

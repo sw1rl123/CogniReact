@@ -28,6 +28,7 @@ function App() {
           <Route path="friends" element={<Friends />}/>
           <Route path="about" element={<About />}/>
           <Route path="messages" element={<Messages />}/>
+          <Route path="messages/:userId" element={<Messages />}/>
           <Route path="wiki" element={<Wiki />}/>
           <Route path="wiki/:wikiId" element={<WikiArticle />}/>
           <Route path="wiki/create" element={<WikiCreate/>}/>

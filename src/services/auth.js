@@ -20,7 +20,6 @@ export const createUser = async (user) => {
 export const loginUser = async (user) => {
     try {
         let response = await api.post("/User/LoginByEmail", user);
-        console.log(response);
         return response;
     } catch(e) {
         return e.status;
