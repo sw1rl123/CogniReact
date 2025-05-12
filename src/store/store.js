@@ -33,6 +33,7 @@ export default class Store {
                 return true;
             }
         } catch (e) {
+            console.error(e);
             console.log(e.response.data);
         }
     }

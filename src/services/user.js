@@ -27,10 +27,12 @@ $api.interceptors.request.use((config) => {
 
 const refreshAccessToken = async () => {
     try {
-        const userId = localStorage.getItem('userId');
-        const response = await $api.get(`${API_URL}/Token/Refresh`, { params: { id: userId} });
+        const rToken = localStorage.getItem('rToken');
+        const response = await $api.get(`${API_URL}/Token/Refresh`, { headers: { "Refresh-token": rToken} });
         var aToken = response.data.accessToken;
         localStorage.setItem("aToken", aToken);
+        localStorage.setItem("rToken", response.data.refreshToken);
+        console.log("refreshed!");
         return aToken;
     } catch (error) {
         console.error("Ошибка при обновлении токена:", error);

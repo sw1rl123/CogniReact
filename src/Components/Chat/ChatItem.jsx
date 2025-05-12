@@ -3,52 +3,58 @@ import React from "react";
 export default function ChatItem({
     chat,
     onClick,
+    userId,
     online
 }) {
+    let dmUser = chat.isDm ? (chat.members[0] == userId ? chat.members[1] : chat.members[0]) : null;
+
+    var chatName = (
+        <div className="truncate chatname" id={`chat_name_${chat.id}`}>
+            {dmUser == null ? chat.name : dmUser}
+        </div>
+    );
+    var userId = localStorage.getItem("userId");
+    var last_msg = chat.lastMessage.isFunctional ? (
+        <div className="preview_message_style">{chat.lastMessage.msg}</div>
+    ) : (
+    <div className="flex-row truncate">
+        <div style={{marginRight: "6px"}} className="preview_username">{userId == chat.lastMessage.senderId ? "You:" : chat.isDm ? "" : chat.lastMessage.senderId + ": "}</div>
+        <div className="preview_message_style">{chat.lastMessage.msg}</div>
+    </div>
+   );
+    const date = new Date(chat.lastMessage.date);
+    const dateTimeStr = date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: false });
+    var time = (
+        <div className="preview_message_style">
+            {dateTimeStr}
+        </div>
+    )
+    var unreaden_count = chat.unreadCount > 0 ? (
+        <span className="message__count">{chat.unreadCount}</span>
+    ) : (
+        <></>
+    );
+    var _ = (
+        <div className="chat-item-container flex flex-col">
+            <div id={`chat_${chat.id}`} className="chat-item flex flex-col overflow-hidden" onClick={() => onClick(chat.id)}>
+                <div style={{display:"flex", justifyContent: "space-between"}}>{chatName} {time}</div>
+                <div style={{display:"flex", justifyContent: "space-between"}}>{last_msg} {unreaden_count}</div>
+            </div>
+        </div>
+    );
     return (
-        <div id={`chat_${chat.id}`} className="chat-item flex flex-col overflow-hidden" onClick={() => onClick(chat.id)}>
-        <div className="flex items-center w-full">
-            {online && (
-            <svg
-                className="absolute overflow-visible -translate-[10px] -translate-y-[15px]"
-                xmlns="http://www.w3.org/2000/svg"
-                width="12"
-                height="12"
-                color="#646cff"
-                id={`online_status_${chat.id}`}
-            >
-                <circle cy="4" r="8" fill="currentColor" />
-            </svg>
-            )}
-            <a className="truncate" id={`chat_name_${chat.id}`}>{chat.name}</a>
-        </div>
-
-        <div
-            id={`chat_preview_content_${chat.id}`}
-            className={`flex items-center gap-1 overflow-hidden ${chat.isTyping ? "typing" : ""}`}
-        >
-            <div
-            className="truncate w-full chat-extra last_message"
-            id={`last_message_${chat.id}`}
-            >
-            {chat.lastMessage}
+        <li className="messages__item message" onClick={(e) => onClick(chat.id)}>
+            {/* <img className="message__img" src={avatar ? avatar : Placeholder}></img> */}
+            <div className="message__info">
+                <div className="message__header">
+                    <h3 className="message__title">{chatName}</h3>
+                    <span className="message__time">{dateTimeStr}</span>
+                </div>
+                <div className="message__text">
+                    {last_msg}
+                    {userId == chat.lastMessage.senderId && unreaden_count}
+                </div>
             </div>
-
-            <div className="flex w-full chat-extra chat_typing gap-1" id={`chat_typing_${chat.id}`} style={{ display: chat.isTyping ? "flex" : "none" }}>
-            <img src="/assets/SvgSpinners3DotsScale.svg" alt="Typing..." />
-            <span className="truncate" id={`chat_typing_name_${chat.id}`}>
-                {chat.isTyping}
-            </span>
-            </div>
-
-            <div
-            className="unreaden-count"
-            id={`unreaden_count_${chat.id}`}
-            style={{ display: chat.unreadCount > 0 ? "block" : "none" }}
-            >
-            {chat.unreadCount}
-            </div>
-        </div>
-        </div>
+        </li>
     );
 }
