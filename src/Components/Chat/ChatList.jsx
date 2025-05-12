@@ -38,10 +38,8 @@ export default function ChatList({chats, userId, shown, onClick}) {
         if (isLoading) {
             return <></>;
         }
-
     return (
         <>
-
             <section className="messages__header" style={{display: shown ? "block" : "none"}}>
                 <h2 className="messages__heading">Чаты</h2>
             </section>

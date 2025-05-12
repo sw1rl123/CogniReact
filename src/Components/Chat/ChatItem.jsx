@@ -1,3 +1,4 @@
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import React, { useContext, useEffect, useState } from "react";
 import Placeholder from './img/placeholder.png';
 import { Context } from "../..";
@@ -7,6 +8,7 @@ export default function ChatItem({
     onClick,
     userId,
     online,
+    getUsername
     userName,
     userImage
 }) {
@@ -18,7 +20,6 @@ export default function ChatItem({
             {dmUser == null ? chat.name : userName}
         </div>
     );
-
     var userId = localStorage.getItem("userId");
     var last_msg = chat.lastMessage.isFunctional ? (
         <div className="preview_message_style">{chat.lastMessage.msg}</div>
@@ -42,21 +43,34 @@ export default function ChatItem({
         <></>
     );
 
-    var _ = (
-        <div className="chat-item-container flex flex-col">
-            <div id={`chat_${chat.id}`} className="chat-item flex flex-col overflow-hidden" onClick={() => onClick(chat.id)}>
-                <div style={{display:"flex", justifyContent: "space-between"}}>{chatName} {time}</div>
-                <div style={{display:"flex", justifyContent: "space-between"}}>{last_msg} {unreaden_count}</div>
-            </div>
-        </div>
-    );
+    const [chatName, setChatName] = useState(null);
+    
+    useEffect(() => {
+        const fetchChatName = async () => {
+            if (!chat) return;
+
+            if (chat.isDm) {
+                const dmUser = chat.members[0] === userId ? chat.members[1] : chat.members[0];
+                const name = await getUsername(dmUser);
+                setChatName(name);
+            } else {
+                setChatName(chat.name);
+            }
+        };
+
+        fetchChatName();
+    }, [chat, userId, getUsername]);
 
     return (
         <li className="messages__item message" onClick={(e) => onClick(chat.id)}>
             <img className="message__img" src={userImage ? userImage : Placeholder}></img>
             <div className="message__info">
                 <div className="message__header">
-                    <h3 className="message__title">{chatName}</h3>
+                    <h3 className="message__title">
+                        <div className="truncate chatname" id={`chat_name_${chat.id}`}>
+                            {chatName}
+                        </div>
+                    </h3>
                     <span className="message__time">{dateTimeStr}</span>
                 </div>
                 <div className="message__text">

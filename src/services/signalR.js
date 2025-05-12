@@ -21,13 +21,13 @@ export async function startSignalRConnection(token) {
         console.warn("SignalR Disconnected.");
         showToast("SignalR Disconnected.");
         // clearUserChats();
-        imHereDaemon.stop();
-        fetchDmsDaemon.stop();
+        // imHereDaemon.stop();
+        // fetchDmsDaemon.stop();
     });
 
     await connection.start().then(() => {
-        imHereDaemon.start();
-        fetchDmsDaemon.start();
+        // imHereDaemon.start();
+        // fetchDmsDaemon.start();
         getChatList();
     });
 
@@ -111,50 +111,50 @@ export function deleteMessage(messageId) {
     connection.invoke("deleteMessage", messageId);
 }
 
-class ImHereDaemon {
-    constructor(interval = 1000) {
-        this.interval = interval;
-        this.running = false;
-        this.loop();
-    }
-    start() {
-        this.running = true;
-    }
-    stop() {
-        this.running = false;
-    }
+// class ImHereDaemon {
+//     constructor(interval = 1000) {
+//         this.interval = interval;
+//         this.running = false;
+//         this.loop();
+//     }
+//     start() {
+//         this.running = true;
+//     }
+//     stop() {
+//         this.running = false;
+//     }
 
-    loop() {
-        if (this.running){
-            imHere();
-        }
-        setTimeout(() => this.loop(), this.interval);
-    }
-}
+//     loop() {
+//         if (this.running){
+//             imHere();
+//         }
+//         setTimeout(() => this.loop(), this.interval);
+//     }
+// }
 
-var imHereDaemon = new ImHereDaemon(1000);
+// var imHereDaemon = new ImHereDaemon(1000);
 
-class FetchDmsDaeman {
-    constructor(interval = 1000) {
-        this.interval = interval;
-        this.running = false;
-        this.loop();
-    }
-    start() {
-        this.running = true;
-    }
-    stop() {
-        this.running = false;
-    }
+// class FetchDmsDaeman {
+//     constructor(interval = 1000) {
+//         this.interval = interval;
+//         this.running = false;
+//         this.loop();
+//     }
+//     start() {
+//         this.running = true;
+//     }
+//     stop() {
+//         this.running = false;
+//     }
 
-    loop() {
-        if (this.running){
-            // getUsersOnline(Object.keys(user_to_dm));
-            // getChatsTyping(Array.from(chats))
-        }
-        setTimeout(() => this.loop(), this.interval);
-    }
-}
-var fetchDmsDaemon = new FetchDmsDaeman(1000);
+//     loop() {
+//         if (this.running){
+//             // getUsersOnline(Object.keys(user_to_dm));
+//             // getChatsTyping(Array.from(chats))
+//         }
+//         setTimeout(() => this.loop(), this.interval);
+//     }
+// }
+// var fetchDmsDaemon = new FetchDmsDaeman(1000);
 
 
