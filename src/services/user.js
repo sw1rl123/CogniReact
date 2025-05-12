@@ -27,12 +27,10 @@ $api.interceptors.request.use((config) => {
 
 const refreshAccessToken = async () => {
     try {
-        const rToken = localStorage.getItem('rToken');
-        const response = await $api.get(`${API_URL}/Token/Refresh`, { headers: { "Refresh-token": rToken} });
+        const userId = localStorage.getItem('userId');
+        const response = await $api.get(`${API_URL}/Token/Refresh`, { params: { id: userId} });
         var aToken = response.data.accessToken;
         localStorage.setItem("aToken", aToken);
-        localStorage.setItem("rToken", response.data.refreshToken);
-        console.log("refreshed!");
         return aToken;
     } catch (error) {
         console.error("Ошибка при обновлении токена:", error);
@@ -156,6 +154,36 @@ export const createPost = async (postText, postImg) => {
     }
 }
 
+export const subscribe = async (friendId) => {
+    try {
+        var URL = "/Friend/Subscribe?friendId=" + friendId;
+        let response = await $api.post(URL);
+        return response;
+    } catch(e) {
+        console.log(e);
+    }
+}
+
+export const unSubscribe = async (friendId) => {
+    try {
+        var URL = "/Friend/Unsubscribe?friendId=" + friendId;
+        let response = await $api.post(URL);
+        return response;
+    } catch(e) {
+        console.log(e);
+    }
+}
+
+export const checkSubscribe = async (friendId) => {
+    try {
+        var URL = "Friend/CheckSubscribe?friendId=" + friendId;
+        let response = await $api.get(URL);
+        return response;
+    } catch(e) {
+        console.log(e);
+    }
+}
+
 export const createNewArticle = async (userId, articleName, articleBody, articleImg) => {
     try {
         let formData = new FormData();
@@ -189,7 +217,6 @@ export const getCurrentArticle = async (id) => {
     try {
         var URL = "/Article/GetArticleById?id=" + id;
         let response = await $api.get(URL);
-        console.log(response);
         return response;
     } catch(e) {
         console.error();
@@ -274,4 +301,3 @@ export const updateUserMbti = async (mbti) => {
         console.log(e);
     }
 }
-

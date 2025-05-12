@@ -6,7 +6,6 @@ import Settings from "../Settings/Settings";
 import About from "../About/About";
 import Chats from "../Chat/Chats";
 import React, { useEffect, useState} from "react";
-import React, { useEffect, useContext, useState} from "react";
 import {Context} from "../../index";
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import {observer} from "mobx-react-lite";
@@ -16,8 +15,6 @@ import Messages from "../Messages/Messages";
 import WikiCreate from "../Wiki/WikiCreate";
 import WikiArticle from "../Wiki/WikiArticle";
 import { startSignalRConnection } from "../../services/signalR";
-import { startSignalRConnection } from "../../services/signalR";
-import Chats from "../Chat/Chats";
 
 function Home() {
 
