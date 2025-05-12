@@ -1,4 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from "react";
+import Placeholder from './img/placeholder.png';
+import { Context } from "../..";
 
 export default function ChatItem({
     chat,
@@ -6,10 +9,17 @@ export default function ChatItem({
     userId,
     online,
     getUsername
+    userName,
+    userImage
 }) {
+
     let dmUser = chat.isDm ? (chat.members[0] == userId ? chat.members[1] : chat.members[0]) : null;
 
-    
+    var chatName = (
+        <div className="truncate chatname" id={`chat_name_${chat.id}`}>
+            {dmUser == null ? chat.name : userName}
+        </div>
+    );
     var userId = localStorage.getItem("userId");
     var last_msg = chat.lastMessage.isFunctional ? (
         <div className="preview_message_style">{chat.lastMessage.msg}</div>
@@ -19,6 +29,7 @@ export default function ChatItem({
         <div className="preview_message_style">{chat.lastMessage.msg}</div>
     </div>
    );
+
     const date = new Date(chat.lastMessage.date);
     const dateTimeStr = date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: false });
     var time = (
@@ -52,7 +63,7 @@ export default function ChatItem({
 
     return (
         <li className="messages__item message" onClick={(e) => onClick(chat.id)}>
-            {/* <img className="message__img" src={avatar ? avatar : Placeholder}></img> */}
+            <img className="message__img" src={userImage ? userImage : Placeholder}></img>
             <div className="message__info">
                 <div className="message__header">
                     <h3 className="message__title">
@@ -64,7 +75,7 @@ export default function ChatItem({
                 </div>
                 <div className="message__text">
                     {last_msg}
-                    {userId == chat.lastMessage.senderId && unreaden_count}
+                    {userId == chat.lastMessage.senderId && <></>/*unreaden_count*/}
                 </div>
             </div>
         </li>

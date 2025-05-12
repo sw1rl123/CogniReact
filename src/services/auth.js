@@ -1,6 +1,7 @@
 import axios from "axios"
 
-export const API_URL = "http://localhost:5279";
+export const API_URL = true ? "https://localhost:7055" : "http://localhost:5279";
+
 
 const api = axios.create({
     baseURL: API_URL,
@@ -10,7 +11,6 @@ const api = axios.create({
 export const createUser = async (user) => {
     try {
         let response = await api.post("/User/CreateUser", user);
-        console.log(response);
         return response;
     } catch(e) {
         console.log(e);
@@ -20,7 +20,6 @@ export const createUser = async (user) => {
 export const loginUser = async (user) => {
     try {
         let response = await api.post("/User/LoginByEmail", user);
-        console.log(response);
         return response;
     } catch(e) {
         return e.status;

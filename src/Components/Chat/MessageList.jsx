@@ -1,11 +1,16 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import ChatItem from './ChatItem';
 import "./Messages.css"
 import MessageItem from './MessageItem';
 import { API_URL } from '../../services/auth';
 import { apiBase, showToast } from '../../services/globals';
+
+import { ReactComponent as SubmitIcon } from './img/submit.svg';
+import { ReactComponent as ArrowIcon } from './img/arrow.svg';
+import Placeholder from "./img/placeholder.png";
+import { Context } from "../..";
+
 // chatId is very important! We cant get it from chatObject due query param
-export default function MessageList({chatId, getUsername, chatObject, userId, onClose, chatMsgs, connection, avatar, Placeholder, startDmOnMessage}) {
+export default function MessageList({chatId, getUsername, chatObject, userId, onClose, chatMsgs, connection, startDmOnMessage}) {
     const [inputText, setInputText] = useState("");
     const [ext, setExt] = useState([]);
 
@@ -85,14 +90,48 @@ export default function MessageList({chatId, getUsername, chatObject, userId, on
             showToast("Error uploading files: " + error.message);
         }
     }
+    let dmUser = chatObject == null ? chatId : chatObject.isDm ? (chatObject.members[0] == userId ? chatObject.members[1] : chatObject.members[0]) : null;
+
+    const [usersNames, setUsersNames] = useState(null);
+    const [usersAvatars, setUsersAvatars] = useState(null);
+    const {store} = useContext(Context);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+    
+        const fetchUsers = async () => {
+            setIsLoading(true);
+            try {
+            const users = await store.getAllUsers();
+            var idToName = new Map();
+            var idToPicture = new Map();
+            for (let i = 0; i < users.length; i++) {
+                idToName.set(users[i].id.toString(), users[i].name + " " + users[i].surname);
+                idToPicture.set(users[i].id.toString(), users[i].picUrl);
+            }
+            setUsersNames(idToName);
+            setUsersAvatars(idToPicture);
+            } catch (error) {
+                console.error("Failed to fetch user data:", error);
+            } finally {
+                setIsLoading(false);
+            }
+    
+        }
+        fetchUsers();
+        }, []);
+
+        if (isLoading) {
+            return <></>;
+        }
 
     return (
         <>
-        <button onClick={() => onClose()}>Close chat</button>
-        <section className="messages__chats" id="messages">
+        {/* <button onClick={() => onClose()}>Close chat</button> */}
+        <section className="messages__chat" id="messages">
             <div className="chat__header">
-                <div className="chat__icon" onClick={(e) => onClose()}/>
-                     <img className="chat__img" src={avatar ? avatar : Placeholder}></img>
+                <ArrowIcon className="chat__icon" onClick={(e) => onClose()}/>
+                     <img className="chat__img" src={usersAvatars.get(dmUser.toString()) ? usersAvatars.get(dmUser.toString()) : Placeholder}></img>
                      <div className="chat__info">
                          <h2 className="chat__name">{chatName}</h2>
                          <span className="chat__status">не в сети</span>

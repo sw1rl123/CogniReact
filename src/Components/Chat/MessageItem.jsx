@@ -20,7 +20,7 @@ export default function MessageItem({userId, messageObject}) {
     console.log("Attachments:", messageObject.attachments)
     console.log(messageObject.attachments != null && messageObject.attachments.map(e => `Aboba ${e}`))
     return (
-        messageObject.isFunctional ? <span className="chat__date">{messageObject.msg}</span> :
+        messageObject.isFunctional ? <span className="chat__message-func"><span>{messageObject.msg}</span></span> :
         <p className={messageObject.senderId != userId ? "chat__message" : "chat__message chat__message--own"}>{messageObject.msg}
         {messageObject.attachments != null && messageObject.attachments.map(link => {
             {console.log("Elem: ", link)}
