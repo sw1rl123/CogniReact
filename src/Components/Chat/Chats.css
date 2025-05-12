@@ -39,16 +39,6 @@ button:active {
     flex-direction: row;
 }
 
-.preview_username {
-    font-family: Montserrat;
-    color: var(--col-text-edit);
-}
-
-.preview_message_style {
-    font-family: Montserrat;
-    color: var(--col-text-desc);
-}
-
 .chatname {
     font-family: Montserrat;
     font-weight: 700;

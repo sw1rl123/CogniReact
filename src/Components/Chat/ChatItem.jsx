@@ -1,4 +1,5 @@
 import React from "react";
+import Placeholder from './img/placeholder.png';
 
 export default function ChatItem({
     chat,
@@ -6,6 +7,9 @@ export default function ChatItem({
     userId,
     online
 }) {
+
+    var avatar = null;
+
     let dmUser = chat.isDm ? (chat.members[0] == userId ? chat.members[1] : chat.members[0]) : null;
 
     var chatName = (
@@ -44,7 +48,7 @@ export default function ChatItem({
     );
     return (
         <li className="messages__item message" onClick={(e) => onClick(chat.id)}>
-            {/* <img className="message__img" src={avatar ? avatar : Placeholder}></img> */}
+            <img className="message__img" src={avatar ? avatar : Placeholder}></img>
             <div className="message__info">
                 <div className="message__header">
                     <h3 className="message__title">{chatName}</h3>

@@ -185,7 +185,7 @@ import { set } from 'mobx';
 
         return (
             <div className="messages">
-                {/* <button onClick={() => connection.invoke("createGroup", "Cogni🤝", ["26", "27"])}>Create Chat</button> */}
+                {/* <button onClick={() => connection.invoke("createGroup", "Cogni🤝", ["1", "27"])}>Create Chat</button> */}
                 <ChatList chats={chats} userId={userId} shown={chatOpen == null} onClick={openChat}/>
                 {chatOpen == null || <MessageList userId={userId} chatObject={chats[chatOpen]} chatId={chatOpen} onClose={closeChat} connection={connection} chatMsgs={chatMsgs} startDmOnMessage={startDmOnMessage}/> }
             </div>

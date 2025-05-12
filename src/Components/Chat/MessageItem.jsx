@@ -17,7 +17,7 @@ export default function MessageItem({userId, messageObject}) {
     const dateTimeStr = date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: false });
 
     return (
-        messageObject.isFunctional ? <span className="chat__date">{messageObject.msg}</span> :
+        messageObject.isFunctional ? <span className="chat__message-func"><span>{messageObject.msg}</span></span> :
         <p className={messageObject.senderId != userId ? "chat__message" : "chat__message chat__message--own"}>{messageObject.msg}
         <span className="chat__time">{dateTimeStr}</span></p>
     );
