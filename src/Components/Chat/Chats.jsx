@@ -24,7 +24,7 @@ class ChatObject {
 }
 
 class MessageObject {
-    constructor({ messageId = null, chatId = null, senderId = null, msg = null, date = null, isEdited = null, isFunctional = null, attachments = null, messageStatuses = [] } = {}) {
+    constructor({ messageId = null, chatId = null, senderId = null, msg = null, date = null, isEdited = null, isFunctional = null, attachments = [], messageStatuses = [] } = {}) {
         this.messageId = messageId;
         this.chatId = chatId;
         this.senderId = senderId;

@@ -1,5 +1,6 @@
 export const DEV = true;//import.meta.env.DEV;
 console.log("ISDEV: ", DEV)
+// ChatService addr
 export const apiBase = DEV ? "http://127.0.0.1:5108" : "/api"
 export const fileApi =  DEV ? "http://127.0.0.1:9000" : ""
 export const cogniApi =  DEV ? "http://127.0.0.1:5279" : "/api"

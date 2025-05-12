@@ -32,6 +32,18 @@
     cursor: pointer;
 }
 
+.video, .image {
+    border-radius: 9px;
+    margin-top: 4px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.media-component {
+    width: 100%;
+    display: flex;
+}
+
 .messages__list {
     width: 100%;
 }
