@@ -2,8 +2,8 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import ChatItem from './ChatItem';
 import "./Messages.css"
 import MessageItem from './MessageItem';
-
-export default function MessageList({chatId, chatObject, userId, onClose, chatMsgs, connection, avatar, Placeholder, startDmOnMessage}) {
+// chatId is very important! We cant get it from chatObject due query param
+export default function MessageList({chatId, getUsername, chatObject, userId, onClose, chatMsgs, connection, avatar, Placeholder, startDmOnMessage}) {
     const [inputText, setInputText] = useState("");
     const [ext, setExt] = useState([]);
 
@@ -19,7 +19,7 @@ export default function MessageList({chatId, chatObject, userId, onClose, chatMs
         setInputText("");
         if (message != "" || (ext != null && ext.length > 0)) {
             // scrollToBottom();
-            // connection.invoke("readMessages", chatId, -1);
+            connection.invoke("readMessages", chatId, -1);
             if (startDmOnMessage) {
                 connection.invoke("startDm", chatId, message);
             } else {
@@ -27,7 +27,24 @@ export default function MessageList({chatId, chatObject, userId, onClose, chatMs
             }
         }
     }
-    let dmUser = chatObject == null ? chatId : chatObject.isDm ? (chatObject.members[0] == userId ? chatObject.members[1] : chatObject.members[0]) : null;
+
+    const [chatName, setChatName] = useState(null);
+
+    useEffect(() => {
+        const fetchChatName = async () => {
+            let dmUser = chatObject == null ? chatId : chatObject.isDm ? (chatObject.members[0] == userId ? chatObject.members[1] : chatObject.members[0]) : null;
+            console.log("dmUser", dmUser)
+            if (dmUser) {
+                const name = await getUsername(dmUser);
+                setChatName(name);
+            } else {
+                setChatName(chatObject.name);
+            }
+        };
+
+        fetchChatName();
+    }, [chatObject, userId, getUsername]);
+
     return (
         <>
         <button onClick={() => onClose()}>Close chat</button>
@@ -36,7 +53,7 @@ export default function MessageList({chatId, chatObject, userId, onClose, chatMs
                 <div className="chat__icon" onClick={(e) => onClose()}/>
                      <img className="chat__img" src={avatar ? avatar : Placeholder}></img>
                      <div className="chat__info">
-                         <h2 className="chat__name">{dmUser == null ? chatId : dmUser}</h2>
+                         <h2 className="chat__name">{chatName}</h2>
                          <span className="chat__status">не в сети</span>
                      </div>
                      <span className="chat__type">ISFP</span>

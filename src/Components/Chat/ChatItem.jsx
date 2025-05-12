@@ -1,18 +1,15 @@
-import React from "react";
+import React, { useContext, useEffect, useRef, useState } from 'react';
 
 export default function ChatItem({
     chat,
     onClick,
     userId,
-    online
+    online,
+    getUsername
 }) {
     let dmUser = chat.isDm ? (chat.members[0] == userId ? chat.members[1] : chat.members[0]) : null;
 
-    var chatName = (
-        <div className="truncate chatname" id={`chat_name_${chat.id}`}>
-            {dmUser == null ? chat.name : dmUser}
-        </div>
-    );
+    
     var userId = localStorage.getItem("userId");
     var last_msg = chat.lastMessage.isFunctional ? (
         <div className="preview_message_style">{chat.lastMessage.msg}</div>
@@ -34,20 +31,35 @@ export default function ChatItem({
     ) : (
         <></>
     );
-    var _ = (
-        <div className="chat-item-container flex flex-col">
-            <div id={`chat_${chat.id}`} className="chat-item flex flex-col overflow-hidden" onClick={() => onClick(chat.id)}>
-                <div style={{display:"flex", justifyContent: "space-between"}}>{chatName} {time}</div>
-                <div style={{display:"flex", justifyContent: "space-between"}}>{last_msg} {unreaden_count}</div>
-            </div>
-        </div>
-    );
+
+    const [chatName, setChatName] = useState(null);
+    
+    useEffect(() => {
+        const fetchChatName = async () => {
+            if (!chat) return;
+
+            if (chat.isDm) {
+                const dmUser = chat.members[0] === userId ? chat.members[1] : chat.members[0];
+                const name = await getUsername(dmUser);
+                setChatName(name);
+            } else {
+                setChatName(chat.name);
+            }
+        };
+
+        fetchChatName();
+    }, [chat, userId, getUsername]);
+
     return (
         <li className="messages__item message" onClick={(e) => onClick(chat.id)}>
             {/* <img className="message__img" src={avatar ? avatar : Placeholder}></img> */}
             <div className="message__info">
                 <div className="message__header">
-                    <h3 className="message__title">{chatName}</h3>
+                    <h3 className="message__title">
+                        <div className="truncate chatname" id={`chat_name_${chat.id}`}>
+                            {chatName}
+                        </div>
+                    </h3>
                     <span className="message__time">{dateTimeStr}</span>
                 </div>
                 <div className="message__text">
