@@ -27,7 +27,7 @@ export default function MessageList({chatId, chatObject, userId, onClose, chatMs
             }
         }
     }
-    let dmUser = chatObject.isDm ? (chatObject.members[0] == userId ? chatObject.members[1] : chatObject.members[0]) : null;
+    let dmUser = chatObject == null ? chatId : chatObject.isDm ? (chatObject.members[0] == userId ? chatObject.members[1] : chatObject.members[0]) : null;
     return (
         <>
         <button onClick={() => onClose()}>Close chat</button>
