@@ -137,6 +137,7 @@ function Frineds() {
 
   }, [location.search]);
   
+  
 
   return (
     <div className='friends__wrapper'>
