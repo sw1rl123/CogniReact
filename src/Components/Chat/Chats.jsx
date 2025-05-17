@@ -261,7 +261,7 @@ export default function Chats({connectionRef, msg}) {
     return (
         <div className="messages">
             {/* <button onClick={() => connectionRef.invoke("createGroup", "Cogni🤝", ["26", "27"])}>Create Chat</button> */}
-            <ChatList getUsername={getUsername} chats={chats} userId={userId} shown={chatOpen == null} onClick={sendDeleteChat}/>
+            <ChatList getUsername={getUsername} chats={chats} userId={userId} shown={chatOpen == null} onClick={openChat}/>
             {chatOpen == null || <MessageList getUsername={getUsername} userId={userId} chatObject={chats[chatOpen]} chatId={chatOpen} onClose={closeChat} connectionRef={connectionRef} chatMsgs={chatMsgs} startDmOnMessage={startDmOnMessage}/> }
         </div>
     );
