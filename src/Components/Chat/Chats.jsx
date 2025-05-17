@@ -71,9 +71,7 @@ export default function Chats({connectionRef, msg}) {
 
     const tryOpenDm = (userId) => {
         let id = dms[userId] ?? userId;
-        setChatOpen(id);
-        setChatMsgs({});
-        getMsgs(id, -1, false, 30);
+        openChat(id);
     }
 
 
