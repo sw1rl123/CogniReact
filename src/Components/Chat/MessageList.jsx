@@ -145,9 +145,9 @@ export default function MessageList({chatId, getUsername, chatObject, userId, on
             </div>
             <div className='chat__write'>
                 <input className="chat__input" value={inputText} onChange={(e) => setInputText(e.target.value)} placeholder="Сообщение"></input>
-                <div onClick={(e) => sendMessage()} style={{width: "32px", height: "32px", background: "yellow"}}/>
-                <div onClick={(e) => {document.getElementById("media-input").click()}} style={{width: "32px", height: "32px", background: "red"}}/>
-                <div onClick={(e) => {document.getElementById("files-input").click()}} style={{width: "32px", height: "32px", background: "green"}}/>
+                <SubmitIcon onClick={(e) => sendMessage()} style={{width: "32px", height: "32px"}}/>
+                <SubmitIcon onClick={(e) => {document.getElementById("media-input").click()}} style={{width: "32px", height: "32px", rotate: "45deg"}}/>
+                {/* <SubmitIcon onClick={(e) => {document.getElementById("files-input").click()}} style={{width: "32px", height: "32px"}}/> */}
             </div>
             <input type="file" id="files-input" multiple style={{display: "none"}} onChange={(e) => sendFiles(e, false)}/>
             <input type="file" id="media-input" multiple style={{display: "none"}} onChange={(e) => sendFiles(e, true)}/>

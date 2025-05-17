@@ -111,7 +111,6 @@ function Frineds() {
 
   }
   }, []);
-  }, []);
 
   useEffect(() => {
     const urlData = decodeURIComponent(location.search);
@@ -138,7 +137,6 @@ function Frineds() {
 
   }, [location.search]);
   
-  }, [location.search]);
   
 
   return (
