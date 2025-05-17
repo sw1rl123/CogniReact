@@ -36,13 +36,15 @@ class MessageObject {
     }
 }
 
-export default function Chats({connection, msg}) {
+export default function Chats({connectionRef, msg}) {
     const userId = localStorage.getItem('userId');
     const token = localStorage.getItem('aToken');
     const [chats, setChats] = useState({});
     const [idToUsername, setIdToUsername] = useState({});
 
+    const [dms, setDms] = useState({});
     const chatsRef = useRef(chats);
+    const [chatsFetched, setChatsFetched] = useState(false);
 
     const [searchParams, setSearchParams] = useSearchParams();
 
@@ -50,44 +52,78 @@ export default function Chats({connection, msg}) {
     const [chatMsgs, setChatMsgs] = useState({});
 
     const [startDmOnMessage, setStartDmOnMessage] = useState(null);
-    
+
+
     useEffect(() => {
         chatsRef.current = chats;
     }, [chats]);
 
+    const getMsgs = (chatId, startId, toNew, amount) => {
+        console.log("Requesting messages...", chatId, startId, toNew, amount)
+        connectionRef.current.invoke("getMsgs", chatId, startId, toNew, amount);
+    }
+
+    const openChat = (chatId) => {
+        setChatOpen(chatId);
+        setChatMsgs({});
+        getMsgs(chatId, -1, false, 30);
+    }
+
+    const tryOpenDm = (userId) => {
+        let id = dms[userId] ?? userId;
+        setChatOpen(id);
+        setChatMsgs({});
+        getMsgs(id, -1, false, 30);
+    }
+
+
     useEffect(() => {
-        if (connection == null) {
-            console.error("Connection not found");
-            return;
-        }
         const fetchChats = async () => {
             try {
-                await connection.invoke("GetChatList");
+                await connectionRef.current.invoke("GetChatList");
             } catch (error) {
                 console.error("Error fetching chats:", error);
             }
         };
         console.log("Fetching chats...");
+
         fetchChats();
+
         const handleChatList = (notification) => {
             const updatedChats = {};
+            const updatedDms = {};
             console.log("Chat list updated:", notification);
             for (const chat of notification) {
                 const c = new ChatObject(chat);
                 updatedChats[c.id] = c;
+                if (c.isDm) {
+                    let otherUserId = c.members[0] == userId ? c.members[1] : c.members[0];
+                    updatedDms[otherUserId] = c.id
+                }
             }
+            setDms(updatedDms);
             setChats(updatedChats);
+            setChatsFetched(true)
         };
 
-        connection.off("ChatList");
-        connection.on("ChatList", handleChatList);
+        connectionRef.current.off("ChatList");
+        connectionRef.current.on("ChatList", handleChatList);
 
         const addChat = (chatObject) => {
             setChats(prevChats => ({...prevChats, [chatObject.id]: chatObject}));
+            if (chatObject.isDm) {
+                let otherUserId = chatObject.members[0] == userId ? chatObject.members[1] : chatObject.members[0];
+                let newChatId = chatObject.id;
+                setDms(prevDms => ({...prevDms, [otherUserId]: newChatId}))
+                if (chatOpen == otherUserId) {
+                    openChat(newChatId)
+                }
+            }
+
         }
 
-        connection.off("NewChatAdded");
-        connection.on("NewChatAdded", (notification) => {
+        connectionRef.current.off("NewChatAdded");
+        connectionRef.current.on("NewChatAdded", (notification) => {
             console.log("New chat added:", notification);
             addChat(new ChatObject({
                 name: notification.name,
@@ -99,8 +135,8 @@ export default function Chats({connection, msg}) {
             }))
         });
 
-        connection.off("ChatRemoved");
-        connection.on("ChatRemoved", (notification) => {
+        connectionRef.current.off("ChatRemoved");
+        connectionRef.current.on("ChatRemoved", (notification) => {
             console.log("Chat removed:", notification.chatId);
             setChats(prevChats => {
                 const updatedChats = {...prevChats};
@@ -109,10 +145,10 @@ export default function Chats({connection, msg}) {
             });
         });
 
-        connection.off("Msgs");
-        connection.on("Msgs", (msgs) => {
+        connectionRef.current.off("Msgs");
+        connectionRef.current.on("Msgs", (msgs) => {
             console.log("Messages received:", msgs);
-            if (msgs.length == 0 && searchParams.get("dm") == chatOpen && chatOpen != null) {
+            if (msgs.length == 0 && (searchParams.get("dm") == chatOpen || searchParams.get("dm") ==  dms[userId]) && chatOpen != null) {
                 setStartDmOnMessage(true);
                 console.log("Will open new DM");
             } else {
@@ -128,27 +164,32 @@ export default function Chats({connection, msg}) {
             );
         });
 
-        if (chatOpen != null) {
-            openChat(chatOpen);
-        }
-
-        connection.off("NewMsg");
-        connection.on("NewMsg", (msg) => {
+        connectionRef.current.off("NewMsg");
+        connectionRef.current.on("NewMsg", (msg) => {
             setChatMsgs(prevChatMsgs => ({
                 ...prevChatMsgs,
                 [msg.messageId]: new MessageObject(msg)
             }));
         })
 
+        if (chatOpen != null) {
+            tryOpenDm(chatOpen);
+        }
+
         return () => {
-            connection.off("ChatList");
-            connection.off("NewChatAdded");
-            connection.off("ChatRemoved");
-            connection.off("Msgs");
-            connection.off("NewMsg");
+            connectionRef.current.off("ChatList");
+            connectionRef.current.off("NewChatAdded");
+            connectionRef.current.off("ChatRemoved");
+            connectionRef.current.off("Msgs");
+            connectionRef.current.off("NewMsg");
         };
-    }, [connection]);
+    }, [connectionRef]);
     
+    useEffect(() => {
+        if (chatOpen != null) {
+            tryOpenDm(chatOpen);
+        }
+    }, [chatsFetched])
 
     if (!token) {
         console.error("Token not found in localStorage");
@@ -156,24 +197,12 @@ export default function Chats({connection, msg}) {
         return <></>;
     }
 
-    if (connection == null) {
+    if (connectionRef.current == null) {
         console.error("Connection not found");
         showToast("Connection not found");
         return <></>;
     }
 
-    const getMsgs = (chatId, startId, toNew, amount) => {
-        connection.invoke("getMsgs", chatId, startId, toNew, amount);
-    }
-
-    
-
-
-    const openChat = (chatId) => {
-        setChatOpen(chatId);
-        setChatMsgs({});
-        getMsgs(chatId, -1, false, 30);
-    }
 
 
     const closeChat = () => {
@@ -181,7 +210,7 @@ export default function Chats({connection, msg}) {
     }
 
     const sendDeleteChat = (chatId) => {
-        connection.invoke("deleteChat", chatId);
+        connectionRef.current.invoke("deleteChat", chatId);
     }
 
     const fetchUsers = async (user_ids) => {
@@ -231,9 +260,9 @@ export default function Chats({connection, msg}) {
 
     return (
         <div className="messages">
-            {/* <button onClick={() => connection.invoke("createGroup", "Cogni🤝", ["26", "27"])}>Create Chat</button> */}
-            <ChatList getUsername={getUsername} chats={chats} userId={userId} shown={chatOpen == null} onClick={openChat}/>
-            {chatOpen == null || <MessageList getUsername={getUsername} userId={userId} chatObject={chats[chatOpen]} chatId={chatOpen} onClose={closeChat} connection={connection} chatMsgs={chatMsgs} startDmOnMessage={startDmOnMessage}/> }
+            {/* <button onClick={() => connectionRef.invoke("createGroup", "Cogni🤝", ["26", "27"])}>Create Chat</button> */}
+            <ChatList getUsername={getUsername} chats={chats} userId={userId} shown={chatOpen == null} onClick={sendDeleteChat}/>
+            {chatOpen == null || <MessageList getUsername={getUsername} userId={userId} chatObject={chats[chatOpen]} chatId={chatOpen} onClose={closeChat} connectionRef={connectionRef} chatMsgs={chatMsgs} startDmOnMessage={startDmOnMessage}/> }
         </div>
     );
 }

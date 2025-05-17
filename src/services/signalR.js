@@ -22,7 +22,7 @@ export async function startSignalRConnection(token) {
     });
 
     await connection.start().then(() => {
-        getChatList(); // is it important?
+        // getChatList(); // is it important?
     }); 
 
     console.log("SignalR Connected");

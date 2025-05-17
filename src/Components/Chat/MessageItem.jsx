@@ -5,16 +5,6 @@ import { apiBase, MINIO_API_URL } from '../../services/globals';
 import { getFileExtension } from './MessageList';
 
 export default function MessageItem({userId, messageObject}) {
-
-
-    //             
-    //                 <span className="chat__date">11 мая</span>
-    //                 <p className="chat__message">Привет завтра во сколько встречаемся?<span className="chat__time">18:35</span></p>
-    //                 {isSended && <p className="chat__message chat__message--own">Привет, думаю к 10<span className="chat__time">18:41</span></p>}
-    //             </div>
-
-            //<p className="chat__message chat__message--own">Привет, думаю к 10<span className="chat__time">18:41</span></p>
-//
     const date = new Date(messageObject.date);
     const dateTimeStr = date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: false });
     console.log("Attachments:", messageObject.attachments)
