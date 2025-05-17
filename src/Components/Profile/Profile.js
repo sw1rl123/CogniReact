@@ -240,21 +240,23 @@ const sendMessage = async (friendId) => {
             <div className="tags__wrapper">
               <h2 className="tags__heading">МУЗЫКА</h2>
               <button onClick={hideTags} type="button" className='modal__button--close'><CloseSvg className='modal__icon'/></button>
-              <ul className='tags__pages'>
+              {/* <ul className='tags__pages'>
                 <li><label className='tags__pages-label'>1<input defaultChecked type="radio" name="tagsEdit"></input></label></li>
                 <li><label className='tags__pages-label'>2<input defaultChecked type="radio" name="tagsEdit"></input></label></li>
                 <li><label className='tags__pages-label'>3<input defaultChecked type="radio" name="tagsEdit"></input></label></li>
-              </ul>
+              </ul> */}
               <ul className="tags__categories categories">
-                <li className="categories__item">альтернатива</li>
-                <li className="categories__item">метал</li>
+                <li className="categories__item">к-поп</li>
+                <li className="categories__item">хип-хоп</li>
                 <li className="categories__item">рок</li>
               </ul>
               <ul className="tags__list">
+                <li className="tags__item">#Bts</li>
+                <li className="tags__item">#Jay-Z</li>
                 <li className="tags__item">#TheBeatles</li>
                 <li className="tags__item">#Nirvana</li>
               </ul>
-              {userId == currentUserId && <button className='tags__button'>редактировать</button>}
+              {/* {userId == currentUserId && <button className='tags__button'>редактировать</button>} */}
             </div>
           </form>
         </div>

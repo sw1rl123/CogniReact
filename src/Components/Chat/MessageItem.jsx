@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import ChatItem from './ChatItem';
 import "./Messages.css"
-import { apiBase } from '../../services/globals';
+import { apiBase, MINIO_API_URL } from '../../services/globals';
 import { getFileExtension } from './MessageList';
 
 export default function MessageItem({userId, messageObject}) {
@@ -24,7 +24,6 @@ export default function MessageItem({userId, messageObject}) {
         <p className={messageObject.senderId != userId ? "chat__message" : "chat__message chat__message--own"}>{messageObject.msg}
         {messageObject.attachments != null && messageObject.attachments.map(link => {
             {console.log("Elem: ", link)}
-            // return (<img key={element} className='image' src={`http://212.22.82.127:9111` +   element}></img>)
             return createMediaComponent(link)
         })} 
         <span className="chat__time">{dateTimeStr}</span></p>
@@ -34,7 +33,7 @@ export default function MessageItem({userId, messageObject}) {
 
 function createMediaComponent(fileLink) {
     const extension = getFileExtension(fileLink);
-    var fileLink = `http://212.22.82.127:9111` +  fileLink;
+    var fileLink = `${MINIO_API_URL}` +  fileLink;
     let mediaElement;
     if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(extension)) {
         mediaElement = (<div key={fileLink} class="media-component image flex"><img src={fileLink} alt="Image" class="image" /></div>)

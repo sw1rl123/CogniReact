@@ -1,9 +1,7 @@
-export const DEV = true;//import.meta.env.DEV;
-console.log("ISDEV: ", DEV)
-// ChatService addr
-export const apiBase = DEV ? "http://127.0.0.1:5108" : "/api"
-export const fileApi =  DEV ? "http://127.0.0.1:9000" : ""
-export const cogniApi =  DEV ? "http://127.0.0.1:5279" : "/api"
+export const COGNI_API_URL ="http://localhost:5279";
+export const CHAT_API_URL = "http://localhost:5108";
+export const MINIO_API_URL = "http://212.22.82.127:9111";
+
 
 // uuid is Unique User Identifier now :D
 let uuid_to_username = {}
@@ -27,7 +25,7 @@ export function clearUsernameRelations() {
 
 
 export async function fetchUsers(user_ids) {
-    const response = await fetch(`${cogniApi}/user/GetUsersByIds`, {
+    const response = await fetch(`${COGNI_API_URL}/user/GetUsersByIds`, {
         method: "POST",
         body: JSON.stringify(user_ids),
         headers: {
