@@ -2,12 +2,11 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import "./Chats.css"
 import MessageList from './MessageList';
 import * as signalR from "@microsoft/signalr";
-import { showToast } from '../../services/globals';
+import { showToast, COGNI_API_URL } from '../../services/globals';
 import ChatItem from './ChatItem';
 import ChatList from './ChatList';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import { set } from 'mobx';
-import { API_URL } from '../../services/auth';
 
 
 
@@ -186,7 +185,7 @@ export default function Chats({connection, msg}) {
     }
 
     const fetchUsers = async (user_ids) => {
-        const response = await fetch(`${API_URL}/user/GetUsersByIds`, {
+        const response = await fetch(`${COGNI_API_URL}/user/GetUsersByIds`, {
             method: "POST",
             body: JSON.stringify(user_ids),
             headers: {

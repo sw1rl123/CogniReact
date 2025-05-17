@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import "./Messages.css"
 import MessageItem from './MessageItem';
-import { API_URL } from '../../services/auth';
-import { apiBase, showToast } from '../../services/globals';
+
+import { COGNI_API_URL, showToast } from '../../services/globals';
 
 import { ReactComponent as SubmitIcon } from './img/submit.svg';
 import { ReactComponent as ArrowIcon } from './img/arrow.svg';
@@ -74,7 +74,7 @@ export default function MessageList({chatId, getUsername, chatObject, userId, on
             formData.append("files", files[i]);
         }
         try {
-            const response = await fetch(`${apiBase}/chat/files/upload`, {
+            const response = await fetch(`${COGNI_API_URL}/chat/files/upload`, {
                 method: "POST",
                 body: formData
             });

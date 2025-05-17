@@ -1,9 +1,9 @@
 import axios from "axios"
+import { COGNI_API_URL } from "./globals";
 
-const API_URL = false ? "https://localhost:7055" : "http://localhost:5279";
 
 const $api = axios.create({
-    baseURL: API_URL,
+    baseURL: COGNI_API_URL,
     withCredentials: true,
     headers: {
         'Content-Type': 'application/json;charset=UTF-8',
@@ -28,7 +28,7 @@ $api.interceptors.request.use((config) => {
 const refreshAccessToken = async () => {
     try {
         const userId = localStorage.getItem('userId');
-        const response = await $api.get(`${API_URL}/Token/Refresh`, { params: { id: userId} });
+        const response = await $api.get(`${COGNI_API_URL}/Token/Refresh`, { params: { id: userId} });
         var aToken = response.data.accessToken;
         localStorage.setItem("aToken", aToken);
         return aToken;
