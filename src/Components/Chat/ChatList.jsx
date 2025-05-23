@@ -4,7 +4,7 @@ import { Context } from "../..";
 
 
 
-export default function ChatList({chats, userId, shown, onClick}) {
+export default function ChatList({chats, getUsername, userId, shown, onClick}) {
 
     const [usersNames, setUsersNames] = useState(null);
     const [usersAvatars, setUsersAvatars] = useState(null);
@@ -19,6 +19,7 @@ export default function ChatList({chats, userId, shown, onClick}) {
             const users = await store.getAllUsers();
             var idToName = new Map();
             var idToPicture = new Map();
+            console.error("Users:", users);
             for (let i = 0; i < users.length; i++) {
                 idToName.set(users[i].id.toString(), users[i].name + " " + users[i].surname);
                 idToPicture.set(users[i].id.toString(), users[i].picUrl);
@@ -39,17 +40,17 @@ export default function ChatList({chats, userId, shown, onClick}) {
         if (isLoading) {
             return <></>;
         }
-
+    
     return (
         <>
-
             <section className="messages__header" style={{display: shown ? "block" : "none"}}>
                 <h2 className="messages__heading">Чаты</h2>
             </section>
             <section className="messages__chats" style={{display: shown ? "block" : "none"}}>
                 <ul className="messages__list">
                     {Object.entries(chats).map(([id, chat]) => (
-                        <ChatItem  userName={usersNames.get(chat.members[1].toString())} userImage={usersAvatars.get(chat.members[1].toString())} key={id} userId={userId} id={id} chat={chat} onClick={() => onClick(id)}/>
+                        <ChatItem getUsername={getUsername} 
+                        userImage={usersAvatars.get((chat.isDm ? (chat.members[0] == userId ? chat.members[1].toString() : chat.members[0].toString()) : null))} key={id} userId={userId} id={id} chat={chat} onClick={() => onClick(id)}/>
                     ))}
                 </ul>
             </section>

@@ -2,6 +2,12 @@
     max-width: 560px;
     width: 100%;
 }
+ * {transition: all 500ms ease-in-out;}
+
+.video, .image {
+    width: 100%;
+    display: flex;
+}
 
 .messages__header {
     width: 100%;
@@ -237,7 +243,7 @@
 }
 
 .chat__input {
-    width: 450px;
+    width: 430px;
     height: 40px;
     padding: 5px 10px;
     border-radius: 20px;
