@@ -7,6 +7,7 @@ import Header from '../../Layouts/Header/Header';
 import { ReactComponent as Arrow } from './img/Arrow.svg';
 import { ReactComponent as Humster } from './img/humster.svg';
 import { ReactComponent as Ellipse } from './img/ellipse.svg';
+import { COGNI_API_URL } from '../../../services/globals';
 
 function Test() {
 
@@ -103,7 +104,7 @@ function Test() {
             navigate('/register');
         }
 
-        axios.get("https://localhost:7055/Test/GetAllQuestions")
+        axios.get(`${COGNI_API_URL}/Test/GetAllQuestions`)
             .then((response) => {
                 setQuestionsEI(response.data.questions.slice(0, 15));
                 setQuestionsSN(response.data.questions.slice(15, 30));

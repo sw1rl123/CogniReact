@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import "./Messages.css"
 import MessageItem from './MessageItem';
-import { API_URL } from '../../services/auth';
-import { apiBase, showToast } from '../../services/globals';
+
+import { COGNI_API_URL, showToast } from '../../services/globals';
 
 import { ReactComponent as SubmitIcon } from './img/submit.svg';
 import { ReactComponent as ArrowIcon } from './img/arrow.svg';
@@ -10,11 +10,11 @@ import Placeholder from "./img/placeholder.png";
 import { Context } from "../..";
 
 // chatId is very important! We cant get it from chatObject due query param
-export default function MessageList({chatId, getUsername, chatObject, userId, onClose, chatMsgs, connection, startDmOnMessage}) {
+export default function MessageList({chatId, getUsername, chatObject, userId, onClose, chatMsgs, connectionRef, startDmOnMessage}) {
     const [inputText, setInputText] = useState("");
     const [ext, setExt] = useState([]);
 
-    
+    console.log("Message list conn: ", connectionRef);
     const sendMessage = async (ext=null) => {
         if (startDmOnMessage == null) {
             // todo: notify that chat is loading
@@ -26,11 +26,11 @@ export default function MessageList({chatId, getUsername, chatObject, userId, on
         setInputText("");
         if (message != "" || (ext != null && ext.length > 0)) {
             // scrollToBottom();
-            connection.invoke("readMessages", chatId, -1);
+            connectionRef.current.invoke("readMessages", chatId, -1);
             if (startDmOnMessage) {
-                connection.invoke("startDm", chatId, message);
+                connectionRef.current.invoke("startDm", chatId, message);
             } else {
-                connection.invoke("sendMsg", chatId, message, ext)
+                connectionRef.current.invoke("sendMsg", chatId, message, ext)
             }
         }
     }
@@ -74,7 +74,7 @@ export default function MessageList({chatId, getUsername, chatObject, userId, on
             formData.append("files", files[i]);
         }
         try {
-            const response = await fetch(`${apiBase}/chat/files/upload`, {
+            const response = await fetch(`${COGNI_API_URL}/chat/files/upload`, {
                 method: "POST",
                 body: formData
             });
@@ -102,15 +102,15 @@ export default function MessageList({chatId, getUsername, chatObject, userId, on
         const fetchUsers = async () => {
             setIsLoading(true);
             try {
-            const users = await store.getAllUsers();
-            var idToName = new Map();
-            var idToPicture = new Map();
-            for (let i = 0; i < users.length; i++) {
-                idToName.set(users[i].id.toString(), users[i].name + " " + users[i].surname);
-                idToPicture.set(users[i].id.toString(), users[i].picUrl);
-            }
-            setUsersNames(idToName);
-            setUsersAvatars(idToPicture);
+                const users = await store.getAllUsers();
+                var idToName = new Map();
+                var idToPicture = new Map();
+                for (let i = 0; i < users.length; i++) {
+                    idToName.set(users[i].id.toString(), users[i].name + " " + users[i].surname);
+                    idToPicture.set(users[i].id.toString(), users[i].picUrl);
+                }
+                setUsersNames(idToName);
+                setUsersAvatars(idToPicture);
             } catch (error) {
                 console.error("Failed to fetch user data:", error);
             } finally {
@@ -118,7 +118,7 @@ export default function MessageList({chatId, getUsername, chatObject, userId, on
             }
     
         }
-        fetchUsers();
+            fetchUsers();
         }, []);
 
         if (isLoading) {

@@ -5,7 +5,7 @@ import Navigation from "../Layouts/Navigation/Navigation";
 import Settings from "../Settings/Settings";
 import About from "../About/About";
 import Chats from "../Chat/Chats";
-import React, { useEffect, useState} from "react";
+import React, { useEffect, useRef, useState} from "react";
 import {Context} from "../../index";
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import {observer} from "mobx-react-lite";
@@ -14,19 +14,55 @@ import Wiki from "../Wiki/Wiki";
 import Messages from "../Messages/Messages";
 import WikiCreate from "../Wiki/WikiCreate";
 import WikiArticle from "../Wiki/WikiArticle";
-import { startSignalRConnection } from "../../services/signalR";
+import { CHAT_API_URL } from "../../services/globals";
+import * as signalR from "@microsoft/signalr";
 
 function Home() {
-
-    const location = useLocation();
-    const [signalRConn, setSignalRConn] = useState(null);
-    
-    let params = useParams()
-
     const navigate = useNavigate();
+    let params = useParams()
+    
+    const location = useLocation();
+
+    const [signalRConn, setSignalRConn] = useState(null);
+    const connectionRef = useRef(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        
+        connectionRef.current = signalRConn;
+    }, [signalRConn]);
+
+    const tryStartConn = async () => {
+        if (connectionRef.current == null){
+            let token = localStorage.getItem('aToken');
+            if (token == null) {
+                console.error("No token for signalR connection!")
+                return
+            }
+            try {
+                let connection = new signalR.HubConnectionBuilder()
+                    .withUrl(`${CHAT_API_URL}/chat/hub?token=${token}`)
+                    .build();
+                connection.onclose(() => {
+                    console.warn("SignalR Disconnected.");
+                });
+                console.log("pre3")
+                await connection.start()
+                console.log("3", connection)
+                setSignalRConn(connection);
+                connectionRef.current = connection;
+                return connection
+            } catch (e) {
+                console.error("Cant open signalR connection: ", e)
+            }
+            console.log("4", connectionRef.current)
+        } else {
+            console.warn("Trying to open connection while its exists")
+        }
+    }
+    
+    
+
+    useEffect(() => {
         localStorage.removeItem('name');
         localStorage.removeItem('surname');
         localStorage.removeItem('email');
@@ -39,17 +75,14 @@ function Home() {
         if (location.pathname == "/") {
             navigate('/profile/' + localStorage.getItem('userId'));
         }
-        let token = localStorage.getItem('aToken');
-        const startConn = async (token) => {
-            let c = await startSignalRConnection(token);
-            setSignalRConn(c);
+        const iHateReact = async () => {
+            await tryStartConn()
+            console.log("PreIsLoading", connectionRef.current)
+            setIsLoading(false)
         }
-
-        if (token != null) {
-            startConn(token);
-        }
-    }, []);
-
+        iHateReact();
+        
+    });
     return (
         <div className="home">
             <Header></Header>
@@ -66,7 +99,7 @@ function Home() {
                 {location.pathname === '/wiki/' + params.wikiId && <WikiArticle/>}
                 {location.pathname === "/wiki/create" && <WikiCreate/>}
 
-                {location.pathname === "/messages" && <Chats connection={signalRConn} />}
+                {location.pathname === "/messages" && !isLoading && <Chats connectionRef={connectionRef} />}
             </div>
             </div>
         </div>

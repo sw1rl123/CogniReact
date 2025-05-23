@@ -1,20 +1,10 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import ChatItem from './ChatItem';
 import "./Messages.css"
-import { apiBase } from '../../services/globals';
+import { apiBase, MINIO_API_URL } from '../../services/globals';
 import { getFileExtension } from './MessageList';
 
 export default function MessageItem({userId, messageObject}) {
-
-
-    //             
-    //                 <span className="chat__date">11 мая</span>
-    //                 <p className="chat__message">Привет завтра во сколько встречаемся?<span className="chat__time">18:35</span></p>
-    //                 {isSended && <p className="chat__message chat__message--own">Привет, думаю к 10<span className="chat__time">18:41</span></p>}
-    //             </div>
-
-            //<p className="chat__message chat__message--own">Привет, думаю к 10<span className="chat__time">18:41</span></p>
-//
     const date = new Date(messageObject.date);
     const dateTimeStr = date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: false });
     console.log("Attachments:", messageObject.attachments)
@@ -24,7 +14,6 @@ export default function MessageItem({userId, messageObject}) {
         <p className={messageObject.senderId != userId ? "chat__message" : "chat__message chat__message--own"}>{messageObject.msg}
         {messageObject.attachments != null && messageObject.attachments.map(link => {
             {console.log("Elem: ", link)}
-            // return (<img key={element} className='image' src={`http://212.22.82.127:9111` +   element}></img>)
             return createMediaComponent(link)
         })} 
         <span className="chat__time">{dateTimeStr}</span></p>
@@ -34,7 +23,7 @@ export default function MessageItem({userId, messageObject}) {
 
 function createMediaComponent(fileLink) {
     const extension = getFileExtension(fileLink);
-    var fileLink = `http://212.22.82.127:9111` +  fileLink;
+    var fileLink = `${MINIO_API_URL}` +  fileLink;
     let mediaElement;
     if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(extension)) {
         mediaElement = (<div key={fileLink} class="media-component image flex"><img src={fileLink} alt="Image" class="image" /></div>)

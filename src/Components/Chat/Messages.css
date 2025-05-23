@@ -2,7 +2,6 @@
     max-width: 560px;
     width: 100%;
 }
- * {transition: all 500ms ease-in-out;}
 
 .video, .image {
     width: 100%;
