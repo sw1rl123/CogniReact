@@ -23,6 +23,7 @@ export default function ChatList({chats, userId, shown, onClick}) {
                 idToName.set(users[i].id.toString(), users[i].name + " " + users[i].surname);
                 idToPicture.set(users[i].id.toString(), users[i].picUrl);
             }
+            console.log(idToName);
             setUsersNames(idToName);
             setUsersAvatars(idToPicture);
             } catch (error) {
