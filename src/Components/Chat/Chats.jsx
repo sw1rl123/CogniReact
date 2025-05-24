@@ -205,16 +205,6 @@ export default function Chats({connectionRef, msg}) {
 
     const closeChat = () => {
         setChatOpen(null);
-        const fetchChats = async () => {
-            try {
-                await connection.invoke("GetChatList");
-            } catch (error) {
-                console.error("Error fetching chats:", error);
-            }
-        };
-        console.log("Fetching chats...");
-        fetchChats();
-        // window.location.reload();
     }
 
     const sendDeleteChat = (chatId) => {
