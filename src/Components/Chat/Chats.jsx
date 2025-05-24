@@ -8,6 +8,8 @@ import ChatList from './ChatList';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import { set } from 'mobx';
 import { API_URL } from '../../services/auth';
+import { Context } from '../..';
+import { startSignalRConnection } from "../../services/signalR";
 
 
 
@@ -37,7 +39,28 @@ class MessageObject {
     }
 }
 
-export default function Chats({connection, msg}) {
+export default function Chats({msg}) {
+
+    const [connection, setConnection] = useState(null);
+
+    useEffect(() => {
+        let token = localStorage.getItem('aToken');
+        
+        const startConn = async (token) => {
+            try {
+                let c = await startSignalRConnection(token);
+                setConnection(c);
+            } catch (e) {
+                console.log("siganlr error: ", e);
+            }
+            
+        }
+
+        if (token != null) {
+            startConn(token);
+        }
+    }, []);
+
     const userId = localStorage.getItem('userId');
     const token = localStorage.getItem('aToken');
     const [chats, setChats] = useState({});
@@ -179,6 +202,16 @@ export default function Chats({connection, msg}) {
 
     const closeChat = () => {
         setChatOpen(null);
+        const fetchChats = async () => {
+            try {
+                await connection.invoke("GetChatList");
+            } catch (error) {
+                console.error("Error fetching chats:", error);
+            }
+        };
+        console.log("Fetching chats...");
+        fetchChats();
+        // window.location.reload();
     }
 
     const sendDeleteChat = (chatId) => {
@@ -196,7 +229,7 @@ export default function Chats({connection, msg}) {
     
         if (response.ok) {
             const users = await response.json();
-            console.log("Getted", users)
+            // console.log("Getted", users)
             for (const user of users) {
                 setIdToUsername(prev => ({
                     ...prev,
@@ -210,7 +243,7 @@ export default function Chats({connection, msg}) {
     }
 
     const getUsername = async (userid) => {
-        console.log("Requesting", userid)
+        // console.log("Requesting", userid)
         let username = idToUsername[userid];
         if (username == null) {
             let response = await fetchUsers([userid]);

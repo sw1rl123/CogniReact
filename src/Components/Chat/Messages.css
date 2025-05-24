@@ -2,7 +2,6 @@
     max-width: 560px;
     width: 100%;
 }
- * {transition: all 500ms ease-in-out;}
 
 .video, .image {
     width: 100%;
@@ -36,6 +35,7 @@
     flex-direction: column;
     position: relative;
     cursor: pointer;
+    overflow-y: scroll;
 }
 
 .messages__chat {
@@ -102,6 +102,17 @@
     color: white;
     font-weight: 600;
     font-size: 19px;
+    position: relative;
+}
+
+.message__mbti {
+    color: var(--col-highlight);
+    font-size: 15px;
+    margin-bottom: 10px;
+    display: block;
+    position: absolute;
+    right: -45px;
+    top: -5px;
 }
 
 .message__time {
@@ -129,7 +140,7 @@
     display: flex;
     justify-content: start;
     gap: 15px;
-    min-height: 80px;
+    min-height: 72px;
     position: relative;
 }
 
@@ -207,6 +218,7 @@
     width: 100%;
     text-align: center;
     margin-bottom: 20px;
+    margin-top: 10px;
 }
 
 .chat__message-func span {

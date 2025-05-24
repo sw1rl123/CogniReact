@@ -9,7 +9,8 @@ export default function ChatItem({
     online,
     getUsername,
     userName,
-    userImage
+    userImage,
+    userMbti
 }) {
 
     let dmUser = chat.isDm ? (chat.members[0] == userId ? chat.members[1] : chat.members[0]) : null;
@@ -25,12 +26,20 @@ export default function ChatItem({
    );
 
     const date = new Date(chat.lastMessage.date);
-    const dateTimeStr = date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: false });
-    var time = (
-        <div className="preview_message_style">
-            {dateTimeStr}
-        </div>
-    )
+    const dateTimeStr = date.toLocaleString('en-US', {year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: false });
+    let [dateTimeStrDay, dateTimeStrTime] = dateTimeStr.split(',');
+    let dateTimeStrDayDivided = dateTimeStrDay.split('/');
+    dateTimeStrDay = dateTimeStrDay.replaceAll('/', '.');
+    const timeNow = new Date().toLocaleString('en-US', {year: 'numeric', month: 'numeric', day: 'numeric'}).split('/');
+    let viewDate = null;
+    if (timeNow[1] - dateTimeStrDayDivided[1] > 1) {
+        viewDate = dateTimeStrDay;
+    } else if (timeNow[1] - dateTimeStrDayDivided[1] == 1) {
+        viewDate = 'Вчера';
+    } else if (timeNow[1] - dateTimeStrDayDivided[1] < 1) {
+        viewDate = dateTimeStrTime;
+    }
+
     var unreaden_count = chat.unreadCount > 0 ? (
         <span className="message__count">{chat.unreadCount}</span>
     ) : (
@@ -63,9 +72,10 @@ export default function ChatItem({
                     <h3 className="message__title">
                         <div className="truncate chatname" id={`chat_name_${chat.id}`}>
                             {chatName}
+                            <span className="message__mbti">{userMbti}</span>
                         </div>
                     </h3>
-                    <span className="message__time">{dateTimeStr}</span>
+                    <span className="message__time">{viewDate}</span>
                 </div>
                 <div className="message__text">
                     {last_msg}

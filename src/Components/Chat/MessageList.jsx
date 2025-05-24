@@ -92,7 +92,7 @@ export default function MessageList({chatId, getUsername, chatObject, userId, on
     }
     let dmUser = chatObject == null ? chatId : chatObject.isDm ? (chatObject.members[0] == userId ? chatObject.members[1] : chatObject.members[0]) : null;
 
-    const [usersNames, setUsersNames] = useState(null);
+    const [usersMBTI, setUsersMBTI] = useState(null);
     const [usersAvatars, setUsersAvatars] = useState(null);
     const {store} = useContext(Context);
     const [isLoading, setIsLoading] = useState(true);
@@ -102,15 +102,15 @@ export default function MessageList({chatId, getUsername, chatObject, userId, on
         const fetchUsers = async () => {
             setIsLoading(true);
             try {
-            const users = await store.getAllUsers();
-            var idToName = new Map();
+            const users = await store.getAllUsersChats([dmUser]);
             var idToPicture = new Map();
+            var idToMBTI = new Map();
             for (let i = 0; i < users.length; i++) {
-                idToName.set(users[i].id.toString(), users[i].name + " " + users[i].surname);
-                idToPicture.set(users[i].id.toString(), users[i].picUrl);
+                idToPicture.set(users[i].id.toString(), users[i].activeAvatar);
+                idToMBTI.set(users[i].id.toString(), users[i].typeMbti);
             }
-            setUsersNames(idToName);
             setUsersAvatars(idToPicture);
+            setUsersMBTI(idToMBTI);
             } catch (error) {
                 console.error("Failed to fetch user data:", error);
             } finally {
@@ -136,7 +136,7 @@ export default function MessageList({chatId, getUsername, chatObject, userId, on
                          <h2 className="chat__name">{chatName}</h2>
                          <span className="chat__status">не в сети</span>
                      </div>
-                     <span className="chat__type">ISFP</span>
+                     <span className="chat__type">{usersMBTI.get(dmUser.toString())}</span>
             </div>
             <div className="chat__dialog">
                 {Object.entries(chatMsgs).toReversed().map(([id, msg]) => (

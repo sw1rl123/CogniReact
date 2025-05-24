@@ -1,5 +1,5 @@
 import { createUser, loginUser } from "../services/auth.js";
-import { checkSubscribe, getCurrentArticle, subscribe, unSubscribe } from "../services/user.js";
+import { checkSubscribe, getAllUsersChats, getCurrentArticle, subscribe, unSubscribe } from "../services/user.js";
 import { getAllArticles } from "../services/user.js";
 import { createNewArticle } from "../services/user.js";
 import { getUserById, getUserPosts, getUserFriends, getAllUsers, updateUserNickname, getUserFriendsFull, getUsersFromName, getUserFriendsAmount, createPost, updateImageAvatar, updateImageBanner, updateUserDescription, updateUserPassword, updateUserMbti } from "../services/user.js";
@@ -82,6 +82,15 @@ export default class Store {
     async getAllUsers() {
         try {
             const response = await getAllUsers();
+            return response.data;
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    async getAllUsersChats(ids) {
+        try {
+            const response = await getAllUsersChats(ids);
             return response.data;
         } catch (e) {
             console.log(e);

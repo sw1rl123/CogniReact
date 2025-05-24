@@ -6,40 +6,54 @@ import { Context } from "../..";
 
 export default function ChatList({chats, getUsername, userId, shown, onClick}) {
 
-    const [usersNames, setUsersNames] = useState(null);
     const [usersAvatars, setUsersAvatars] = useState(null);
+    const [usersMBTI, setUsersMBTI] = useState(null);
     const {store} = useContext(Context);
-    const [isLoading, setIsLoading] = useState(true);
+
+    let chatsTemp = Object.entries(chats);
+    let chatsSortByTime = [];
+    for (let i = 0; i < chatsTemp.length; i++) {
+        let time = new Date(chatsTemp[i][1].lastMessage.date).getTime();
+        chatsSortByTime.push([i, time])
+    }
+
+    chatsSortByTime.sort((a, b) => a[1] - b[1]);
+    let chatsSorted = [];
+    chatsSortByTime.forEach((element) => chatsSorted.push(chatsTemp[element[0]]));
 
     useEffect(() => {
-    
-        const fetchUsers = async () => {
-            setIsLoading(true);
-            try {
-            const users = await store.getAllUsers();
-            var idToName = new Map();
-            var idToPicture = new Map();
-            console.error("Users:", users);
-            for (let i = 0; i < users.length; i++) {
-                idToName.set(users[i].id.toString(), users[i].name + " " + users[i].surname);
-                idToPicture.set(users[i].id.toString(), users[i].picUrl);
+        let buddyIds = [];
+
+        for (let i = 0; i < Object.entries(chats).length; i++) {
+            if (Object.entries(chats)[i][1].isDm) {
+                var buddyId = Object.entries(chats)[i][1].members[0] == userId ? Object.entries(chats)[i][1].members[1] : Object.entries(chats)[i][1].members[0];
+                buddyIds.push(buddyId);
             }
-            console.log(idToName);
-            setUsersNames(idToName);
+        }
+        
+
+        const fetchUsers = async () => {
+            try {
+            const users = await store.getAllUsersChats(buddyIds);
+            var idToPicture = new Map();
+            var idToMBTI = new Map();
+            for (let i = 0; i < users.length; i++) {
+                idToPicture.set(users[i].id.toString(), users[i].activeAvatar);
+                idToMBTI.set(users[i].id.toString(), users[i].typeMbti);
+            }
             setUsersAvatars(idToPicture);
+            setUsersMBTI(idToMBTI);
             } catch (error) {
                 console.error("Failed to fetch user data:", error);
-            } finally {
-                setIsLoading(false);
             }
     
         }
         fetchUsers();
-        }, []);
+        }, [chats]);
 
-        if (isLoading) {
-            return <></>;
-        }
+        // if (isLoading) {
+        //     return <></>;
+        // }
     
     return (
         <>
@@ -48,8 +62,8 @@ export default function ChatList({chats, getUsername, userId, shown, onClick}) {
             </section>
             <section className="messages__chats" style={{display: shown ? "block" : "none"}}>
                 <ul className="messages__list">
-                    {Object.entries(chats).map(([id, chat]) => (
-                        <ChatItem getUsername={getUsername} 
+                    {chatsSorted.reverse().map(([id, chat]) => (
+                        <ChatItem getUsername={getUsername} userMbti={usersMBTI.get((chat.isDm ? (chat.members[0] == userId ? chat.members[1].toString() : chat.members[0].toString()) : null))}
                         userImage={usersAvatars.get((chat.isDm ? (chat.members[0] == userId ? chat.members[1].toString() : chat.members[0].toString()) : null))} key={id} userId={userId} id={id} chat={chat} onClick={() => onClick(id)}/>
                     ))}
                 </ul>

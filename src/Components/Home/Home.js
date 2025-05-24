@@ -19,14 +19,13 @@ import { startSignalRConnection } from "../../services/signalR";
 function Home() {
 
     const location = useLocation();
-    const [signalRConn, setSignalRConn] = useState(null);
+   
     
     let params = useParams()
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        
         localStorage.removeItem('name');
         localStorage.removeItem('surname');
         localStorage.removeItem('email');
@@ -35,19 +34,28 @@ function Home() {
 
         if (!(localStorage.getItem('userId') && (localStorage.getItem('aToken') || localStorage.getItem('rToken')))) {
             navigate('/login');
+            window.location.reload();
         }
         if (location.pathname == "/") {
             navigate('/profile/' + localStorage.getItem('userId'));
-        }
-        let token = localStorage.getItem('aToken');
-        const startConn = async (token) => {
-            let c = await startSignalRConnection(token);
-            setSignalRConn(c);
+            window.location.reload();
         }
 
-        if (token != null) {
-            startConn(token);
-        }
+        // let token = localStorage.getItem('aToken');
+
+        // const startConn = async (token) => {
+        //     try {
+        //         let c = await startSignalRConnection(token);
+        //         setSignalRConn(c);
+        //     } catch (e) {
+        //         console.log("siganlr error: ", e);
+        //     }
+            
+        // }
+
+        // if (token != null) {
+        //     startConn(token);
+        // }
     }, []);
 
     return (
@@ -66,7 +74,7 @@ function Home() {
                 {location.pathname === '/wiki/' + params.wikiId && <WikiArticle/>}
                 {location.pathname === "/wiki/create" && <WikiCreate/>}
 
-                {location.pathname === "/messages" && <Chats connection={signalRConn} />}
+                {location.pathname === "/messages" && <Chats />}
             </div>
             </div>
         </div>

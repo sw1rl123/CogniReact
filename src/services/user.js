@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const API_URL = false ? "https://localhost:7055" : "http://localhost:5279";
+const API_URL = "https://localhost:7055";
 
 const $api = axios.create({
     baseURL: API_URL,
@@ -27,7 +27,6 @@ $api.interceptors.request.use((config) => {
 
 const refreshAccessToken = async () => {
     try {
-        const userId = localStorage.getItem('userId');
         const response = await $api.get(`${API_URL}/Token/Refresh`);
         var aToken = response.data.accessToken;
         var rToken = response.data.refreshToken;
@@ -36,6 +35,9 @@ const refreshAccessToken = async () => {
         return aToken;
     } catch (error) {
         console.error("Ошибка при обновлении токена:", error);
+        localStorage.removeItem("aToken");
+        localStorage.removeItem("rToken");
+        // window.location.reload();
     }
 };
 
@@ -45,18 +47,22 @@ $api.interceptors.response.use((config) => {
     };
 }, async (error) => {
     const originalRequest = error.config;
-    if (error.response && error.response.status === 401) {
-        if (!originalRequest._retry) {
-            originalRequest._retry = true;
-            try {
-                const newAccessToken = await refreshAccessToken();
-                originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-                return $api.request(originalRequest);
-            } catch (e) {
-                console.error("Не удалось обновить токен. Переход на логин.");
-            }
-        }
+    if (error.response.status === 401 && error.config && !error.config._isRetry) {
+        originalRequest._isRetry = true;
+        try {
+            const newAccessToken = await refreshAccessToken();
+            originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+            return $api.request(originalRequest);
+        } catch (e) {
+            console.error("Не удалось обновить токен. Переход на логин.");
+            localStorage.removeItem("aToken");
+            localStorage.removeItem("rToken");
+            window.location.reload();
+        } 
+    } else {
+        console.log('ошибка');
     }
+    
 });
 
 export const getUserById = async (userId) => {
@@ -113,6 +119,20 @@ export const getAllUsers = async () => {
         console.error();
     }
 }
+
+export const getAllUsersChats = async (ids) => {
+    try {
+        var URL = "/User/GetUsersByIds";
+
+        var data = ids;
+
+        let response = await $api.post(URL, data);
+        return response;
+    } catch(e) {
+        console.error();
+    }
+}
+
 
 export const getUsersFromName = async (text, mbti) => {
     try {
@@ -192,6 +212,7 @@ export const createNewArticle = async (userId, articleName, articleBody, article
         formData.append('articleName', articleName);
         formData.append('articleBody', articleBody);
         formData.append('idUser', userId);
+        formData.append('annotation', "123");
 
         
         if(articleImg) {

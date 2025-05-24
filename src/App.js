@@ -14,12 +14,14 @@ import './App.css';
 import Messages from "./Components/Messages/Messages";
 import WikiCreate from "./Components/Wiki/WikiCreate";
 import WikiArticle from "./Components/Wiki/WikiArticle";
+import NotFound from "./Components/NotFound/NotFound";
 function App() {
 
   return (
     <>
       <BrowserRouter>
         <Routes>
+          <Route path="*" element={<NotFound />}/>
           <Route path="login" element={<LoginForm />}/>
           <Route path="register" element={<RegisterForm />}/>
           <Route path="test" element={<Test />}/>

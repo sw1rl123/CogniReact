@@ -17,8 +17,8 @@ export default function MessageItem({userId, messageObject}) {
 //
     const date = new Date(messageObject.date);
     const dateTimeStr = date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: false });
-    console.log("Attachments:", messageObject.attachments)
-    console.log(messageObject.attachments != null && messageObject.attachments.map(e => `Aboba ${e}`))
+    // console.log("Attachments:", messageObject.attachments)
+    // console.log(messageObject.attachments != null && messageObject.attachments.map(e => `Aboba ${e}`))
     return (
         messageObject.isFunctional ? <span className="chat__message-func"><span>{messageObject.msg}</span></span> :
         <p className={messageObject.senderId != userId ? "chat__message" : "chat__message chat__message--own"}>{messageObject.msg}

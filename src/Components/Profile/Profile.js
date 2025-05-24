@@ -106,28 +106,29 @@ function Profile() {
       setIsLoading(true);
       const userId = params.userId; 
       
-
-      try {
-        const response = await store.checkFriend(userId);
-        var count = 0;
-        setIsFrineds(response.youSubscribed)
-        if (response.youSubscribed) { count++ };
-        if (response.yourSubscriber) { count += 2 };
-        switch (count) {
-          case 1:
-            setIsFrinedsText('отписаться');
-            break;
-          case 2:
-            setIsFrinedsText('добавить в ответ');
-            break;
-          case 3:
-            setIsFrinedsText('удалить из друзей');
-            break;
+      if (userId != currentUserId) {
+        try {
+          const response = await store.checkFriend(userId);
+          var count = 0;
+          setIsFrineds(response.youSubscribed)
+          if (response.youSubscribed) { count++ };
+          if (response.yourSubscriber) { count += 2 };
+          switch (count) {
+            case 1:
+              setIsFrinedsText('отписаться');
+              break;
+            case 2:
+              setIsFrinedsText('добавить в ответ');
+              break;
+            case 3:
+              setIsFrinedsText('удалить из друзей');
+              break;
+          }
+        } catch (error) {
+            console.error("Failed to fetch user data:", error);
+        } finally {
+            setIsLoading(false);
         }
-      } catch (error) {
-          console.error("Failed to fetch user data:", error);
-      } finally {
-          setIsLoading(false);
       }
     };
 

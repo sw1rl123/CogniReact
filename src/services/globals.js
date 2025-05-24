@@ -1,5 +1,5 @@
 export const DEV = true;//import.meta.env.DEV;
-console.log("ISDEV: ", DEV)
+// console.log("ISDEV: ", DEV)
 // ChatService addr
 export const apiBase = DEV ? "http://127.0.0.1:5108" : "/api"
 export const fileApi =  DEV ? "http://127.0.0.1:9000" : ""
@@ -72,17 +72,17 @@ export function uuidv4() {
 }
 
 export function showToast(message) {
-    let toast = document.createElement("div");
-    toast.textContent = message;
-    toast.style.position = "fixed";
-    toast.style.bottom = "20px";
-    toast.style.left = "50%";
-    toast.style.transform = "translateX(-50%)";
-    toast.style.background = "rgba(0, 0, 0, 0.7)";
-    toast.style.color = "#fff";
-    toast.style.padding = "10px 20px";
-    toast.style.borderRadius = "5px";
-    toast.style.zIndex = "1000";
-    document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 2000);
+    // let toast = document.createElement("div");
+    // toast.textContent = message;
+    // toast.style.position = "fixed";
+    // toast.style.bottom = "20px";
+    // toast.style.left = "50%";
+    // toast.style.transform = "translateX(-50%)";
+    // toast.style.background = "rgba(0, 0, 0, 0.7)";
+    // toast.style.color = "#fff";
+    // toast.style.padding = "10px 20px";
+    // toast.style.borderRadius = "5px";
+    // toast.style.zIndex = "1000";
+    // document.body.appendChild(toast);
+    // setTimeout(() => toast.remove(), 2000);
 }

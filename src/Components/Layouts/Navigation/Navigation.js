@@ -12,7 +12,7 @@ function Navigation() {
 
   const refreshPage = async () => {
     navigate("/profile/" + localStorage.getItem('userId'));
-    window.location.reload();
+    // window.location.reload();
   };
 
   useEffect(() => {

@@ -17,7 +17,7 @@ function WikiCreate() {
         var response = await store.createArticle(userId, articleName, articleBody);
         if(response) {
             navigate("/wiki");
-            window.location.reload();
+            // window.location.reload();
         }
     };
 
