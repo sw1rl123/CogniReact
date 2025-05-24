@@ -12,4 +12,3 @@ services:
       watch:
         - action: sync
           path: .
-          target: /app

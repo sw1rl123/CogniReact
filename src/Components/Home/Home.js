@@ -83,7 +83,6 @@ function Home() {
         iHateReact();
         
     });
-
     return (
         <div className="home">
             <Header></Header>
@@ -100,7 +99,7 @@ function Home() {
                 {location.pathname === '/wiki/' + params.wikiId && <WikiArticle/>}
                 {location.pathname === "/wiki/create" && <WikiCreate/>}
 
-                {location.pathname === "/messages" && <Chats connectionRef={connectionRef} />}
+                {location.pathname === "/messages" && !isLoading && <Chats connectionRef={connectionRef} />}
             </div>
             </div>
         </div>
