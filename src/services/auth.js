@@ -1,10 +1,14 @@
 import axios from "axios"
+<<<<<<< HEAD
 
 export const API_URL = "https://localhost:7055";
+=======
+import { COGNI_API_URL } from "./globals";
+>>>>>>> abc4aa1e920a93c2e32d9896eddd40db1ab207af
 
 
 const api = axios.create({
-    baseURL: API_URL,
+    baseURL: COGNI_API_URL,
     withCredentials: true,
 });
 

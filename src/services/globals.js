@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 export const DEV = true;//import.meta.env.DEV;
 // console.log("ISDEV: ", DEV)
 // ChatService addr
@@ -70,6 +71,11 @@ export function uuidv4() {
         (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16)
     );
 }
+=======
+export const COGNI_API_URL ="http://localhost:5279";
+export const CHAT_API_URL = "http://localhost:5108";
+export const MINIO_API_URL = "http://212.22.82.127:9111";
+>>>>>>> abc4aa1e920a93c2e32d9896eddd40db1ab207af
 
 export function showToast(message) {
     // let toast = document.createElement("div");
