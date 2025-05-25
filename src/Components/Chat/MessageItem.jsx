@@ -11,12 +11,14 @@ export default function MessageItem({userId, messageObject}) {
     // console.log(messageObject.attachments != null && messageObject.attachments.map(e => `Aboba ${e}`))
     return (
         messageObject.isFunctional ? <span className="chat__message-func"><span>{messageObject.msg}</span></span> :
+        <div className='chat__message-wrapper'>
         <p className={messageObject.senderId != userId ? "chat__message" : "chat__message chat__message--own"}>{messageObject.msg}
         {messageObject.attachments != null && messageObject.attachments.map(link => {
             {console.log("Elem: ", link)}
             return createMediaComponent(link)
         })} 
         <span className="chat__time">{dateTimeStr}</span></p>
+        </div>
     );
 }
 
@@ -26,13 +28,13 @@ function createMediaComponent(fileLink) {
     var fileLink = `${MINIO_API_URL}` +  fileLink;
     let mediaElement;
     if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(extension)) {
-        mediaElement = (<div key={fileLink} class="media-component image flex"><img src={fileLink} alt="Image" class="image" /></div>)
+        mediaElement = (<div key={fileLink} className="media-component image flex"><img src={fileLink} alt="Image" class="image" /></div>)
     } else if (['mp4', 'webm', 'ogg', 'avi'].includes(extension)) {
-        mediaElement = (<div key={fileLink} class="media-component video flex" width="100%"><video controls width="100%"><source src={fileLink} type={`video/${extension}`}/>Your browser does not support the video tag.</video></div>)
+        mediaElement = (<div key={fileLink} className="media-component video flex" width="100%"><video controls width="100%"><source src={fileLink} type={`video/${extension}`}/>Your browser does not support the video tag.</video></div>)
     } else if (['mp3', 'ogg', 'wav', 'aac'].includes(extension)) {
-        mediaElement = (<div key={fileLink} class="media-component audio flex"><audio controls><source src={fileLink} type={`audio/${extension}`}/>Your browser does not support the audio element.</audio></div>)
+        mediaElement = (<div key={fileLink} className="media-component audio flex"><audio controls><source src={fileLink} type={`audio/${extension}`}/>Your browser does not support the audio element.</audio></div>)
     } else {
-        mediaElement = (<div key={fileLink} class="media-component unsupported">Unsupported media type: ${extension}</div>)
+        mediaElement = (<div key={fileLink} className="media-component unsupported">Unsupported media type: ${extension}</div>)
     }
     return mediaElement;
 }

@@ -34,7 +34,6 @@
     display: flex;
     flex-direction: column;
     position: relative;
-    cursor: pointer;
     overflow-y: scroll;
 }
 
@@ -49,7 +48,6 @@
     display: flex;
     flex-direction: column;
     position: relative;
-    cursor: pointer;
 }
 
 .messages__list {
@@ -63,6 +61,7 @@
     position: relative;
     margin-bottom: 20px;
     align-items: center;
+    cursor: pointer;
 }
 
 .message::after {
@@ -73,6 +72,10 @@
     border-bottom: 2px solid var(--col-bg-sections-hover);
     bottom: -10px;
     right: 0;
+}
+
+.message:nth-last-child(1):after {
+    width: 0;
 }
 
 .message__img {
@@ -89,7 +92,6 @@
     width: 100%;
     font-family: Montserrat;
     gap: 20px;
-    padding: 5px;
 }
 
 .message__header{
@@ -160,6 +162,7 @@
     display: block;
     background: black;
     border-radius: 100%;
+    cursor: pointer;
 }
 
 .chat__info {
@@ -190,28 +193,39 @@
 
 .chat__dialog {
     position: relative;
-    max-height: calc(100% - 115px);
+    max-height: calc(100% - 107px);
     overflow-y: scroll;
     display: flex;
     flex-direction: column-reverse;
 }
 
+.chat__message-wrapper {
+    width: 100%;
+    margin-bottom: 30px;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+}
+
 .chat__message {
     font-family: Montserrat;
     color: white;
-    padding: 5px 10px;
-    max-width: 250px;
+    padding: 7px 15px;
+    max-width: 300px;
+    width: max-content;
     font-size: 17px;
-    border-radius: 15px;
+    border-radius: 20px;
     background: var(--col-addons-dark);
     position: relative;
-    margin-bottom: 30px;
     word-wrap: break-word;
+}
+
+.chat__message-wrapper:has(.chat__message--own) {
+    flex-direction: row-reverse;
 }
 
 .chat__message--own {
     background: var(--col-addons);
-    margin-left: 310px;
 }
 
 .chat__message-func {

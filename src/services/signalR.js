@@ -18,7 +18,6 @@ export async function startSignalRConnection(token) {
 
     connection.onclose(() => {
         console.warn("SignalR Disconnected.");
-        console.log(1)
         showToast("SignalR Disconnected.");
     });
 

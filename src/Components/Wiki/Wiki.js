@@ -3,8 +3,7 @@ import './Wiki.css';
 import { ReactComponent as CreateIcon } from './img/create_atricle.svg';
 import { useNavigate } from 'react-router-dom';
 import { Context } from '../..';
-import banner from './img/banner.png';
-import photo from './img/photo.jpg';
+import WikiMiniArticle from "./WikiMiniArticle";
 
 function Wiki() {
 
@@ -30,7 +29,7 @@ function Wiki() {
             const articlesDownload = await store.getArticles();
             setArticles(articlesDownload);
           } catch (error) {
-              console.error("Failed to fetch user posts:", error);
+              console.error("Failed to fetch articles:", error);
           } finally {
             setIsLoading(false);
         }
@@ -38,11 +37,6 @@ function Wiki() {
     
         fetchArticles();
       }, [])
-
-      const toArticle = async (id) => {
-        navigate("/wiki/" + id);
-        window.location.reload();
-      };
 
       if (isLoading) {
         return <></>;
@@ -57,19 +51,7 @@ function Wiki() {
                         <h2 className="wiki__posts--heading">Публикации</h2>
                         <ul className="wiki__list">
                             {articles.map(article =>
-                            <li onClick={(e) => toArticle(article.idArticle)} key={article.idArticle} className="wiki__item article">
-                                <span className="article__banner"><img src={banner} className="article__img"></img></span>
-                                <div className="article__author author">
-                                    <img src={photo} className="author__avatar" alt=""></img>
-                                    <span className="author__info">
-                                        <p className="author__name">Илья</p>
-                                        <span className="author__readers"></span>
-                                        <p className="author__mbti"></p>
-                                    </span>
-                                </div>
-                                <h2 className="article__heading">{article.articleName}</h2>
-                                <p className="article__description"></p>
-                            </li>
+                            <WikiMiniArticle key={article.id} article={article}/>
                             )}
                         </ul>
                     </div>

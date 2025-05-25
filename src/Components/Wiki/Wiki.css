@@ -206,13 +206,83 @@
     color: var(--col-text-desc);
 }
 
-.new-article__text,
 .read-article__text {
     background: none;
     outline: none;
     color: var(--col-text-main);
     border: none;
-    height: 400px;
+    min-height: 400px;
     font-size: 17px;
     resize: none;
+}
+
+.wiki__text-wrapper {
+    position: relative;
+    min-height: 400px;
+}
+
+.new-article__textarea,
+.new-article__text {
+    width: 100%;
+    line-height: 100%;
+}
+
+.new-article__text {
+    word-wrap: break-word;
+    color: white;
+    background: none;
+    outline: none;
+    border: none;
+    font-size: 17px;
+    resize: none;
+}
+
+.new-article__textarea {
+    position: absolute;
+    color: transparent;
+    background: none;
+    outline: none;
+    border: none;
+    font-size: 17px;
+    resize: none;
+    z-index: 2;
+    top: 0;
+    left: 0;
+}
+
+@keyframes stick-blink {
+    0% {
+        opacity: 1;
+    }
+    49% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    99% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+  }
+
+.article__stick {
+    display: none;
+    transition: 0;
+}
+
+.new-article__textarea:focus + .new-article__text + .article__stick {
+    display: inline;
+    animation: stick-blink 1s infinite;
+}
+
+pre {
+    white-space: pre-wrap;    
+    white-space: -moz-pre-wrap; 
+    white-space: -pre-wrap;      
+    white-space: -o-pre-wrap;    
+    word-wrap: break-word;      
+    font-family: Montserrat;
 }

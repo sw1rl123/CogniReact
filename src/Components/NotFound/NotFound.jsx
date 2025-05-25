@@ -12,7 +12,7 @@ function NotFound() {
                 <h1 className="notfound__error">404</h1>
                 <p className="notfound__warning">Страница не найдена</p>
                 <p className="notfound__text">Неправильно набран адрес или такой страницы не существует</p>
-                <Link to="/messages" className="notfound__link">К чатам</Link>
+                <Link to="/" className="notfound__link">На главную</Link>
             </div>
             <img className='notfound__image' src={maskot} alt="" />
         </div>

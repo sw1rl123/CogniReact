@@ -20,7 +20,7 @@ export default function ChatItem({
         <div className="preview_message_style">{chat.lastMessage.msg}</div>
     ) : (
     <div className="flex-row truncate">
-        <div style={{marginRight: "6px"}} className="preview_username">{userId == chat.lastMessage.senderId ? "You:" : chat.isDm ? "" : chat.lastMessage.senderId + ": "}</div>
+        <div style={{marginRight: "6px"}} className="preview_username">{userId == chat.lastMessage.senderId ? "Вы:" : chat.isDm ? "" : chat.lastMessage.senderId + ": "}</div>
         <div className="preview_message_style">{chat.lastMessage.msg}</div>
     </div>
    );

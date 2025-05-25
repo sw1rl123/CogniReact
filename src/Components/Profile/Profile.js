@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import './Profile.css';
 import { ReactComponent as CloseSvg } from './img/close.svg';
 import { ReactComponent as StarSvg } from './img/star.svg';
+import { ReactComponent as Cross } from './img/cross.svg';
 import { Context } from '../..';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import Placeholder from './img/placeholder.png';
@@ -151,6 +152,8 @@ function Profile() {
 
   const [isTagsShow, setIsTagsShow] = useState(false);
 
+  const [isTagsEdit, setIsTagsEdit] = useState(false);
+
   const showTags = () => {
     setIsTagsShow(true);
   }
@@ -241,23 +244,28 @@ const sendMessage = async (friendId) => {
             <div className="tags__wrapper">
               <h2 className="tags__heading">МУЗЫКА</h2>
               <button onClick={hideTags} type="button" className='modal__button--close'><CloseSvg className='modal__icon'/></button>
-              {/* <ul className='tags__pages'>
+              { isTagsEdit && <>
+                <ul className='tags__pages'>
                 <li><label className='tags__pages-label'>1<input defaultChecked type="radio" name="tagsEdit"></input></label></li>
-                <li><label className='tags__pages-label'>2<input defaultChecked type="radio" name="tagsEdit"></input></label></li>
-                <li><label className='tags__pages-label'>3<input defaultChecked type="radio" name="tagsEdit"></input></label></li>
-              </ul> */}
+                <li><label className='tags__pages-label'>2<input type="radio" name="tagsEdit"></input></label></li>
+                <li><label className='tags__pages-label'>3<input type="radio" name="tagsEdit"></input></label></li>
+              </ul>
+              <p className="categories__heading">мои категории:</p>
+              </>
+              }
               <ul className="tags__categories categories">
-                <li className="categories__item">к-поп</li>
-                <li className="categories__item">хип-хоп</li>
-                <li className="categories__item">рок</li>
+                <li className="categories__item"><label><input type="checkbox" />к-поп <span className="categories__item-add"><Cross></Cross></span></label></li>
+                <li className="categories__item"><label><input type="checkbox" />хип-хоп<span className="categories__item-add"><Cross></Cross></span></label></li>
+                <li className="categories__item"><label><input type="checkbox" />рок<span className="categories__item-add"><Cross></Cross></span></label></li>
               </ul>
+              {isTagsEdit && <p className="categories__heading">мои теги:</p>}
               <ul className="tags__list">
-                <li className="tags__item">#Bts</li>
-                <li className="tags__item">#Jay-Z</li>
-                <li className="tags__item">#TheBeatles</li>
-                <li className="tags__item">#Nirvana</li>
+                <li className="tags__item"><label><input type="checkbox" />#Bts</label></li>
+                <li className="tags__item"><label><input type="checkbox" />#Jay-Z</label></li>
+                <li className="tags__item"><label><input type="checkbox" />#TheBeatles</label></li>
+                <li className="tags__item"><label><input type="checkbox" />#Nirvana</label></li>
               </ul>
-              {/* {userId == currentUserId && <button className='tags__button'>редактировать</button>} */}
+              {userId == currentUserId && !isTagsEdit ? <button className='tags__button' type="button" onClick={(e) => setIsTagsEdit(true)}>редактировать</button> : <button className='tags__button' type="button">сохранить</button>}
             </div>
           </form>
         </div>
@@ -269,7 +277,7 @@ const sendMessage = async (friendId) => {
         </section>
         <section className="profile__human human">
           <div className="human__left">
-            <span className="human__avatar-border"><img src={userImage ? userImage : Placeholder} alt=" " className="human__avatar"/><span className="human__status"></span></span>
+            <span className="human__avatar-border"><img src={userImage ? userImage : Placeholder} alt=" " className="human__avatar"/>{/*<span className="human__status"></span>*/}</span>
             <span className="human__mbti">{userTypeMBTI}</span>
           </div>
           <div className="human__right">

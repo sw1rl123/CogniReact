@@ -28,7 +28,7 @@ $api.interceptors.request.use((config) => {
 
 const refreshAccessToken = async () => {
     try {
-        const response = await $api.get(`${API_URL}/Token/Refresh`);
+        const response = await $api.get(`${COGNI_API_URL}/Token/Refresh`);
         var aToken = response.data.accessToken;
         var rToken = response.data.refreshToken;
         localStorage.setItem("aToken", aToken);
@@ -38,7 +38,7 @@ const refreshAccessToken = async () => {
         console.error("Ошибка при обновлении токена:", error);
         localStorage.removeItem("aToken");
         localStorage.removeItem("rToken");
-        // window.location.reload();
+        window.location.reload();
     }
 };
 
@@ -56,9 +56,9 @@ $api.interceptors.response.use((config) => {
             return $api.request(originalRequest);
         } catch (e) {
             console.error("Не удалось обновить токен. Переход на логин.");
-            localStorage.removeItem("aToken");
-            localStorage.removeItem("rToken");
-            window.location.reload();
+            // localStorage.removeItem("aToken");
+            // localStorage.removeItem("rToken");
+            // window.location.reload();
         } 
     } else {
         console.log('ошибка');
@@ -207,13 +207,13 @@ export const checkSubscribe = async (friendId) => {
     }
 }
 
-export const createNewArticle = async (userId, articleName, articleBody, articleImg) => {
+export const createNewArticle = async (userId, articleName, articleBody, articleImg, annotation) => {
     try {
         let formData = new FormData();
         formData.append('articleName', articleName);
         formData.append('articleBody', articleBody);
         formData.append('idUser', userId);
-        formData.append('annotation', "123");
+        formData.append('annotation', annotation);
 
         
         if(articleImg) {
@@ -229,7 +229,7 @@ export const createNewArticle = async (userId, articleName, articleBody, article
 
 export const getAllArticles = async () => {
     try {
-        var URL = "/Article/GetAllArticleIdsAndNames";
+        var URL = "Article/GetArticles";
         let response = await $api.get(URL);
         return response;
     } catch(e) {

@@ -8,6 +8,7 @@ import { ReactComponent as SubmitIcon } from './img/submit.svg';
 import { ReactComponent as ArrowIcon } from './img/arrow.svg';
 import Placeholder from "./img/placeholder.png";
 import { Context } from "../..";
+import { useNavigate } from 'react-router-dom';
 
 // chatId is very important! We cant get it from chatObject due query param
 export default function MessageList({chatId, getUsername, chatObject, userId, onClose, chatMsgs, connectionRef, startDmOnMessage}) {
@@ -97,6 +98,8 @@ export default function MessageList({chatId, getUsername, chatObject, userId, on
     const {store} = useContext(Context);
     const [isLoading, setIsLoading] = useState(true);
 
+    const navigate = useNavigate()
+
     useEffect(() => {
     
         const fetchUsers = async () => {
@@ -121,6 +124,10 @@ export default function MessageList({chatId, getUsername, chatObject, userId, on
             fetchUsers();
         }, []);
 
+        const toProfile = async (id) => {
+            navigate("/profile/" + id);
+          };
+
         if (isLoading) {
             return <></>;
         }
@@ -131,7 +138,7 @@ export default function MessageList({chatId, getUsername, chatObject, userId, on
         <section className="messages__chat" id="messages">
             <div className="chat__header">
                 <ArrowIcon className="chat__icon" onClick={(e) => onClose()}/>
-                     <img className="chat__img" src={usersAvatars.get(dmUser.toString()) ? usersAvatars.get(dmUser.toString()) : Placeholder}></img>
+                     <img onClick={(e) => toProfile(dmUser)} className="chat__img" src={usersAvatars.get(dmUser.toString()) ? usersAvatars.get(dmUser.toString()) : Placeholder}></img>
                      <div className="chat__info">
                          <h2 className="chat__name">{chatName}</h2>
                          <span className="chat__status">не в сети</span>
