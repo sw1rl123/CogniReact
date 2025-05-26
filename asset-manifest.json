@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/CogniReact/static/css/main.b6287b54.css",
-    "main.js": "/CogniReact/static/js/main.dc00e47c.js",
+    "main.js": "/CogniReact/static/js/main.c2487d4c.js",
     "static/media/logo.svg": "/CogniReact/static/media/logo.f99b7b5e81912aa5f7609aadf95f1f6f.svg",
     "static/media/evolventa.ttf": "/CogniReact/static/media/evolventa.bdd876d18c8ec79d6fbf.ttf",
     "static/media/image16.png": "/CogniReact/static/media/image16.fe01625fa300a8159d48.png",
@@ -60,10 +60,10 @@
     "static/media/close.svg": "/CogniReact/static/media/close.a9c869e6996d96871e62a956cba6b427.svg",
     "static/media/arrow.svg": "/CogniReact/static/media/arrow.39a6173db50ed25276258450fcac6073.svg",
     "main.b6287b54.css.map": "/CogniReact/static/css/main.b6287b54.css.map",
-    "main.dc00e47c.js.map": "/CogniReact/static/js/main.dc00e47c.js.map"
+    "main.c2487d4c.js.map": "/CogniReact/static/js/main.c2487d4c.js.map"
   },
   "entrypoints": [
     "static/css/main.b6287b54.css",
-    "static/js/main.dc00e47c.js"
+    "static/js/main.c2487d4c.js"
   ]
 }
