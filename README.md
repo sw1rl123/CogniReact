@@ -6,6 +6,8 @@
 3) Выполнить ```docker compose -f compose.dev.yml watch dev_frontend``` в корне проекта 👾
 4) Подождать запуска ⌛
 
+Compose Watch синхронизирует изменения в `src` и `public`; при изменении `package.json` или `package-lock.json` контейнер пересобирается.
+
 С vpn на 3 шаг может выполниться не с первого раза при первом запуске 😥
 
 Для логов используйте ```docker compose -f .\compose.dev.yml logs -f dev_frontend```

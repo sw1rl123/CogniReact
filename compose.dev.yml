@@ -11,4 +11,12 @@ services:
     develop:
       watch:
         - action: sync
-          path: .
+          path: ./src
+          target: /app/src
+        - action: sync
+          path: ./public
+          target: /app/public
+        - action: rebuild
+          path: ./package.json
+        - action: rebuild
+          path: ./package-lock.json
