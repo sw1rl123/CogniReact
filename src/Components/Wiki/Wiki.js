@@ -11,7 +11,8 @@ function Wiki() {
 
     const {store} = useContext(Context);
 
-    const [articles, setArticles] = useState(null);
+    const [articles, setArticles] = useState([]);
+    const [hasLoadError, setHasLoadError] = useState(false);
 
     const [isLoading, setIsLoading] = useState(true);
 
@@ -20,21 +21,25 @@ function Wiki() {
       };
 
     useEffect(() => {
-    
+
         const fetchArticles = async () => {
         setIsLoading(true);
-          
-    
+
+
           try {
             const articlesDownload = await store.getArticles();
+            if (!Array.isArray(articlesDownload)) {
+              throw new TypeError("Expected articles response to be an array");
+            }
             setArticles(articlesDownload);
           } catch (error) {
               console.error("Failed to fetch articles:", error);
+              setHasLoadError(true);
           } finally {
             setIsLoading(false);
         }
         };
-    
+
         fetchArticles();
       }, [])
 
@@ -50,10 +55,12 @@ function Wiki() {
                     <div className="wiki__posts">
                         <h2 className="wiki__posts--heading">Публикации</h2>
                         <ul className="wiki__list">
-                            {articles.map(article =>
-                            <WikiMiniArticle key={article.id} article={article}/>
-                            )}
+                            {articles.map(article => (
+                                <WikiMiniArticle key={article.idArticle} article={article}/>
+                            ))}
                         </ul>
+                        {hasLoadError && <p className="wiki__empty">Не удалось загрузить публикации.</p>}
+                        {!hasLoadError && articles.length === 0 && <p className="wiki__empty">Пока нет публикаций.</p>}
                     </div>
                 </section>
 
@@ -84,4 +91,3 @@ function Wiki() {
 };
 
 export default Wiki;
-
