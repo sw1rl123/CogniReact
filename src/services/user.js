@@ -48,7 +48,7 @@ $api.interceptors.response.use((config) => {
     };
 }, async (error) => {
     const originalRequest = error.config;
-    if (error.response.status === 401 && error.config && !error.config._isRetry) {
+    if (error.response?.status === 401 && error.config && !error.config._isRetry) {
         originalRequest._isRetry = true;
         try {
             const newAccessToken = await refreshAccessToken();
@@ -56,15 +56,21 @@ $api.interceptors.response.use((config) => {
             return $api.request(originalRequest);
         } catch (e) {
             console.error("Не удалось обновить токен. Переход на логин.");
-            // localStorage.removeItem("aToken");
-            // localStorage.removeItem("rToken");
-            // window.location.reload();
+            return Promise.reject(e);
         } 
     } else {
-        console.log('ошибка');
+        return Promise.reject(error);
     }
     
 });
+
+export const getTagCatalog = () => $api.get("/UserTag/GetTagCatalog");
+
+export const getUserTagSelection = (userId) =>
+    $api.get("/UserTag/GetUserTagSelection", { params: { userId } });
+
+export const setUserTagSelection = (selection) =>
+    $api.put("/UserTag/SetUserTagSelection", selection);
 
 export const getUserById = async (userId) => {
     try {
@@ -228,13 +234,8 @@ export const createNewArticle = async (userId, articleName, articleBody, article
 }
 
 export const getAllArticles = async () => {
-    try {
-        var URL = "Article/GetArticles";
-        let response = await $api.get(URL);
-        return response;
-    } catch(e) {
-        console.error();
-    }
+    let response = await $api.get("Article/GetArticlesPreviews");
+    return response;
 }
 
 export const getCurrentArticle = async (id) => {

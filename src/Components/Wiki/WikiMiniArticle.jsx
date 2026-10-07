@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import Placeholder from '../Profile/img/placeholder.png';
 import { Context } from '../..';
 import banner from './img/banner.png';
 
@@ -16,9 +17,8 @@ function WikiMiniArticle({article}) {
     useEffect(() => {
         const FetchUserData = async (id) => {
             try {
-                const user = await store.userInfo(id);
-                setUser(user);
-                return user;
+                const userData = await store.userInfo(id);
+                setUser(userData || null);
             } catch (e) {
                 console.error("Failed to fetch user:", e);
             } finally {
@@ -29,9 +29,8 @@ function WikiMiniArticle({article}) {
         FetchUserData(article.idUser);
     }, []);
 
-    const toArticle = async (id) => {
+    const toArticle = (id) => {
         navigate("/wiki/" + id);
-        window.location.reload();
       };
 
     if (isLoading) {
@@ -39,14 +38,14 @@ function WikiMiniArticle({article}) {
     }
 
   return (
-    <li onClick={(e) => toArticle(article.id)} className="wiki__item article">
+    <li onClick={() => toArticle(article.idArticle)} className="wiki__item article">
         <span className="article__banner"><img src={article.articlePreview ? article.articlePreview : banner} className="article__img"></img></span>
         <div className="article__author author">
-            <img src={user.activeAvatar} className="author__avatar" alt=""></img>
+            <img src={user?.activeAvatar || article.userProfilePicture || Placeholder} className="author__avatar" alt=""></img>
             <span className="author__info">
-                <p className="author__name">{user.name}</p>
-                <span className="author__readers">{article.readsNumber ? article.readsNumber : 0} читателя | {new Date(article.created).toLocaleString('en-US', {year: 'numeric', month: 'numeric', day: 'numeric'}).replaceAll('/', '.')}</span>
-                <p className="author__mbti">{user.typeMbti}</p>
+                <p className="author__name">{user?.name || article.userName}</p>
+                <span className="author__readers">{article.readsNumber || 0} прочтений | {article.timeSincePublication}</span>
+                <p className="author__mbti">{user?.typeMbti || article.userMbti}</p>
             </span>
         </div>
         <h2 className="article__heading">{article.articleName}</h2>

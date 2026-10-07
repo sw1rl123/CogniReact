@@ -1,10 +1,24 @@
 import { createUser, loginUser } from "../services/auth.js";
-import { checkSubscribe, getAllUsersChats, getCurrentArticle, subscribe, unSubscribe } from "../services/user.js";
+import { checkSubscribe, getAllUsersChats, getCurrentArticle, getTagCatalog, getUserTagSelection, setUserTagSelection, subscribe, unSubscribe } from "../services/user.js";
 import { getAllArticles } from "../services/user.js";
 import { createNewArticle } from "../services/user.js";
 import { getUserById, getUserPosts, getUserFriends, getAllUsers, updateUserNickname, getUserFriendsFull, getUsersFromName, getUserFriendsAmount, createPost, updateImageAvatar, updateImageBanner, updateUserDescription, updateUserPassword, updateUserMbti } from "../services/user.js";
 
 export default class Store {
+
+    async getTagCatalog() {
+        const response = await getTagCatalog();
+        return response.data;
+    }
+
+    async getUserTagSelection(userId) {
+        const response = await getUserTagSelection(userId);
+        return response.data;
+    }
+
+    async setUserTagSelection(selection) {
+        await setUserTagSelection(selection);
+    }
 
     async register(user) {
         try {
@@ -162,12 +176,8 @@ export default class Store {
     }
 
     async getArticles() {
-        try {
-            const response = await getAllArticles();
-            return response.data;
-        } catch (e) {
-            console.log(e);
-        }
+        const response = await getAllArticles();
+        return response.data;
     }
 
     async getArticle(id) {
