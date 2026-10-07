@@ -35,19 +35,17 @@ export default class Store {
     async login(user) {
         try {
             const response = await loginUser(user);
-            if (response == 404) {
+            localStorage.setItem('aToken', response.data.accessToken);
+            localStorage.setItem('rToken', response.data.refreshToken);
+            localStorage.setItem('userId', response.data.id);
+            // startSignalRConnection(response.data.accessToken);
+            return true;
+        } catch (e) {
+            if (e.response?.status === 401) {
                 return false;
             }
-            else {
-                localStorage.setItem('aToken', response.data.accessToken);
-                localStorage.setItem('rToken', response.data.refreshToken);
-                localStorage.setItem('userId', response.data.id);
-                // startSignalRConnection(response.data.accessToken);
-                return true;
-            }
-        } catch (e) {
             console.error(e);
-            console.log(e.response.data);
+            throw e;
         }
     }
 

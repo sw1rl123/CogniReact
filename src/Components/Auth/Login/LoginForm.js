@@ -8,7 +8,7 @@ import maskot from "../../../assets/images/maskot-hi.png"
 
 function LoginForm() {
 
-  const [validEnter, setValidEnter] = useState(false);
+  const [loginError, setLoginError] = useState('');
 
   const navigate = useNavigate();
 
@@ -20,11 +20,18 @@ function LoginForm() {
   });
 
   const login = async (user) => {
-    var response = await store.login(user);
-    if(response) {
-      navigate('/profile/' + localStorage.getItem('userId'));
-    } else {
-      setValidEnter(true);
+    setLoginError('');
+    try {
+      const response = await store.login(user);
+      if(response) {
+        navigate('/profile/' + localStorage.getItem('userId'));
+      } else {
+        setLoginError('Неверный логин или пароль');
+      }
+    } catch (e) {
+      setLoginError(e.response
+        ? 'Ошибка сервера при входе. Попробуйте позже.'
+        : 'Не удалось подключиться к API. Проверьте, запущен ли Cogni.');
     }
 	};
 
@@ -62,7 +69,7 @@ function LoginForm() {
             <img className="login__maskot-image" src={maskot} alt="" />
         </div>
 
-          {(validEnter) && <span className='loginform__error--enter'><p>Неверный логин или пароль</p></span>}
+          {loginError && <span className='loginform__error--enter'><p>{loginError}</p></span>}
           <form onSubmit={onSubmit} className='login__form loginform'>
               <h1 className='loginform__header'>Вход в «COGNI»</h1>
               <input
@@ -90,4 +97,3 @@ function LoginForm() {
 };
 
 export default observer(LoginForm);
-
