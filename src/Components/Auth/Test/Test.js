@@ -9,12 +9,11 @@ import { ReactComponent as Humster } from './img/humster.svg';
 import { ReactComponent as Ellipse } from './img/ellipse.svg';
 import { COGNI_API_URL } from '../../../services/globals';
 
+const QUESTIONS_PER_PAGE = 4;
+
 function Test() {
 
-    const [questionsEI, setQuestionsEI] = useState([]);
-    const [questionsSN, setQuestionsSN] = useState([]);
-    const [questionsFT, setQuestionsFT] = useState([]);
-    const [questionsJP, setQuestionsJP] = useState([]);
+    const [questions, setQuestions] = useState([]);
 
     const navigate = useNavigate();
 
@@ -106,10 +105,7 @@ function Test() {
 
         axios.get(`${COGNI_API_URL}/Test/GetAllQuestions`)
             .then((response) => {
-                setQuestionsEI(response.data.questions.slice(0, 15));
-                setQuestionsSN(response.data.questions.slice(15, 30));
-                setQuestionsFT(response.data.questions.slice(30, 45));
-                setQuestionsJP(response.data.questions.slice(45, 60));
+                setQuestions(response.data.questions);
              })
              .catch((err) => {
                 console.log(err);
@@ -122,6 +118,7 @@ function Test() {
     const [JP, setJP] = useState(Array(15).fill(0));
 
     const [showResult, setShowResult] = useState(false);
+    const pageCount = Math.ceil(questions.length / QUESTIONS_PER_PAGE);
 
     const setLetter = (id, number, operation) => {
     if (id <= 15) {
@@ -141,19 +138,10 @@ function Test() {
         document.getElementById("test").scrollTo(0, 0);
     }, [questPage]);
 
-    const changePage = (number, func) => {
-        if (func == 1) {
-            if (questPage == 1 && number == -1) {
-                return false;
-            }
-            if (questPage == 12 && number == 1) {
-                return false;
-            }
-            setQuestPage(questPage + number);
-        } else {
-            setQuestPage(number);
-        }
-            
+    const changePage = (page, relative = false) => {
+        const nextPage = relative ? questPage + page : page;
+        if (nextPage < 1 || nextPage > pageCount) return;
+        setQuestPage(nextPage);
     }
 
     return (
@@ -164,65 +152,23 @@ function Test() {
             <>
             <div className="test__wrapper">
             <ul className='test__pagination'>
-                <li className={"test__pagination-item " + (questPage == 1 && "test__pagination-select")} onClick={() => changePage(1, 2)}>1</li>
-                <li className={"test__pagination-item " + (questPage == 2 && "test__pagination-select")} onClick={() => changePage(2, 2)}>2</li>
-                <li className={"test__pagination-item " + (questPage == 3 && "test__pagination-select")} onClick={() => changePage(3, 2)}>3</li>
-                <li className={"test__pagination-item " + (questPage == 4 && "test__pagination-select")} onClick={() => changePage(4, 2)}>4</li>
-                <li className={"test__pagination-item " + (questPage == 5 && "test__pagination-select")} onClick={() => changePage(5, 2)}>5</li>
-                <li className={"test__pagination-item " + (questPage == 6 && "test__pagination-select")} onClick={() => changePage(6, 2)}>6</li>
-                <li className={"test__pagination-item " + (questPage == 7 && "test__pagination-select")} onClick={() => changePage(7, 2)}>7</li>
-                <li className={"test__pagination-item " + (questPage == 8 && "test__pagination-select")} onClick={() => changePage(8, 2)}>8</li>
-                <li className={"test__pagination-item " + (questPage == 9 && "test__pagination-select")} onClick={() => changePage(9, 2)}>9</li>
-                <li className={"test__pagination-item " + (questPage == 10 && "test__pagination-select")} onClick={() => changePage(10, 2)}>10</li>
-                <li className={"test__pagination-item " + (questPage == 11 && "test__pagination-select")} onClick={() => changePage(11, 2)}>11</li>
-                <li className={"test__pagination-item " + (questPage == 12 && "test__pagination-select")} onClick={() => changePage(12, 2)}>12</li>
+                {Array.from({ length: pageCount }, (_, index) => {
+                    const page = index + 1;
+                    return (
+                        <li
+                            key={page}
+                            className={"test__pagination-item " + (questPage === page ? "test__pagination-select" : "")}
+                            onClick={() => changePage(page)}
+                        >
+                            {page}
+                        </li>
+                    );
+                })}
             </ul>
-            <button type="button" className={'test__button--page-prev' + (questPage >= 2 && questPage <= 12 ? ' test__button-show' : "")} onClick={() => changePage(-1, 1)}><Arrow/></button>
-            <button type="button" className={'test__button--page-next' + (questPage >= 1 && questPage <= 11 ? ' test__button-show' : "")} onClick={() => changePage(1, 1)}><Arrow/></button>
-            <ul className={"test__list" + (questPage >= 1 && questPage <= 3 ? " test__list--show" + (questPage % 3): "")}>
-                {questionsEI.map(question =>
-                    <li key={question.idMbtiQuestion} className='test__item'>
-                        <p className='test__question'>
-                        {question.question}
-                        </p>
-                        <label className="test__label"><input onChange={() => setLetter(Number(question.idMbtiQuestion), 1, -1)} name={"question" + (Number(question.idMbtiQuestion))} className='test__input' type="radio"></input><span className='test__answer'>Нет</span></label>
-                        <label className="test__label"><input onChange={() => setLetter(Number(question.idMbtiQuestion), 0.5, -1)} name={"question" + (Number(question.idMbtiQuestion))} className='test__input' type="radio"></input><span className='test__answer'>Скорее<br/> нет, чем да</span></label>
-                        <label className="test__label"><input onChange={() => setLetter(Number(question.idMbtiQuestion), 0.5, 1)} name={"question" + (Number(question.idMbtiQuestion))} className='test__input' type="radio"></input><span className='test__answer'>Скореe<br/> да, чем нет</span></label>
-                        <label className="test__label"><input onChange={() => setLetter(Number(question.idMbtiQuestion), 1, 1)} name={"question" + (Number(question.idMbtiQuestion))} className='test__input' type="radio"></input><span className='test__answer'>Да</span></label>
-                    </li>
-                )}
-            </ul>
-
-            <ul className={"test__list" + (questPage >= 4 && questPage <= 6 ? " test__list--show" + (questPage % 3) : "")}>
-                {questionsSN.map(question =>
-                    <li key={question.idMbtiQuestion} className='test__item'>
-                        <p className='test__question'>
-                        {question.question}
-                        </p>
-                        <label className="test__label"><input onChange={() => setLetter(Number(question.idMbtiQuestion), 1, -1)} name={"question" + (Number(question.idMbtiQuestion))} className='test__input' type="radio"></input><span className='test__answer'>Нет</span></label>
-                        <label className="test__label"><input onChange={() => setLetter(Number(question.idMbtiQuestion), 0.5, -1)} name={"question" + (Number(question.idMbtiQuestion))} className='test__input' type="radio"></input><span className='test__answer'>Скорее<br/> нет, чем да</span></label>
-                        <label className="test__label"><input onChange={() => setLetter(Number(question.idMbtiQuestion), 0.5, 1)} name={"question" + (Number(question.idMbtiQuestion))} className='test__input' type="radio"></input><span className='test__answer'>Скореe<br/> да, чем нет</span></label>
-                        <label className="test__label"><input onChange={() => setLetter(Number(question.idMbtiQuestion), 1, 1)} name={"question" + (Number(question.idMbtiQuestion))} className='test__input' type="radio"></input><span className='test__answer'>Да</span></label>
-                    </li>
-                )}
-            </ul>
-
-            <ul className={"test__list" + (questPage >= 7 && questPage <= 9 ? " test__list--show" + (questPage % 3) : "")}>
-                {questionsFT.map(question =>
-                    <li key={question.idMbtiQuestion} className='test__item'>
-                        <p className='test__question'>
-                        {question.question}
-                        </p>
-                        <label className="test__label"><input onChange={() => setLetter(Number(question.idMbtiQuestion), 1, -1)} name={"question" + (Number(question.idMbtiQuestion))} className='test__input' type="radio"></input><span className='test__answer'>Нет</span></label>
-                        <label className="test__label"><input onChange={() => setLetter(Number(question.idMbtiQuestion), 0.5, -1)} name={"question" + (Number(question.idMbtiQuestion))} className='test__input' type="radio"></input><span className='test__answer'>Скорее<br/> нет, чем да</span></label>
-                        <label className="test__label"><input onChange={() => setLetter(Number(question.idMbtiQuestion), 0.5, 1)} name={"question" + (Number(question.idMbtiQuestion))} className='test__input' type="radio"></input><span className='test__answer'>Скореe<br/> да, чем нет</span></label>
-                        <label className="test__label"><input onChange={() => setLetter(Number(question.idMbtiQuestion), 1, 1)} name={"question" + (Number(question.idMbtiQuestion))} className='test__input' type="radio"></input><span className='test__answer'>Да</span></label>
-                    </li>
-                )}
-            </ul>
-            
-            <ul className={"test__list" + (questPage >= 10 && questPage <= 12 ? " test__list--show" + (questPage % 3) : "")}>
-                {questionsJP.map(question =>
+            <button type="button" className={'test__button--page-prev' + (questPage > 1 ? ' test__button-show' : "")} onClick={() => changePage(-1, true)}><Arrow/></button>
+            <button type="button" className={'test__button--page-next' + (questPage < pageCount ? ' test__button-show' : "")} onClick={() => changePage(1, true)}><Arrow/></button>
+            <ul className="test__list">
+                {questions.slice((questPage - 1) * QUESTIONS_PER_PAGE, questPage * QUESTIONS_PER_PAGE).map(question =>
                     <li key={question.idMbtiQuestion} className='test__item'>
                         <p className='test__question'>
                         {question.question}
@@ -235,7 +181,7 @@ function Test() {
                 )}
             </ul>
             </div>
-            {questPage == 12 && <button onClick={(e) => onSubmitTest()} className='test__button'>Завершить тест</button>}
+            {pageCount > 0 && questPage === pageCount && <button onClick={(e) => onSubmitTest()} className='test__button'>Завершить тест</button>}
             </>
             }
             {showResult && 

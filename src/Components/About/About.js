@@ -10,8 +10,6 @@ import { ReactComponent as WaweSvg } from './img/wawe.svg';
 import { ReactComponent as Wawe2Svg } from './img/wawe2.svg';
 import { ReactComponent as CogniSvg } from './img/COGNI.svg';
 import { ReactComponent as TypesSvg } from './img/types.svg';
-import { ReactComponent as BorderSvg } from './img/border.svg';
-import { ReactComponent as Border2Svg } from './img/border2.svg';
 import image1 from './img/team/image1.png';
 import image2 from './img/team/image2.png';
 import image3 from './img/team/image3.png';
@@ -85,17 +83,17 @@ function About() {
                     <ul className="leaders__list">
                         <li className="leaders__item">
                             <img src={image1} className="leaders__img"/>
-                            <BorderSvg/><p className="leaders__name">Елена Ивановна Мещангина</p>
+                            <p className="leaders__name">Елена Ивановна Мещангина</p>
                             <span className="leaders__role">КУРАТОР ПРОЕКТА</span>
                         </li>
                         <li className="leaders__item">
                             <img src={image2} className="leaders__img"/>
-                            <BorderSvg/> <p className="leaders__name">Кристина Кирксова</p>
+                            <p className="leaders__name">Кристина Кирксова</p>
                             <span className="leaders__role">ЛИДЕР ПРОЕКТА</span>
                         </li>
                         <li className="leaders__item">
                             <img src={image3} className="leaders__img"/>
-                            <BorderSvg/><p className="leaders__name">Алина Мограбян</p>
+                            <p className="leaders__name">Алина Мограбян</p>
                             <span className="leaders__role">МЕНЕДЖЕР ПРОЕКТА</span>
                         </li>
                     </ul>
@@ -109,28 +107,28 @@ function About() {
 
                     <ul className="team__list">
                         <li className="team__item">
-                            <img src={image4} className="team__img"/>\
-                            <Border2Svg/><p className="team__name">Камилла Касымова</p>
+                            <img src={image4} className="team__img"/>
+                            <p className="team__name">Камилла Касымова</p>
                         </li>
 
                         <li className="team__item">
-                            <img src={image5} className="team__img"/>\
-                            <Border2Svg/><p className="team__name">Екатерина Батурина</p>
+                            <img src={image5} className="team__img"/>
+                            <p className="team__name">Екатерина Батурина</p>
                         </li>
 
                         <li className="team__item">
-                            <img src={image6} className="team__img"/>\
-                            <Border2Svg/><p className="team__name">София Каткова</p>
+                            <img src={image6} className="team__img"/>
+                            <p className="team__name">София Каткова</p>
                         </li>
 
                         <li className="team__item">
-                            <img src={image7} className="team__img"/>\
-                            <Border2Svg/><p className="team__name">Анастасия Калинкина</p>
+                            <img src={image7} className="team__img"/>
+                            <p className="team__name">Анастасия Калинкина</p>
                         </li>
 
                         <li className="team__item">
-                            <img src={image8} className="team__img"/>\
-                            <Border2Svg/><p className="team__name">Николай Булгаков</p>
+                            <img src={image8} className="team__img"/>
+                            <p className="team__name">Николай Булгаков</p>
                         </li>
                     </ul>
                 </section>
@@ -143,38 +141,38 @@ function About() {
 
                     <ul className="team__list">
                         <li className="team__item">
-                            <img src={image3} className="team__img"/>\
-                            <Border2Svg/><p className="team__name">Алина Мограбян</p>
+                            <img src={image3} className="team__img"/>
+                            <p className="team__name">Алина Мограбян</p>
                         </li>
 
                         <li className="team__item">
-                            <img src={image9} className="team__img"/>\
-                            <Border2Svg/><p className="team__name">Алёна Швайкина</p>
+                            <img src={image9} className="team__img"/>
+                            <p className="team__name">Алёна Швайкина</p>
                         </li>
 
                         <li className="team__item">
-                            <img src={image10} className="team__img"/>\
-                            <Border2Svg/><p className="team__name">Анастасия Иванова</p>
+                            <img src={image10} className="team__img"/>
+                            <p className="team__name">Анастасия Иванова</p>
                         </li>
 
                         <li className="team__item">
-                            <img src={image11} className="team__img"/>\
-                            <Border2Svg/><p className="team__name">Алёна Комиссарова</p>
+                            <img src={image11} className="team__img"/>
+                            <p className="team__name">Алёна Комиссарова</p>
                         </li>
 
                         <li className="team__item">
-                            <img src={image12} className="team__img"/>\
-                            <Border2Svg/><p className="team__name">Алина Ишунькина</p>
+                            <img src={image12} className="team__img"/>
+                            <p className="team__name">Алина Ишунькина</p>
                         </li>
 
                         <li className="team__item">
-                            <img src={image13} className="team__img"/>\
-                            <Border2Svg/><p className="team__name">Денис Житинский</p>
+                            <img src={image13} className="team__img"/>
+                            <p className="team__name">Денис Житинский</p>
                         </li>
 
                         <li className="team__item">
-                            <img src={image14} className="team__img"/>\
-                            <Border2Svg/><p className="team__name">Анастасия Квасова</p>
+                            <img src={image14} className="team__img"/>
+                            <p className="team__name">Анастасия Квасова</p>
                         </li>
                     </ul>
                 </section>
@@ -187,33 +185,33 @@ function About() {
 
                     <ul className="team__list">
                         <li className="team__item">
-                            <img src={image15} className="team__img"/>\
-                            <Border2Svg/><p className="team__name">Илья Цымбал</p>
+                            <img src={image15} className="team__img"/>
+                            <p className="team__name">Илья Цымбал</p>
                         </li>
 
                         <li className="team__item">
-                            <img src={image16} className="team__img"/>\
-                            <Border2Svg/><p className="team__name">Владислав Виноградов</p>
+                            <img src={image16} className="team__img"/>
+                            <p className="team__name">Владислав Виноградов</p>
                         </li>
 
                         <li className="team__item">
-                            <img src={image17} className="team__img"/>\
-                            <Border2Svg/><p className="team__name">Владислав Кашкин</p>
+                            <img src={image17} className="team__img"/>
+                            <p className="team__name">Владислав Кашкин</p>
                         </li>
 
                         <li className="team__item">
-                            <img src={image18} className="team__img"/>\
-                            <Border2Svg/><p className="team__name">Мария Степанчук</p>
+                            <img src={image18} className="team__img"/>
+                            <p className="team__name">Мария Степанчук</p>
                         </li>
 
                         <li className="team__item">
-                            <img src={image19} className="team__img"/>\
-                            <Border2Svg/><p className="team__name">Рафаэл Гядукян</p>
+                            <img src={image19} className="team__img"/>
+                            <p className="team__name">Рафаэл Гядукян</p>
                         </li>
 
                         <li className="team__item">
-                            <img src={image20} className="team__img"/>\
-                            <Border2Svg/><p className="team__name">Улугбек Исматов</p>
+                            <img src={image20} className="team__img"/>
+                            <p className="team__name">Улугбек Исматов</p>
                         </li>
                     </ul>
                 </section>
@@ -226,28 +224,28 @@ function About() {
 
                     <ul className="team__list">
                         <li className="team__item">
-                            <img src={image21} className="team__img"/>\
-                            <Border2Svg/><p className="team__name">Анастасия Трушева</p>
+                            <img src={image21} className="team__img"/>
+                            <p className="team__name">Анастасия Трушева</p>
                         </li>
 
                         <li className="team__item">
-                            <img src={image22} className="team__img"/>\
-                            <Border2Svg/><p className="team__name">Анастасия Митяева</p>
+                            <img src={image22} className="team__img"/>
+                            <p className="team__name">Анастасия Митяева</p>
                         </li>
 
                         <li className="team__item">
-                            <img src={image23} className="team__img"/>\
-                            <Border2Svg/><p className="team__name">Артем Архипов</p>
+                            <img src={image23} className="team__img"/>
+                            <p className="team__name">Артем Архипов</p>
                         </li>
 
                         <li className="team__item">
-                            <img src={image24} className="team__img"/>\
-                            <Border2Svg/><p className="team__name">Вадим Потапов</p>
+                            <img src={image24} className="team__img"/>
+                            <p className="team__name">Вадим Потапов</p>
                         </li>
 
                         <li className="team__item">
-                            <img src={image25} className="team__img"/>\
-                            <Border2Svg/><p className="team__name">Анастасия Бахматова</p>
+                            <img src={image25} className="team__img"/>
+                            <p className="team__name">Анастасия Бахматова</p>
                         </li>
                     </ul>
                 </section>
@@ -260,18 +258,18 @@ function About() {
 
                     <ul className="team__list">
                         <li className="team__item">
-                            <img src={image26} className="team__img"/>\
-                            <Border2Svg/><p className="team__name">Анастасия Подгорная</p>
+                            <img src={image26} className="team__img"/>
+                            <p className="team__name">Анастасия Подгорная</p>
                         </li>
 
                         <li className="team__item">
-                            <img src={image27} className="team__img"/>\
-                            <Border2Svg/><p className="team__name">Мартин Костюшкин</p>
+                            <img src={image27} className="team__img"/>
+                            <p className="team__name">Мартин Костюшкин</p>
                         </li>
 
                         <li className="team__item">
-                            <img src={image28} className="team__img"/>\
-                            <Border2Svg/><p className="team__name">Полина Голдина</p>
+                            <img src={image28} className="team__img"/>
+                            <p className="team__name">Полина Голдина</p>
                         </li>
                     </ul>
                 </section>
@@ -281,4 +279,3 @@ function About() {
 };
 
 export default About;
-

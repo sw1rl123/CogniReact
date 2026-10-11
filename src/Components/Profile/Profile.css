@@ -283,6 +283,54 @@
     width: 100%;
 }
 
+.post__actions {
+    display: flex;
+    align-items: center;
+    border-top: 1px solid var(--col-bg-sections-hover);
+    padding-top: 12px;
+}
+
+.post__like {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 12px;
+    border-radius: 18px;
+    color: var(--col-text-main);
+    background: transparent;
+    font-family: Montserrat;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 150ms ease, background-color 150ms ease;
+}
+
+.post__like:hover {
+    background: var(--col-bg-sections-hover);
+}
+
+.post__like-icon {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    transition: fill 150ms ease, color 150ms ease;
+}
+
+.post__like--active {
+    color: var(--col-highlight);
+}
+
+.post__like--active .post__like-icon {
+    fill: currentColor;
+}
+
+.post__like-count {
+    min-width: 1ch;
+    text-align: center;
+}
+
 .addons {
     display: flex;
     flex-direction: column;

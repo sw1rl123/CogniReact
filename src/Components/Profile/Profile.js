@@ -28,6 +28,14 @@ function Profile() {
   const [isLoading, setIsLoading] = useState(true);
 
   const [userPosts, setUserPosts] = useState([]);
+  const [likedPosts, setLikedPosts] = useState({});
+
+  const togglePostLike = (postId) => {
+    setLikedPosts(current => ({
+      ...current,
+      [postId]: !current[postId]
+    }));
+  };
 
   const [userFriends, setUserFriends] = useState([]);
   const [userFriendsAmount, setUserFriendsAmount] = useState([]);
@@ -710,10 +718,25 @@ const sendMessage = async (friendId) => {
                 <div className='posts__post post'>
                     <p className='post__description'>{post.postBody}</p>
                     <ul className='post__list'>
-                      {post.postImages.map(image =>
-                        <li key={0} className='post__item'><img className='post__image' src={image}/></li>
+                      {post.postImages.map((image, index) =>
+                        <li key={`${post.id}-${index}`} className='post__item'><img className='post__image' src={image}/></li>
                       )}
                     </ul>
+                </div>
+                <div className='post__actions'>
+                  <button
+                    type='button'
+                    className={`post__like${likedPosts[post.id] ? ' post__like--active' : ''}`}
+                    onClick={() => togglePostLike(post.id)}
+                    aria-pressed={Boolean(likedPosts[post.id])}
+                    aria-label={likedPosts[post.id] ? 'Убрать отметку «Нравится»' : 'Поставить отметку «Нравится»'}
+                  >
+                    <svg className='post__like-icon' viewBox='0 0 24 24' aria-hidden='true'>
+                      <path d='M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z' />
+                    </svg>
+                    <span>Нравится</span>
+                    <span className='post__like-count'>{likedPosts[post.id] ? 1 : 0}</span>
+                  </button>
                 </div>
               </li>
             )}
