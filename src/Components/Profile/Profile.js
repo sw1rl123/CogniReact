@@ -6,6 +6,46 @@ import { Context } from '../..';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import Placeholder from './img/placeholder.png';
 
+function GetPostTimeStrSincePublication(timeStr) {
+    const publishedAt = new Date(timeStr);
+    const now = new Date();
+
+    const diffMs = now.getTime() - publishedAt.getTime();
+    const diffSeconds = Math.floor(diffMs / 1000);
+    const diffMinutes = Math.floor(diffSeconds / 60);
+    const diffHours = Math.floor(diffMinutes / 60);
+
+    if (Number.isNaN(publishedAt.getTime())) throw new Error("Invalid date");
+
+    // Меньше минуты
+    if (diffSeconds < 60) return `${Math.max(0, diffSeconds)} сек. назад`;
+
+    // Меньше часа
+    if (diffMinutes < 60) return `${diffMinutes} мин. назад`;
+
+    // Меньше суток
+    if (diffHours < 24) return `${diffHours} ч. ${diffMinutes % 60} мин. назад`;
+
+    // Сутки и больше
+    const dateFormatter = new Intl.DateTimeFormat("ru-RU", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hourCycle: "h23",
+        timeZone: "Europe/Moscow"
+    });
+
+    const parts = Object.fromEntries(
+        dateFormatter
+            .formatToParts(publishedAt)
+            .map(({ type, value }) => [type, value])
+    );
+
+    return `${parts.day} ${parts.month} ${parts.year} в ${parts.hour}:${parts.minute}`;
+};
+
 function Profile() {
   const fixedHobbyNames = ['Музыка', 'Медиа', 'Творчество', 'Игры', 'Спорт'];
 
@@ -712,7 +752,7 @@ const sendMessage = async (friendId) => {
                 <img src={userImage ? userImage : Placeholder} alt=" " className='posts__avatar'></img>
                   <div className='posts__info'>
                     <p className='posts__name'>{userName + " " + userSurname}</p>
-                    <span className='posts__time'>45 часов назад</span>
+                    <span className='posts__time'>{GetPostTimeStrSincePublication(post.createDate)}</span>
                   </div>
                 </div>
                 <div className='posts__post post'>
