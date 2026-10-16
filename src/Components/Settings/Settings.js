@@ -181,7 +181,7 @@ function Settings() {
           <div className='modal__photos'>
             <label className='modal__photo'>Загрузить изображение<input onChange={(e) => setNewImage(Object.values(e.target.files))} ref={inputRef} type="file" className='modal__input--image'/></label>
           </div>
-          <button type="submit" className='modal__button'>Сохрнаить фото профиля</button>
+          <button type="submit" className='modal__button'>Сохранить фото профиля</button>
         </form>
         </div>
       }
@@ -203,7 +203,7 @@ function Settings() {
         </section>
         <section className='settings__info'>
           <div className="settings__type">
-            <h2 className="settings__type-heading">Изменить тип личность</h2>
+            <h2 className="settings__type-heading">Изменить тип личности</h2>
             <div>
             <p className="settings__type-mbti">
               <span className="mbti-letter">{userTypeMBTI[0]}</span>
