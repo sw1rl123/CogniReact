@@ -286,3 +286,40 @@ pre {
     word-wrap: break-word;      
     font-family: Montserrat;
 }
+
+/* ===== Состояния (hover / active) ===== */
+.article,
+.types__item {
+  cursor: pointer;
+  transition: box-shadow 0.2s ease;
+}
+
+.article:hover,
+.types__item:hover {
+  box-shadow: 0 0 0 1px var(--col-text-main);
+}
+
+.wiki__icon,
+.wiki__create-button {
+  cursor: pointer;
+  transition: filter 0.2s ease, transform 0.1s ease;
+}
+
+.wiki__icon:hover {
+  filter: brightness(var(--hover-bright-link));
+  transform: scale(1.1);
+}
+
+.wiki__icon:active {
+  filter: brightness(var(--press-bright-link));
+  transform: scale(0.96);
+}
+
+.wiki__create-button:hover {
+  filter: brightness(var(--hover-bright));
+}
+
+.wiki__create-button:active {
+  filter: brightness(var(--press-bright));
+  transform: scale(0.97);
+}

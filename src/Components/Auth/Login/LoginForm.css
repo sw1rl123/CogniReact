@@ -208,3 +208,48 @@
 .loginform__error--enter ~ .loginform {
     animation: tilt-shaking 0.3s;
 }
+
+/* ===== Состояния (hover / active) ===== */
+.loginform__button,
+.loginform__link,
+.info__link {
+  cursor: pointer;
+  transition: filter 0.2s ease, transform 0.1s ease;
+}
+
+.loginform__button:hover {
+  background: var(--online-blue);
+}
+
+.loginform__button:active {
+  filter: brightness(var(--press-bright));
+  transform: scale(0.97);
+}
+
+.loginform__link:hover {
+  color: var(--online-blue);
+}
+
+.info__link:hover {
+  filter: brightness(var(--hover-bright-link));
+  text-decoration: underline;
+}
+
+.loginform__link:active,
+.info__link:active {
+  filter: brightness(var(--press-bright-link));
+  transform: scale(0.96);
+}
+
+.loginform__input {
+  transition: box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.loginform__input:hover {
+  filter: brightness(0.8);
+}
+
+.loginform__input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--col-addons);
+}

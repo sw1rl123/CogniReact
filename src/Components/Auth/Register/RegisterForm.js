@@ -190,7 +190,7 @@ function RegisterForm() {
                     </select>
                     {(validMBTI) && <span className='loginform__error'><InfoIcon></InfoIcon><p>Вы не выбрали MBTI</p></span>}
 
-                    <button type="submit" className='loginform__button'>Зарегистрироваться</button>
+                    <button type="submit" className='loginform__button loginform__button__register'>Зарегистрироваться</button>
                     <p className='loginform__text'>или</p>
                     <button onClick={onTest} type="button" className='loginform__button-other'>Пройти тест <br/> и узнать свой тип</button>
                 </section>

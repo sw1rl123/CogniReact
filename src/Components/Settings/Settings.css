@@ -316,3 +316,69 @@
     outline: none;
     resize: none;
 }
+
+/* ===== Состояния (hover / active) ===== */
+.human__avatar-edit,
+.settings__bg-edit,
+.human__name-edit,
+.human__description-edit,
+.settings__type-button,
+.settings__save-button {
+  cursor: pointer;
+  transition: filter 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+}
+
+/* Подписи «Изменить» */
+.human__avatar-edit:hover,
+.settings__bg-edit:hover,
+.human__name-edit:hover,
+.human__description-edit:hover {
+  filter: brightness(var(--hover-bright-link));
+}
+
+.human__avatar-edit:active,
+.settings__bg-edit:active,
+.human__name-edit:active,
+.human__description-edit:active {
+  filter: brightness(var(--press-bright-link));
+  transform: scale(0.96);
+}
+
+/* Кнопки */
+.settings__type-button:hover {
+  filter: brightness(var(--hover-bright));
+}
+
+.settings__type-button:active {
+  filter: brightness(var(--press-bright));
+  transform: scale(0.97);
+}
+
+.settings__save-button {
+  background: var(--col-addons);
+}
+
+.settings__save-button:hover {
+  box-shadow: 0 0 0 1px var(--col-text-main);
+}
+
+.settings__save-button:active {
+  background: var(--dark-blue-gradient);
+  border: none;
+  filter: brightness(var(--press-bright));
+  transform: scale(0.97);
+}
+
+/* Поля пароля */
+.settings__password-input {
+  transition: box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.settings__password-input:hover {
+  filter: brightness(0.8);
+}
+
+.settings__password-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--col-addons);
+}
