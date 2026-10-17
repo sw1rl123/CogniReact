@@ -313,3 +313,35 @@
     bottom: 20px;
     z-index: 1;
   }
+
+  /* ===== Состояния (hover / active) ===== */
+.test__button,
+.result-test__button,
+.result-test__about button,
+.result-test__about a {
+  cursor: pointer;
+  transition: filter 0.2s ease, transform 0.1s ease;
+}
+
+.test__button:hover,
+.result-test__button:hover,
+.result-test__about button:hover {
+  filter: brightness(var(--hover-bright));
+}
+
+.test__button:active,
+.result-test__button:active,
+.result-test__about button:active {
+  filter: brightness(var(--press-bright));
+  transform: scale(0.97);
+}
+
+.result-test__about a:hover {
+  filter: brightness(var(--hover-bright-link));
+  text-decoration: underline;
+}
+
+.result-test__about a:active {
+  filter: brightness(var(--press-bright-link));
+  transform: scale(0.96);
+}

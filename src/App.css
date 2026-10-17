@@ -44,196 +44,26 @@
   --col-addons-dark: #443d6c;
   --col-rights: linear-gradient(180deg, rgba(170,213,160,1) 0%, rgba(118,183,103,1) 100%);
   --col-highlight: #F063A7;
+
+  --online-blue: #beaeff;
+  --background-light: #443d6c;
+  --block-gray-dark: #75718c;
+  --text-white: #ffffff;
+  --main-blue-gradient: linear-gradient(180deg, #988bcd 0%, #7e6fbb 100%);
+  --blue-to-pink-gradient: linear-gradient(180deg, #8f69c4 0%, #727bc1 100%);
+  --dark-blue-gradient: linear-gradient(180deg, #8b7dc4 0%, #504784 100%);
+  --mbti-pink-gradient: linear-gradient(180deg, #f063a7 0%, #cb508b 100%);
+
+  --hover-bright: 1.15;       
+  --hover-bright-link: 1.25;  
+  --press-bright: 0.9;      
+  --press-bright-link: 0.85;  
 }
 
 html, body, #root {
     height: 100%;
     position: relative;
     z-index: 0;
-}
-
-:root {
-  --hover-bright: 1.15;
-  --hover-bright-link: 1.25;
-  --press-bright: 0.9;
-  --press-bright-link: 0.85;
-}
-
-.loginform__button,
-.loginform__button-other,
-.test__button,
-.result-test__button,
-.result-test__about button,
-.human__button-addFriend,
-.human__button-sendMessage,
-.addpost__button,
-.modal__button,
-.tags__button,
-.tags__pill,
-.wiki__create-button,
-.settings__type-button,
-.settings__save-button,
-.header__logout,
-.hobbies__button:last-child {
-  cursor: pointer;
-  transition: filter 0.2s ease, transform 0.1s ease;
-}
-
-.loginform__button:hover,
-.loginform__button-other:hover,
-.test__button:hover,
-.result-test__button:hover,
-.result-test__about button:hover,
-.human__button-addFriend:hover,
-.human__button-sendMessage:hover,
-.addpost__button:hover,
-.modal__button:hover,
-.tags__button:hover,
-.tags__pill:hover,
-.wiki__create-button:hover,
-.settings__type-button:hover,
-.settings__save-button:hover,
-.header__logout:hover,
-.hobbies__button:last-child:hover {
-  filter: brightness(var(--hover-bright));
-}
-
-.loginform__button:active,
-.loginform__button-other:active,
-.test__button:active,
-.result-test__button:active,
-.result-test__about button:active,
-.human__button-addFriend:active,
-.human__button-sendMessage:active,
-.addpost__button:active,
-.modal__button:active,
-.tags__button:active,
-.tags__pill:active,
-.wiki__create-button:active,
-.settings__type-button:active,
-.settings__save-button:active,
-.header__logout:active,
-.hobbies__button:last-child:active {
-  filter: brightness(var(--press-bright));
-  transform: scale(0.97);
-}
-
-.human__avatar-edit,
-.settings__bg-edit,
-.human__name-edit,
-.human__description-edit,
-.wiki__icon,
-.tags__bookmark-button,
-.header__about,
-.info__link,
-.loginform__link,
-.result-test__about a,
-.about__whatIs a,
-.about__COGNI a {
-  cursor: pointer;
-  transition: filter 0.2s ease, transform 0.1s ease, opacity 0.2s ease;
-}
-
-.human__avatar-edit:hover,
-.settings__bg-edit:hover,
-.human__name-edit:hover,
-.human__description-edit:hover,
-.wiki__icon:hover,
-.tags__bookmark-button:hover,
-.header__about:hover,
-.info__link:hover,
-.loginform__link:hover,
-.result-test__about a:hover,
-.about__whatIs a:hover,
-.about__COGNI a:hover {
-  filter: brightness(var(--hover-bright-link));
-}
-
-.human__avatar-edit:active,
-.settings__bg-edit:active,
-.human__name-edit:active,
-.human__description-edit:active,
-.wiki__icon:active,
-.tags__bookmark-button:active,
-.header__about:active,
-.info__link:active,
-.loginform__link:active,
-.result-test__about a:active,
-.about__whatIs a:active,
-.about__COGNI a:active {
-  filter: brightness(var(--press-bright-link));
-  transform: scale(0.96);
-}
-
-.header__about:hover,
-.info__link:hover,
-.loginform__link:hover,
-.result-test__about a:hover,
-.about__whatIs a:hover,
-.about__COGNI a:hover {
-  text-decoration: underline;
-}
-
-.article,
-.friends__item,
-.types__item,
-.addons__item {
-  cursor: pointer;
-  transition: filter 0.2s ease, transform 0.15s ease;
-}
-
-.article:hover,
-.friends__item:hover,
-.types__item:hover {
-  filter: brightness(var(--hover-bright));
-}
-
-.addons__item:hover {
-  transform: translateY(2px);
-}
-
-.article:active,
-.friends__item:active,
-.types__item:active,
-.addons__item:active {
-  filter: brightness(var(--press-bright));
-  transform: translateY(0) scale(0.98);
-}
-
-.navigation__link {
-  transition: transform 0.1s ease, filter 0.2s ease;
-}
-
-.navigation__link:active {
-  transform: scale(0.97);
-  filter: brightness(var(--press-bright));
-}
-
-.settings__password-input,
-.header__search,
-.loginform__input {
-  transition: box-shadow 0.2s ease, filter 0.2s ease;
-}
-
-.settings__password-input:hover,
-.header__search:hover,
-.loginform__input:hover {
-  filter: brightness(0.8);
-}
-
-.settings__password-input:focus,
-.header__search:focus,
-.loginform__input:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px var(--col-addons);
-}
-
-.modal__button--close:hover {
-  opacity: 0.7;
-}
-
-.modal__button--close:active {
-  transform: scale(0.9);
 }
 
 button:disabled:hover,

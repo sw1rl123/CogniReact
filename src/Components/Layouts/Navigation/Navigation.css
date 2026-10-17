@@ -37,3 +37,21 @@
     color: var(--col-text-edit);
     background: var(--col-bg-buttons);
 }
+
+/* ===== Состояния (hover / active) ===== */
+.navigation__link {
+  transition: transform 0.1s ease, filter 0.2s ease;
+}
+
+/* :not(...) чтобы не ломать вид кнопки текущей страницы */
+.navigation__link:not(.navigation__link--active):hover {
+  background: var(--col-bg-sections);
+  border: 1px solid var(--block-gray-dark);
+  transform: scale(0.97);
+}
+
+.navigation__link:active {
+  background: var(--col-bg-sections-hover);
+  filter: brightness(var(--press-bright));
+  transform: scale(0.97);
+}

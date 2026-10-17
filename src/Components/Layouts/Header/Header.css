@@ -101,3 +101,50 @@
     font-weight: 600;
     color: var(--col-addons);
 }
+
+/* ===== Состояния (hover / active) ===== */
+.header__about {
+  cursor: pointer;
+  transition: filter 0.2s ease, transform 0.1s ease;
+}
+
+.header__about:hover {
+  filter: brightness(var(--hover-bright-link));
+  text-decoration: underline;
+}
+
+.header__about:active {
+  filter: brightness(var(--press-bright-link));
+  transform: scale(0.96);
+}
+
+.header__search {
+  --search-border: linear-gradient(var(--col-bg-sections), var(--col-bg-sections));
+  border: 3px solid transparent;
+  background:
+    linear-gradient(var(--col-bg-sections), var(--col-bg-sections)) padding-box,
+    var(--search-border) border-box;
+  outline: none;
+}
+
+.header__search:hover,
+.header__search:focus {
+  --search-border: var(--main-blue-gradient);
+}
+
+.header__logout {
+  cursor: pointer;
+  transition: filter 0.2s ease, transform 0.1s ease;
+}
+
+.header__logout:hover .logout__button {
+  border: 3px solid transparent;
+  background:
+    linear-gradient(var(--col-bg-buttons), var(--col-bg-buttons)) padding-box,
+    var(--blue-to-pink-gradient) border-box;
+}
+
+.header__logout:active {
+  filter: brightness(var(--press-bright));
+  transform: scale(0.97);
+}

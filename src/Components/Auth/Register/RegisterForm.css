@@ -286,3 +286,23 @@
 .loginform__error svg:hover ~ p{
     opacity: 1;
 }
+
+/* ===== Состояния (hover / active) ===== */
+.loginform__button.loginform__button__register {
+  background: var(--main-blue-gradient);
+}
+
+.loginform__button.loginform__button__register:hover,
+.loginform .loginform__button-other:hover {
+  background: var(--background-light);
+}
+
+.loginform__button-other {
+  cursor: pointer;
+  transition: filter 0.2s ease, transform 0.1s ease;
+}
+
+.loginform__button-other:active {
+  filter: brightness(var(--press-bright));
+  transform: scale(0.97);
+}
