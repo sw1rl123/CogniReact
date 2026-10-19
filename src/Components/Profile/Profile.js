@@ -419,7 +419,11 @@ const sendMessage = async (friendId) => {
             <textarea onChange={(e) => setNewPost(e.target.value)} className='modal__input' placeholder='Расскажите нам!'/>
           </div>
           <div className='modal__photos'>
-            <label className='modal__photo'>Хотите добавить фото?<input multiple onChange={(e) => setNewPostImages(Object.values(e.target.files))} ref={inputRef} type="file" className='modal__input--image'/></label>
+            <label className='modal__photo'>
+              Хотите добавить фото?
+              <input multiple onChange={(e) => setNewPostImages(Object.values(e.target.files))} ref={inputRef} type="file" accept="image/*" className='modal__input--image'/>
+              {newPostImages.length > 0 && <span className='modal__photo-selected'>Выбрано: {newPostImages.map(file => file.name).join(', ')}</span>}
+            </label>
           </div>
           <button type="submit" className='modal__button'>Опубликовать пост</button>
         </form>
