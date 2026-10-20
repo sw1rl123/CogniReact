@@ -25,8 +25,10 @@ function RegisterForm() {
         setValidEmail(false);
         setValidPassword(false);
         setValidPasswordRepeat(false);
+        setValidPasswordRepeat(false);
+        setValidAgree(false);
 
-        if (validStatus.status) {
+        if (validStatus.status && agree) {
             setUser({
                 ...user,
                 name: user.name.charAt(0).toUpperCase() + user.name.slice(1),
@@ -49,6 +51,9 @@ function RegisterForm() {
             }
             if (validStatus.passwordRepeat) {
                 setValidPasswordRepeat(true);
+            }
+            if (!agree) {
+                setValidAgree(true);
             }
         }
     };
@@ -100,6 +105,8 @@ function RegisterForm() {
     const [validPassword, setValidPassword] = React.useState(false);
     const [validPasswordRepeat, setValidPasswordRepeat] = React.useState(false);
     const [validMBTI, setValidMBTI] = React.useState(false);
+    const [agree, setAgree] = React.useState(false);
+    const [validAgree, setValidAgree] = React.useState(false);
 
     useEffect(() => {
 
@@ -165,7 +172,18 @@ function RegisterForm() {
                     type="password" placeholder='Подтвердите пароль' className='loginform__input'/>
                     {(validPasswordRepeat) && <span className='loginform__error'><InfoIcon></InfoIcon><p>Пароли не совпадают</p></span>}
 
-                    {/*<label htmlFor="agreeRadio" className='loginform__label'><input type="checkbox" className='loginform__radio' id="agreeRadio"/><p>Согласен на обработку персональных данных <a href="" className='loginform__agree'>Пользовательское соглашение</a></p></label>*/}
+                    <label htmlFor="agreeRadio" className='loginform__label'>
+                        <input
+                            type="checkbox"
+                            className='loginform__radio'
+                            id="agreeRadio"
+                            checked={agree}
+                            onChange={(e) => setAgree(e.target.checked)}
+                        />
+                        <p>Согласен на обработку персональных данных <a href="" className='loginform__agree'>Пользовательское соглашение</a></p>
+                    </label>
+                    {validAgree && <p className='loginform__agree-error'>Отметьте согласие, чтобы продолжить</p>}
+
                     <button onClick={completeFormStep} type="button" className='loginform__button'>Продолжить</button>
                     <p className='loginform__desc'>Уже есть аккаунт?</p>
                     <Link to="/login" className='loginform__link color-green'>Войти</Link>

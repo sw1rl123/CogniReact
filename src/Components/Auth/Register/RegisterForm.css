@@ -203,21 +203,49 @@
     font-size: 15px;
 }
 
-.loginform__radio {
-    margin-right: 8px;
-}
-
 .loginform__label {
     display: flex;
-    color: white;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    color: #D8E0F4;
     font-size: 12px;
+    font-weight: 500;
     font-family: Montserrat;
-    line-height: 13px;
+    line-height: normal;
     margin-bottom: 14px;
     text-align: left;
+    cursor: pointer;
+}
+
+.loginform__radio {
+    appearance: none;
+    flex-shrink: 0;
+    width: 25px;
+    height: 25px;
+    margin: 0;
+    border-radius: 50%;
+    background: #E6E5F0;
+    cursor: pointer;
+    position: relative;
+}
+
+.loginform__radio:checked::after {
+    content: "";
+    position: absolute;
+    inset: 6px;
+    border-radius: 50%;
+    background: var(--col-addons);
+}
+
+.loginform__radio:focus-visible {
+    outline: 2px solid var(--col-addons);
+    outline-offset: 2px;
 }
 
 .loginform__agree {
+    display: block;
+    margin-top: 4px;
     color: #597FE0;
 }
 
@@ -291,3 +319,19 @@
     opacity: 1;
 }
 
+.loginform__agree-error {
+    width: 100%;
+    margin-top: -8px;
+    margin-bottom: 14px;
+    padding-left: 33px;
+    color: #c04242;
+    font-family: Montserrat;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: normal;
+    text-align: left;
+}
+
+.loginform__label:has(+ .loginform__agree-error) .loginform__radio {
+    box-shadow: 0 0 0 2px #c04242;
+}
