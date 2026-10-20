@@ -27,6 +27,11 @@ function RegisterForm() {
         setValidPasswordRepeat(false);
 
         if (validStatus.status) {
+            setUser({
+                ...user,
+                name: user.name.charAt(0).toUpperCase() + user.name.slice(1),
+                surname: user.surname.charAt(0).toUpperCase() + user.surname.slice(1),
+            });
             setFormStep(cur => cur + 1);
         } else {
             
@@ -135,13 +140,13 @@ function RegisterForm() {
                         value={user?.name}
                         onChange={(e) => setUser({ ...user, name: e.target.value })}
                         type="text" placeholder='Имя' className='loginform__input'/>
-                    {(validName) && <span className='loginform__error'><InfoIcon></InfoIcon><p>Имя должно начинаться с заглавной буквы, быть написано на русском и содержать минимум 2 символа</p></span>}
+                    {(validName) && <span className='loginform__error'><InfoIcon></InfoIcon><p>Имя должно быть написано на русском и содержать минимум 2 символа</p></span>}
 
                     <input 
                         value={user?.surname}
                         onChange={(e) => setUser({ ...user, surname: e.target.value })}
                         type="text" placeholder='Фамилия' className='loginform__input'/>
-                    {(validSurname) && <span className='loginform__error'><InfoIcon></InfoIcon><p>Фамилия должна начинаться с заглавной буквы, быть написано на русском и содержать минимум 2 символа</p></span>}
+                    {(validSurname) && <span className='loginform__error'><InfoIcon></InfoIcon><p>Фамилия должна быть написана на русском и содержать минимум 2 символа</p></span>}
 
                     <input
                         value={user?.email}
