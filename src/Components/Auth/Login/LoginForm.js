@@ -5,10 +5,13 @@ import './LoginForm.css';
 import { Context } from '../../..';
 import { observer } from 'mobx-react-lite';
 import maskot from "../../../assets/images/maskot-hi.png"
+import { ReactComponent as EyeIcon } from '../../../assets/images/visibility.svg';
+import { ReactComponent as EyeOffIcon } from '../../../assets/images/visibility-off.svg';
 
 function LoginForm() {
 
   const [loginError, setLoginError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
 
@@ -77,10 +80,21 @@ function LoginForm() {
                       onChange={(e) => setUser({ ...user, email: e.target.value })}
                       type="text" placeholder='Введите e-mail' className='loginform__input'/>
 
+              <div className='loginform__password'>
                   <input
                       value={user?.password}
                       onChange={(e) => setUser({ ...user, password: e.target.value })}
-                      type="password" placeholder='Введите пароль' className='loginform__input'/>
+                      type={showPassword ? 'text' : 'password'}
+                      placeholder='Введите пароль'
+                      className='loginform__input loginform__input--password'/>
+                  <button
+                      type="button"
+                      className='loginform__eye'
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      aria-label={showPassword ? 'Скрыть пароль' : 'Показать пароль'}>
+                      {showPassword ? <EyeOffIcon fill="currentColor" /> : <EyeIcon fill="currentColor" />}
+                  </button>
+              </div>
 
               <button type="submit" className='loginform__button'>Войти</button>
               <Link to="/register" className='loginform__link'>Зарегистрироваться</Link>

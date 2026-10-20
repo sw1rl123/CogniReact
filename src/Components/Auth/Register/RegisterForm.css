@@ -286,3 +286,40 @@
 .loginform__error svg:hover ~ p{
     opacity: 1;
 }
+
+.loginform__password {
+  position: relative;
+  width: 100%;
+  margin-bottom: 23px;
+}
+
+.loginform__password .loginform__input--password {
+  display: block;
+  width: 100%;
+  margin: 0;
+  box-sizing: border-box;
+  padding-right: 54px;
+}
+
+.loginform__eye {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 18px;
+  margin: auto 0;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: #16171B;
+  opacity: 0.55;
+  cursor: pointer;
+}
+
+.loginform__eye:hover {
+  opacity: 1;
+}
