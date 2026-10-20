@@ -196,15 +196,17 @@
 }
 
 .loginform__error--enter {
-    position: absolute;
-    margin-top: -470px;
-    padding: 20px;
+    width: 100%;
+    margin-bottom: 16px;
+    padding: 12px 16px;
     font-family: Montserrat;
+    font-size: 14px;
+    text-align: center;
     background: #c04242;
-    border-radius: 20px;
+    border-radius: 15px;
     color: white;
 }
 
-.loginform__error--enter ~ .loginform {
+.loginform:has(.loginform__error--enter) {
     animation: tilt-shaking 0.3s;
 }

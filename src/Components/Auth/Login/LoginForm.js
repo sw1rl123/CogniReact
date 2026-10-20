@@ -26,7 +26,7 @@ function LoginForm() {
       if(response) {
         navigate('/profile/' + localStorage.getItem('userId'));
       } else {
-        setLoginError('Неверный логин или пароль');
+        setLoginError('Неверный e-mail или пароль');
       }
     } catch (e) {
       setLoginError(e.response
@@ -69,7 +69,6 @@ function LoginForm() {
             <img className="login__maskot-image" src={maskot} alt="" />
         </div>
 
-          {loginError && <span className='loginform__error--enter'><p>{loginError}</p></span>}
           <form onSubmit={onSubmit} className='login__form loginform'>
               <h1 className='loginform__header'>Вход в «COGNI»</h1>
               <input
@@ -81,7 +80,7 @@ function LoginForm() {
                       value={user?.password}
                       onChange={(e) => setUser({ ...user, password: e.target.value })}
                       type="password" placeholder='Введите пароль' className='loginform__input'/>
-
+              {loginError && <span className='loginform__error--enter'><p>{loginError}</p></span>}
               <button type="submit" className='loginform__button'>Войти</button>
               <Link to="/register" className='loginform__link'>Зарегистрироваться</Link>
           </form>
