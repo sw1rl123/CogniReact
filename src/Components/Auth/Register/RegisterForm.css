@@ -335,3 +335,75 @@
 .loginform__label:has(+ .loginform__agree-error) .loginform__radio {
     box-shadow: 0 0 0 2px #c04242;
 }
+
+
+.mbti-select {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    vertical-align: top;
+}
+
+.mbti-select__field {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    background: #E4E5F1;
+    color: #757C94;
+    font-size: 17px;
+    text-align: left;
+    cursor: pointer;
+}
+
+.mbti-select:has(+ .loginform__error) .mbti-select__field {
+    padding-right: 60px;
+}
+
+.mbti-select__value {
+    color: #191822;
+    font-weight: 700;
+}
+
+.mbti-select__arrow {
+    flex-shrink: 0;
+    transition: transform 0.2s;
+}
+
+.mbti-select__arrow--open {
+    transform: rotate(180deg);
+}
+
+.mbti-select__list {
+    position: absolute;
+    top: calc(100% - 23px - 20px);
+    left: 0;
+    right: 0;
+    z-index: 3;
+    max-height: 260px;
+    overflow-y: auto;
+    padding: 20px 0 8px;
+    background: #E4E5F1;
+    border-radius: 0 0 20px 20px;
+    list-style: none;
+    margin: 0;
+}
+
+.mbti-select__option {
+    display: block;
+    width: 100%;
+    padding: 6px 0;
+    background: none;
+    border: none;
+    color: #191822;
+    font-family: Montserrat;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 21px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.mbti-select__option:hover {
+    color: var(--col-addons);
+}
