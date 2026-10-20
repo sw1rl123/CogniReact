@@ -278,11 +278,16 @@
     transition: 0.3s;
     color: white;
     font-size: 14px;
-    height: 55px;
     line-height: 1.2em;
-    width: 400px;
+    width: max-content;
+    max-width: min(300px, calc(50vw - 480px));
+    z-index: 3;
+    pointer-events: none;
+    margin-top: 29px;
+    transform: translateY(-50%);
 }
 
 .loginform__error svg:hover ~ p{
     opacity: 1;
 }
+
