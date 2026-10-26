@@ -21,15 +21,11 @@ export default class Store {
     }
 
     async register(user) {
-        try {
-            const response = await createUser(user);
-            localStorage.setItem('aToken', response.data.accessToken);
-            localStorage.setItem('rToken', response.data.refreshToken);
-            localStorage.setItem('userId', response.data.id);
-            return true;
-        } catch (e) {
-            console.log(e);
-        }
+        const response = await createUser(user);
+        localStorage.setItem('aToken', response.data.accessToken);
+        localStorage.setItem('rToken', response.data.refreshToken);
+        localStorage.setItem('userId', response.data.id);
+        return true;
     }
 
     async login(user) {

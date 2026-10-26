@@ -5,6 +5,47 @@ import { ReactComponent as StarSvg } from './img/star.svg';
 import { Context } from '../..';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import Placeholder from './img/placeholder.png';
+import bannerPlaceholder from '../Settings/img/banner-placeholder.png';
+
+function GetPostTimeStrSincePublication(timeStr) {
+    const publishedAt = new Date(timeStr);
+    const now = new Date();
+
+    const diffMs = now.getTime() - publishedAt.getTime();
+    const diffSeconds = Math.floor(diffMs / 1000);
+    const diffMinutes = Math.floor(diffSeconds / 60);
+    const diffHours = Math.floor(diffMinutes / 60);
+
+    if (Number.isNaN(publishedAt.getTime())) throw new Error("Invalid date");
+
+    // Меньше минуты
+    if (diffSeconds < 60) return `${Math.max(0, diffSeconds)} сек. назад`;
+
+    // Меньше часа
+    if (diffMinutes < 60) return `${diffMinutes} мин. назад`;
+
+    // Меньше суток
+    if (diffHours < 24) return `${diffHours} ч. ${diffMinutes % 60} мин. назад`;
+
+    // Сутки и больше
+    const dateFormatter = new Intl.DateTimeFormat("ru-RU", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hourCycle: "h23",
+        timeZone: "Europe/Moscow"
+    });
+
+    const parts = Object.fromEntries(
+        dateFormatter
+            .formatToParts(publishedAt)
+            .map(({ type, value }) => [type, value])
+    );
+
+    return `${parts.day} ${parts.month} ${parts.year} в ${parts.hour}:${parts.minute}`;
+};
 
 function Profile() {
   const fixedHobbyNames = ['Музыка', 'Медиа', 'Творчество', 'Игры', 'Спорт'];
@@ -419,7 +460,11 @@ const sendMessage = async (friendId) => {
             <textarea onChange={(e) => setNewPost(e.target.value)} className='modal__input' placeholder='Расскажите нам!'/>
           </div>
           <div className='modal__photos'>
-            <label className='modal__photo'>Хотите добавить фото?<input multiple onChange={(e) => setNewPostImages(Object.values(e.target.files))} ref={inputRef} type="file" className='modal__input--image'/></label>
+            <label className='modal__photo'>
+              Хотите добавить фото?
+              <input multiple onChange={(e) => setNewPostImages(Object.values(e.target.files))} ref={inputRef} type="file" accept="image/*" className='modal__input--image'/>
+              {newPostImages.length > 0 && <span className='modal__photo-selected'>Выбрано: {newPostImages.map(file => file.name).join(', ')}</span>}
+            </label>
           </div>
           <button type="submit" className='modal__button'>Опубликовать пост</button>
         </form>
@@ -674,7 +719,7 @@ const sendMessage = async (friendId) => {
       }
       <div className="profile__main">
         <section className="profile__bg">
-          <img className="profile__bg--img" src={userBannerImage}/>
+          <img className="profile__bg--img" src={userBannerImage || bannerPlaceholder} alt=""/>
           <span className="profile__bg--text">COGNI</span>
         </section>
         <section className="profile__human human">
@@ -712,7 +757,7 @@ const sendMessage = async (friendId) => {
                 <img src={userImage ? userImage : Placeholder} alt=" " className='posts__avatar'></img>
                   <div className='posts__info'>
                     <p className='posts__name'>{userName + " " + userSurname}</p>
-                    <span className='posts__time'>45 часов назад</span>
+                    <span className='posts__time'>{GetPostTimeStrSincePublication(post.createDate)}</span>
                   </div>
                 </div>
                 <div className='posts__post post'>

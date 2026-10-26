@@ -1,21 +1,60 @@
 @keyframes tilt-shaking {
     0% { transform: rotate(0deg); }
     25% { transform: rotate(5deg); }
-    50% { transform: rotate(0eg); }
+    50% { transform: rotate(0deg); }
     75% { transform: rotate(-5deg); }
     100% { transform: rotate(0deg); }
 }
 
 .login__wrapper {
-    background: linear-gradient(90deg, rgba(9,42,49,1) 0%, rgba(76,105,95,1) 100%);
+    background: var(--col-bg-login);
     width: 100%;
     height: 100%;
+    position: relative;
+    overflow-x: hidden;
+}
+
+.login__bg {
+    width: 100%;
+    min-height: calc(100% - 110px);
+    height: 100%;
+    background: url("../../../assets/images/bgImage2.png") center top;
+    position: absolute;
+    z-index: 0;
+    top: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
+    gap: 100px;
+}
+
+.login__maskot {
+    max-width: 440px;
+}
+
+.login__maskot-text {
+    background: rgb(25, 24, 34, 0.5);
+    padding: 15px;
+    border-radius: 20px;
+    color: white;
+    font-family: Montserrat;
+    font-size: 17px;
+    margin-bottom: 60px;
     position: relative;
-    overflow-x: hidden;
+    line-height: 120%;
+}
+
+.login__maskot-text:after {
+    content: "";
+    position: absolute;
+    display: block;
+    bottom: -20px;
+    width: 20px;
+    height: 20px;
+    left: 140px;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 20px solid rgb(25, 24, 34, 0.5);
 }
 
 .login__blur {
@@ -74,6 +113,13 @@
     border-radius: 20px;
     position: relative;
     z-index: 2;
+    text-align: center;
+}
+
+.loginform:has(.loginform__error),
+.loginform:has(.loginform__error--enter),
+.loginform:has(.loginform__submit-error) {
+    animation: tilt-shaking 0.3s;
 }
 
 .loginform__header {
@@ -87,10 +133,12 @@
 
 .loginform__input {
     font-family: Montserrat;
-    padding: 20px;
+    padding: 20px 50px 20px 20px;
     margin-bottom: 23px;
     border-radius: 20px;
     width: 100%;
+    outline: none;
+    transition: box-shadow 0.2s ease, filter 0.2s ease;
 }
 
 .loginform__button {
@@ -98,7 +146,7 @@
     width: 100%;
     border-radius: 20px;
     color: white;
-    background: linear-gradient(90deg, rgba(28,92,128,1) 0%, rgba(113,212,104,1) 100%);
+    background: var(--col-addons-dark);
     font-size: 19px;
     font-family: Montserrat;
     font-weight: bold;
@@ -137,27 +185,55 @@
     margin-bottom: 10px;
 }
 
-
 .info__link {
     color: #D8E0F4;
     font-family: Montserrat;
     font-size: 15px;
 }
 
-.loginform__radio {
-    margin-right: 8px;
-}
-
 .loginform__label {
     display: flex;
-    color: white;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    color: #D8E0F4;
     font-size: 12px;
+    font-weight: 500;
     font-family: Montserrat;
-    line-height: 13px;
+    line-height: normal;
     margin-bottom: 14px;
+    text-align: left;
+    cursor: pointer;
+}
+
+.loginform__radio {
+    appearance: none;
+    flex-shrink: 0;
+    width: 25px;
+    height: 25px;
+    margin: 0;
+    border-radius: 50%;
+    background: #E6E5F0;
+    cursor: pointer;
+    position: relative;
+}
+
+.loginform__radio:checked::after {
+    content: "";
+    position: absolute;
+    inset: 6px;
+    border-radius: 50%;
+    background: var(--col-addons);
+}
+
+.loginform__radio:focus-visible {
+    outline: 2px solid var(--col-addons);
+    outline-offset: 2px;
 }
 
 .loginform__agree {
+    display: block;
+    margin-top: 4px;
     color: #597FE0;
 }
 
@@ -169,7 +245,7 @@
 }
 
 .color-green {
-    color: #59E0C0;
+    color: var(--col-addons-dark);
 }
 
 .loginform__button-other {
@@ -177,11 +253,13 @@
     width: 100%;
     border-radius: 20px;
     color: white;
-    background: linear-gradient(90deg, rgba(99,255,218,1) 0%, rgba(140,75,205,1) 100%);
+    background: var(--col-bg-login);
     font-size: 19px;
     font-family: Montserrat;
     font-weight: bold;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    transition: filter 0.2s ease, transform 0.1s ease;
 }
 
 .loginform__text {
@@ -195,61 +273,242 @@
     cursor: pointer;
 }
 
-.loginform__error--enter {
+.loginform__error {
     position: absolute;
-    margin-top: -470px;
-    padding: 20px;
+    margin-left: 10px;
+    text-align: left;
     font-family: Montserrat;
+}
+
+.loginform__error svg {
+    position: absolute;
+    margin-left: -45px;
+    margin-top: 17px;
+    fill: #c04242;
+    width: 25px;
+}
+
+.loginform__error p {
     background: #c04242;
-    border-radius: 20px;
+    padding: 10px 15px;
+    border-radius: 15px;
+    opacity: 0;
+    transition: 0.3s;
     color: white;
+    font-size: 14px;
+    line-height: 1.2em;
+    width: max-content;
+    max-width: min(300px, calc(50vw - 480px));
+    z-index: 3;
+    pointer-events: none;
+    margin-top: 29px;
+    transform: translateY(-50%);
 }
 
-.loginform__error--enter ~ .loginform {
-    animation: tilt-shaking 0.3s;
+.loginform__error svg:hover ~ p {
+    opacity: 1;
 }
 
-/* ===== Состояния (hover / active) ===== */
-.loginform__button,
-.loginform__link,
-.info__link {
-  cursor: pointer;
-  transition: filter 0.2s ease, transform 0.1s ease;
+/* ===== Плашка ошибки входа (LoginForm.js) ===== */
+.loginform__error--enter {
+    width: 100%;
+    margin-bottom: 16px;
+    padding: 12px 16px;
+    font-family: Montserrat;
+    font-size: 14px;
+    text-align: center;
+    background: #c04242;
+    border-radius: 15px;
+    color: white;
+    box-sizing: border-box;
 }
 
-.loginform__button:hover {
-  background: var(--online-blue);
+/* ===== Состояния (hover / active) из feature/button-states ===== */
+.loginform__button.loginform__button__register {
+    background: var(--main-blue-gradient);
 }
 
-.loginform__button:active {
-  filter: brightness(var(--press-bright));
-  transform: scale(0.97);
+.loginform__button.loginform__button__register:hover,
+.loginform .loginform__button-other:hover {
+    background: var(--background-light);
+}
+
+.loginform__button-other:active {
+    filter: brightness(var(--press-bright));
+    transform: scale(0.97);
+}
+
+.loginform__input:hover {
+    filter: brightness(0.8);
+}
+
+.loginform__input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--col-addons);
 }
 
 .loginform__link:hover {
-  color: var(--online-blue);
-}
-
-.info__link:hover {
-  filter: brightness(var(--hover-bright-link));
-  text-decoration: underline;
+    color: var(--online-blue);
 }
 
 .loginform__link:active,
 .info__link:active {
-  filter: brightness(var(--press-bright-link));
-  transform: scale(0.96);
+    filter: brightness(var(--press-bright-link));
+    transform: scale(0.96);
 }
 
-.loginform__input {
-  transition: box-shadow 0.2s ease, filter 0.2s ease;
+/* ===== Ошибки полей из main (используются в RegisterForm) ===== */
+.loginform__password-error {
+    margin: 0 0 14px;
+    color: #ff8585;
+    font-family: Montserrat;
+    font-size: 12px;
+    line-height: 1.4;
+    text-align: left;
 }
 
-.loginform__input:hover {
-  filter: brightness(0.8);
+.loginform__password:has(+ .loginform__password-error) {
+    margin-bottom: 8px;
 }
 
-.loginform__input:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px var(--col-addons);
+.loginform__submit-error {
+    width: 100%;
+    margin: 0 0 16px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: #c04242;
+    color: white;
+    font-family: Montserrat;
+    font-size: 13px;
+    line-height: 1.4;
+    text-align: left;
+    box-sizing: border-box;
+}
+
+.loginform__agree-error {
+    width: 100%;
+    margin-top: -8px;
+    margin-bottom: 14px;
+    padding-left: 33px;
+    color: #c04242;
+    font-family: Montserrat;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: normal;
+    text-align: left;
+    box-sizing: border-box;
+}
+
+.loginform__label:has(+ .loginform__agree-error) .loginform__radio {
+    box-shadow: 0 0 0 2px #c04242;
+}
+
+/* ===== Кастомный select MBTI из main (используется в RegisterForm) ===== */
+.mbti-select {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    vertical-align: top;
+}
+
+.mbti-select__field {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    background: #E4E5F1;
+    color: #757C94;
+    font-size: 17px;
+    text-align: left;
+    cursor: pointer;
+}
+
+.mbti-select:has(+ .loginform__error) .mbti-select__field {
+    padding-right: 60px;
+}
+
+.mbti-select__value {
+    color: #191822;
+    font-weight: 700;
+}
+
+.mbti-select__arrow {
+    flex-shrink: 0;
+    transition: transform 0.2s;
+}
+
+.mbti-select__arrow--open {
+    transform: rotate(180deg);
+}
+
+.mbti-select__list {
+    position: absolute;
+    top: calc(100% - 23px - 20px);
+    left: 0;
+    right: 0;
+    z-index: 3;
+    max-height: 260px;
+    overflow-y: auto;
+    padding: 20px 0 8px;
+    background: #E4E5F1;
+    border-radius: 0 0 20px 20px;
+    list-style: none;
+    margin: 0;
+}
+
+.mbti-select__option {
+    display: block;
+    width: 100%;
+    padding: 6px 0;
+    background: none;
+    border: none;
+    color: #191822;
+    font-family: Montserrat;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 21px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.mbti-select__option:hover {
+    color: var(--col-addons);
+}
+
+/* ===== Поле пароля с кнопкой «глаз» из main ===== */
+.loginform__password {
+    position: relative;
+    width: 100%;
+    margin-bottom: 23px;
+}
+
+.loginform__password .loginform__input--password {
+    display: block;
+    width: 100%;
+    margin: 0;
+    box-sizing: border-box;
+    padding-right: 54px;
+}
+
+.loginform__eye {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 18px;
+    margin: auto 0;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: #16171B;
+    opacity: 0.55;
+    cursor: pointer;
+}
+
+.loginform__eye:hover {
+    opacity: 1;
 }

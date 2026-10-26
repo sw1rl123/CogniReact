@@ -9,12 +9,7 @@ const api = axios.create({
 });
 
 export const createUser = async (user) => {
-    try {
-        let response = await api.post("/User/CreateUser", user);
-        return response;
-    } catch(e) {
-        console.log(e);
-    }
+    return await api.post("/User/CreateUser", user);
 }
 
 export const loginUser = async (user) => {
@@ -62,13 +57,13 @@ export const isFormMbtiValid = (user) => {
 //Валидация имени
 const validateName = (name) => {
     var re = /^[\u0400-\u04FF]+$/;
-    return re.test(name) && name[0] == name[0].toUpperCase();
+    return re.test(name);
 };
 
 //Валидация Фамилии
 const validateSurname = (surname) => {
     var re = /^[\u0400-\u04FF]+$/;
-    return re.test(surname) && surname[0] == surname[0].toUpperCase();
+    return re.test(surname);
 };
 
 //Валидация email

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Placeholder from '../Profile/img/placeholder.png';
 import { Context } from '../..';
-import banner from './img/banner.png';
+import banner from '../Settings/img/banner-placeholder.png';
 
 function WikiMiniArticle({article}) {
 

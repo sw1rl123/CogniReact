@@ -3,6 +3,7 @@ import './Settings.css';
 import { Context } from '../..';
 import { ReactComponent as CloseSvg } from './img/close.svg';
 import { useNavigate } from 'react-router-dom';
+import bannerPlaceholder from './img/banner-placeholder.png';
 
 function Settings() {
 
@@ -179,7 +180,11 @@ function Settings() {
             <button onClick={hideModel} type="button" className='modal__button--close'><CloseSvg className='modal__icon'/></button>
           </div>
           <div className='modal__photos'>
-            <label className='modal__photo'>Загрузить изображение<input onChange={(e) => setNewImage(Object.values(e.target.files))} ref={inputRef} type="file" className='modal__input--image'/></label>
+            <label className='modal__photo'>
+              Загрузить изображение
+              <input onChange={(e) => setNewImage(Object.values(e.target.files))} ref={inputRef} type="file" accept="image/*" className='modal__input--image'/>
+              {newImage.length > 0 && <span className='modal__photo-selected'>Выбрано: {newImage[0].name}</span>}
+            </label>
           </div>
           <button type="submit" className='modal__button'>Сохранить фото профиля</button>
         </form>
@@ -187,9 +192,19 @@ function Settings() {
       }
       <form className="settings__main" autoComplete="off">
         <section className="settings__bg">
-          <img className="settings__bg--img" src={userBannerImage}/>
+          <img
+            className="settings__bg--img"
+            src={userBannerImage || bannerPlaceholder}
+            draggable={false}
+          
+            onError={(e) => {
+              e.currentTarget.onerror = null; 
+              e.currentTarget.src = bannerPlaceholder;
+            }}
+            alt=""
+          />
           <span className="settings__bg--text">COGNI</span>
-          <span className="settings__bg-edit" onClick={(e) => showModel(2)}>Изменить обложку</span>
+          <span hidden className="settings__bg-edit" onClick={(e) => showModel(2)}>Изменить обложку</span>
         </section>
         <section className="settings__human human">
           <div className="human__left">

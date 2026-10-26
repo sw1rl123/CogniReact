@@ -6,6 +6,8 @@ import { isFormValid, isFormMbtiValid } from "../../../services/auth.js";
 import {observer} from "mobx-react-lite";
 import {Context} from "../../../index";
 import maskot from "../../../assets/images/maskot-hi.png"
+import { ReactComponent as EyeIcon } from '../../../assets/images/visibility.svg';
+import { ReactComponent as EyeOffIcon } from '../../../assets/images/visibility-off.svg';
 import './RegisterForm.css';
 
 
@@ -14,6 +16,7 @@ function RegisterForm() {
     const navigate = useNavigate();
 
     const {store} = useContext(Context);
+    const [registrationError, setRegistrationError] = React.useState('');
 
     //2 шага регистрации
     const [formStep, setFormStep] = React.useState(0);
@@ -25,8 +28,14 @@ function RegisterForm() {
         setValidEmail(false);
         setValidPassword(false);
         setValidPasswordRepeat(false);
+        setValidAgree(false);
 
-        if (validStatus.status) {
+        if (validStatus.status && agree) {
+            setUser({
+                ...user,
+                name: user.name.charAt(0).toUpperCase() + user.name.slice(1),
+                surname: user.surname.charAt(0).toUpperCase() + user.surname.slice(1),
+            });
             setFormStep(cur => cur + 1);
         } else {
             
@@ -45,14 +54,26 @@ function RegisterForm() {
             if (validStatus.passwordRepeat) {
                 setValidPasswordRepeat(true);
             }
+            if (!agree) {
+                setValidAgree(true);
+            }
         }
     };
 
     //Создание пользователя
     const onCreate = async (user) => {
-        var response = await store.register(user);
-        if(response) {
-         navigate('/profile/' + localStorage.getItem('userId'));
+        setRegistrationError('');
+        try {
+            await store.register(user);
+            navigate('/profile/' + localStorage.getItem('userId'));
+        } catch (error) {
+            const serverMessage = typeof error.response?.data === 'string'
+                ? error.response.data
+                : '';
+            setRegistrationError(serverMessage
+                || (error.response
+                    ? 'Не удалось зарегистрироваться. Проверьте данные и попробуйте ещё раз.'
+                    : 'Не удалось подключиться к серверу. Проверьте подключение и попробуйте ещё раз.'));
         }
 	};
 
@@ -89,12 +110,19 @@ function RegisterForm() {
 
     const [passwordRepeat, setPasswordRepeat] = React.useState('');
 
+    const [showPassword, setShowPassword] = React.useState(false);
+    const [showPasswordRepeat, setShowPasswordRepeat] = React.useState(false);
+
     const [validName, setValidName] = React.useState(false);
     const [validSurname, setValidSurname] = React.useState(false);
     const [validEmail, setValidEmail] = React.useState(false);
     const [validPassword, setValidPassword] = React.useState(false);
     const [validPasswordRepeat, setValidPasswordRepeat] = React.useState(false);
     const [validMBTI, setValidMBTI] = React.useState(false);
+    const [agree, setAgree] = React.useState(false);
+    const [validAgree, setValidAgree] = React.useState(false);
+    const [mbtiOpen, setMbtiOpen] = React.useState(false);
+    const mbtiTypes = ['ISTJ', 'ISFJ', 'INFJ', 'INTJ', 'ISTP', 'ISFP', 'INFP', 'INTP', 'ESTP', 'ESFP', 'ENFP', 'ENTP', 'ESTJ', 'ESFJ', 'ENFJ', 'ENTJ'];
 
     useEffect(() => {
 
@@ -128,20 +156,21 @@ function RegisterForm() {
                 <img className="login__maskot-image" src={maskot} alt="" />
             </div>
             
-            <form onSubmit={onSubmit} className='login__form loginform'>
+            <form onSubmit={onSubmit} onChange={() => setRegistrationError('')} className='login__form loginform'>
+                {registrationError && <p className='loginform__submit-error' role='alert'>{registrationError}</p>}
                 {formStep === 0 &&  (<section>
                     <h1 className='loginform__header'>Регистрация</h1>
                     <input 
                         value={user?.name}
                         onChange={(e) => setUser({ ...user, name: e.target.value })}
                         type="text" placeholder='Имя' className='loginform__input'/>
-                    {(validName) && <span className='loginform__error'><InfoIcon></InfoIcon><p>Имя должно начинаться с заглавной буквы, быть написано на русском и содержать минимум 2 символа</p></span>}
+                    {(validName) && <span className='loginform__error'><InfoIcon></InfoIcon><p>Имя должно быть написано на русском и содержать минимум 2 символа</p></span>}
 
                     <input 
                         value={user?.surname}
                         onChange={(e) => setUser({ ...user, surname: e.target.value })}
                         type="text" placeholder='Фамилия' className='loginform__input'/>
-                    {(validSurname) && <span className='loginform__error'><InfoIcon></InfoIcon><p>Фамилия должна начинаться с заглавной буквы, быть написано на русском и содержать минимум 2 символа</p></span>}
+                    {(validSurname) && <span className='loginform__error'><InfoIcon></InfoIcon><p>Фамилия должна быть написана на русском и содержать минимум 2 символа</p></span>}
 
                     <input
                         value={user?.email}
@@ -149,18 +178,51 @@ function RegisterForm() {
                         type="text" placeholder='Введите e-mail' className='loginform__input'/>
                     {(validEmail) && <span className='loginform__error'><InfoIcon></InfoIcon><p>Email указан не верно</p></span>}
 
-                    <input
-                        value={user?.password}
-                        onChange={(e) => setUser({ ...user, password: e.target.value })}
-                        type="password" placeholder='Придумайте пароль' className='loginform__input'/>
-                    {(validPassword) && <span className='loginform__error'><InfoIcon></InfoIcon><p>Пароль должен состоять минимум из 8 символов и содержать хотя бы одну цифру/букву и один из символов: !@#$%^&*</p></span>}
+                    <div className='loginform__password'>
+                        <input
+                            value={user?.password}
+                            onChange={(e) => setUser({ ...user, password: e.target.value })}
+                            type={showPassword ? 'text' : 'password'}
+                            placeholder='Придумайте пароль'
+                            className='loginform__input loginform__input--password'/>
+                        <button
+                            type="button"
+                            className='loginform__eye'
+                            onClick={() => setShowPassword((prev) => !prev)}
+                            aria-label={showPassword ? 'Скрыть пароль' : 'Показать пароль'}>
+                            {showPassword ? <EyeOffIcon fill="currentColor" /> : <EyeIcon fill="currentColor" />}
+                        </button>
+                    </div>
+                    {(validPassword) && <p className='loginform__password-error'>Пароль должен быть не короче 8 символов и содержать латинскую букву, цифру и спецсимвол (!@#$%^&*).</p>}
 
-                    <input
-                    onChange={(e) => setPasswordRepeat(e.target.value)}
-                    type="password" placeholder='Подтвердите пароль' className='loginform__input'/>
-                    {(validPasswordRepeat) && <span className='loginform__error'><InfoIcon></InfoIcon><p>Пароли не совпадают</p></span>}
+                    <div className='loginform__password'>
+                        <input
+                            onChange={(e) => setPasswordRepeat(e.target.value)}
+                            type={showPasswordRepeat ? 'text' : 'password'}
+                            placeholder='Подтвердите пароль'
+                            className='loginform__input loginform__input--password'/>
+                        <button
+                            type="button"
+                            className='loginform__eye'
+                            onClick={() => setShowPasswordRepeat((prev) => !prev)}
+                            aria-label={showPasswordRepeat ? 'Скрыть пароль' : 'Показать пароль'}>
+                            {showPasswordRepeat ? <EyeOffIcon fill="currentColor" /> : <EyeIcon fill="currentColor" />}
+                        </button>
+                    </div>
+                    {(validPasswordRepeat) && <p className='loginform__password-error'>Пароли не совпадают</p>}
 
-                    {/*<label htmlFor="agreeRadio" className='loginform__label'><input type="checkbox" className='loginform__radio' id="agreeRadio"/><p>Согласен на обработку персональных данных <a href="" className='loginform__agree'>Пользовательское соглашение</a></p></label>*/}
+                    <label htmlFor="agreeRadio" className='loginform__label'>
+                        <input
+                            type="checkbox"
+                            className='loginform__radio'
+                            id="agreeRadio"
+                            checked={agree}
+                            onChange={(e) => setAgree(e.target.checked)}
+                        />
+                        <p>Согласен на обработку персональных данных <a href="" className='loginform__agree'>Пользовательское соглашение</a></p>
+                    </label>
+                    {validAgree && <p className='loginform__agree-error'>Отметьте согласие, чтобы продолжить</p>}
+
                     <button onClick={completeFormStep} type="button" className='loginform__button'>Продолжить</button>
                     <p className='loginform__desc'>Уже есть аккаунт?</p>
                     <Link to="/login" className='loginform__link color-green'>Войти</Link>
@@ -169,25 +231,23 @@ function RegisterForm() {
 
                 {formStep === 1 &&  (<section>
                     <h1 className='loginform__header'>Введите свой тип <br/> личности</h1>
-                    <select className='loginform__input' name="MBTI" onChange={(e) => setUser({ ...user, mbtiType: e.target.value })}>
-                        <option value="">Выберите ваш MBTI</option>
-                        <option value="ISTJ">ISTJ</option>
-                        <option value="ISFJ">ISFJ</option>
-                        <option value="INFJ">INFJ</option>
-                        <option value="INTJ">INTJ</option>
-                        <option value="ISTP">ISTP</option>
-                        <option value="ISFP">ISFP</option>
-                        <option value="INFP">INFP</option>
-                        <option value="INTP">INTP</option>
-                        <option value="ESTP">ESTP</option>
-                        <option value="ESFP">ESFP</option>
-                        <option value="ENFP">ENFP</option>
-                        <option value="ENTP">ENTP</option>
-                        <option value="ESTJ">ESTJ</option>
-                        <option value="ESFJ">ESFJ</option>
-                        <option value="ENFJ">ENFJ</option>
-                        <option value="ENTJ">ENTJ</option>
-                    </select>
+                    <div className='mbti-select'>
+                        <button type="button" className='loginform__input mbti-select__field' onClick={() => setMbtiOpen(!mbtiOpen)}>
+                            <span className={user.mbtiType ? 'mbti-select__value' : ''}>{user.mbtiType || 'Ваш MBTI'}</span>
+                            <svg className={mbtiOpen ? 'mbti-select__arrow mbti-select__arrow--open' : 'mbti-select__arrow'} width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M19.92 8.95L13.4 15.47c-.77.77-2.03.77-2.8 0L4.08 8.95" stroke="#292D32" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                        </button>
+                        {mbtiOpen && (
+                            <ul className='mbti-select__list'>
+                                {mbtiTypes.map((type) => (
+                                    <li key={type}>
+                                        <button type="button" className='mbti-select__option' onClick={() => { setUser({ ...user, mbtiType: type }); setMbtiOpen(false); }}>{type}</button>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
                     {(validMBTI) && <span className='loginform__error'><InfoIcon></InfoIcon><p>Вы не выбрали MBTI</p></span>}
 
                     <button type="submit" className='loginform__button loginform__button__register'>Зарегистрироваться</button>
