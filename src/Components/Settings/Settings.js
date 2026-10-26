@@ -179,7 +179,11 @@ function Settings() {
             <button onClick={hideModel} type="button" className='modal__button--close'><CloseSvg className='modal__icon'/></button>
           </div>
           <div className='modal__photos'>
-            <label className='modal__photo'>Загрузить изображение<input onChange={(e) => setNewImage(Object.values(e.target.files))} ref={inputRef} type="file" className='modal__input--image'/></label>
+            <label className='modal__photo'>
+              Загрузить изображение
+              <input onChange={(e) => setNewImage(Object.values(e.target.files))} ref={inputRef} type="file" accept="image/*" className='modal__input--image'/>
+              {newImage.length > 0 && <span className='modal__photo-selected'>Выбрано: {newImage[0].name}</span>}
+            </label>
           </div>
           <button type="submit" className='modal__button'>Сохранить фото профиля</button>
         </form>
