@@ -16,6 +16,7 @@ function RegisterForm() {
     const navigate = useNavigate();
 
     const {store} = useContext(Context);
+    const [registrationError, setRegistrationError] = React.useState('');
 
     //2 шага регистрации
     const [formStep, setFormStep] = React.useState(0);
@@ -61,9 +62,18 @@ function RegisterForm() {
 
     //Создание пользователя
     const onCreate = async (user) => {
-        var response = await store.register(user);
-        if(response) {
-         navigate('/profile/' + localStorage.getItem('userId'));
+        setRegistrationError('');
+        try {
+            await store.register(user);
+            navigate('/profile/' + localStorage.getItem('userId'));
+        } catch (error) {
+            const serverMessage = typeof error.response?.data === 'string'
+                ? error.response.data
+                : '';
+            setRegistrationError(serverMessage
+                || (error.response
+                    ? 'Не удалось зарегистрироваться. Проверьте данные и попробуйте ещё раз.'
+                    : 'Не удалось подключиться к серверу. Проверьте подключение и попробуйте ещё раз.'));
         }
 	};
 
@@ -146,7 +156,8 @@ function RegisterForm() {
                 <img className="login__maskot-image" src={maskot} alt="" />
             </div>
             
-            <form onSubmit={onSubmit} className='login__form loginform'>
+            <form onSubmit={onSubmit} onChange={() => setRegistrationError('')} className='login__form loginform'>
+                {registrationError && <p className='loginform__submit-error' role='alert'>{registrationError}</p>}
                 {formStep === 0 &&  (<section>
                     <h1 className='loginform__header'>Регистрация</h1>
                     <input 
@@ -182,7 +193,7 @@ function RegisterForm() {
                             {showPassword ? <EyeOffIcon fill="currentColor" /> : <EyeIcon fill="currentColor" />}
                         </button>
                     </div>
-                    {(validPassword) && <span className='loginform__error'><InfoIcon></InfoIcon><p>Пароль должен состоять минимум из 8 символов и содержать хотя бы одну цифру/букву и один из символов: !@#$%^&*</p></span>}
+                    {(validPassword) && <p className='loginform__password-error'>Пароль должен быть не короче 8 символов и содержать латинскую букву, цифру и спецсимвол (!@#$%^&*).</p>}
 
                     <div className='loginform__password'>
                         <input
@@ -198,7 +209,7 @@ function RegisterForm() {
                             {showPasswordRepeat ? <EyeOffIcon fill="currentColor" /> : <EyeIcon fill="currentColor" />}
                         </button>
                     </div>
-                    {(validPasswordRepeat) && <span className='loginform__error'><InfoIcon></InfoIcon><p>Пароли не совпадают</p></span>}
+                    {(validPasswordRepeat) && <p className='loginform__password-error'>Пароли не совпадают</p>}
 
                     <label htmlFor="agreeRadio" className='loginform__label'>
                         <input

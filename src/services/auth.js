@@ -9,12 +9,7 @@ const api = axios.create({
 });
 
 export const createUser = async (user) => {
-    try {
-        let response = await api.post("/User/CreateUser", user);
-        return response;
-    } catch(e) {
-        console.log(e);
-    }
+    return await api.post("/User/CreateUser", user);
 }
 
 export const loginUser = async (user) => {
