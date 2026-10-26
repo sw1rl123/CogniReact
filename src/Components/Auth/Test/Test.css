@@ -63,10 +63,18 @@
 .sakinorva-option-selected .sakinorva-option-label { font-weight: 800; }
 
 .sakinorva-navigation { width: min(100%, 760px); display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 14px; }
+
+/* ===== Кнопка теста (современная из main) ===== */
 .test__button {
-    min-width: 180px; padding: 15px 28px; border: 2px solid var(--col-highlight); border-radius: 999px;
-    background: var(--col-highlight); color: var(--col-bg-main);
-    font: 700 16px/1.2 Montserrat, sans-serif; cursor: pointer;
+    display: block;
+    min-width: 180px;
+    padding: 15px 28px;
+    border: 2px solid var(--col-highlight);
+    border-radius: 999px;
+    background: var(--col-highlight);
+    color: var(--col-bg-main);
+    font: 700 16px/1.2 Montserrat, sans-serif;
+    cursor: pointer;
     transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease;
 }
 .test__button:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(0,0,0,.18); }
@@ -80,6 +88,7 @@
     font: 600 14px/1.5 Montserrat, sans-serif; text-align: center;
 }
 
+/* ===== Карточка результата (современная из main) ===== */
 .result-test { border-radius: 22px; width: min(100%, 900px); min-height: 490px; height: auto; background-color: var(--col-bg-sections); padding: 28px; font-family: Montserrat, sans-serif; position: relative; box-shadow: 0 12px 32px rgba(0,0,0,.12); }
 .result-test__title { font-weight: 800; font-size: clamp(22px, 3vw, 30px); line-height: 1.3; color: var(--col-text-main); margin: 0 0 20px; padding: 0; width: auto; height: auto; }
 .result-test__flex { display: flex; justify-content: space-between; align-items: center; gap: 24px; }
@@ -98,13 +107,79 @@
 .sakinorva-function > div:first-child { display: flex; justify-content: space-between; gap: 10px; font-size: 13px; margin-bottom: 6px; }
 .sakinorva-bar { height: 8px; border-radius: 999px; background: rgba(127,127,127,.2); overflow: hidden; }
 .sakinorva-bar span { display: block; height: 100%; border-radius: inherit; background: var(--col-highlight); transition: width .25s ease; }
-.result-test__button { background: var(--col-text-edit); color: var(--col-text-main); font-size: 16px; font-family: Montserrat, sans-serif; padding: 14px 20px; border: 0; border-radius: 16px; min-width: 220px; font-weight: 700; cursor: pointer; position: absolute; left: 50%; transform: translateX(-50%); bottom: 22px; z-index: 1; }
+.result-test__button { background: var(--col-text-edit); color: var(--col-text-main); font-size: 16px; font-family: Montserrat, sans-serif; padding: 14px 20px; border: 0; border-radius: 16px; min-width: 220px; font-weight: 700; cursor: pointer; position: absolute; left: 50%; transform: translateX(-50%); bottom: 22px; z-index: 1; transition: filter .2s ease, transform .1s ease; }
 .result-test__button:disabled { opacity: .6; cursor: wait; }
 
-@media (max-width: 640px) { .test { padding-top: 76px; } .test__bg { padding: 18px 12px 36px; } .sakinorva-intro h1 { font-size: 27px; } .sakinorva-intro p { font-size: 14px; } .test__item { padding: 15px; border-radius: 17px; gap: 12px; margin-bottom: 14px; } .test__question { font-size: 15px; } .sakinorva-example { font-size: 12px; } .sakinorva-scale { gap: 5px; } .sakinorva-option { height: 76px; min-height: 76px; padding: 6px 3px; border-radius: 12px; gap: 4px; } .sakinorva-option-label { font-size: 10px; line-height: 1.15; } .test__button { min-width: 140px; padding: 13px 16px; font-size: 14px; } .result-test { padding: 18px 15px 78px; } .result-test__flex { flex-direction: column; gap: 8px; } .result-test__mbti { min-height: 170px; width: 100%; min-width: 0; } .result-test__mbti svg { max-height: 170px; } .result-test__about { text-align: center; margin: 0; padding: 0; } .sakinorva-top3 { grid-template-columns: 1fr; } .sakinorva-functions { grid-template-columns: 1fr; padding-bottom: 12px; } .result-test__button { position: static; transform: none; display: block; width: 100%; margin-top: 20px; } }
+/* ===== Добавлено из feature/button-states: состояния, которых нет в main ===== */
+.result-test__button:hover {
+    filter: brightness(var(--hover-bright));
+}
+.result-test__button:active {
+    filter: brightness(var(--press-bright));
+    transform: translateX(-50%) scale(0.97);
+}
 
-.test__pagination { position: absolute; left: -180px; top: 0; width: 150px; margin: 0; padding: 12px; list-style: none; background: var(--col-bg-sections); border-radius: 18px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; align-content: start; box-shadow: 0 8px 22px rgba(0,0,0,.08); }
-.test__pagination-item { display: flex; align-items: center; justify-content: center; border: 2px solid var(--col-highlight); border-radius: 10px; min-height: 34px; color: var(--col-text-main); font: 700 13px Montserrat, sans-serif; cursor: pointer; transition: background .15s ease, transform .15s ease; }
+.result-test__about button {
+    cursor: pointer;
+    transition: filter 0.2s ease, transform 0.1s ease;
+}
+.result-test__about button:hover {
+    filter: brightness(var(--hover-bright));
+}
+.result-test__about button:active {
+    filter: brightness(var(--press-bright));
+    transform: scale(0.97);
+}
+
+.result-test__about a {
+    cursor: pointer;
+    transition: filter 0.2s ease, transform 0.1s ease;
+}
+.result-test__about a:hover {
+    filter: brightness(var(--hover-bright-link));
+    text-decoration: underline;
+}
+.result-test__about a:active {
+    filter: brightness(var(--press-bright-link));
+    transform: scale(0.96);
+}
+
+/* ===== Адаптив из main ===== */
+@media (max-width: 640px) {
+    .test { padding-top: 76px; }
+    .test__bg { padding: 18px 12px 36px; }
+    .sakinorva-intro h1 { font-size: 27px; }
+    .sakinorva-intro p { font-size: 14px; }
+    .test__item { padding: 15px; border-radius: 17px; gap: 12px; margin-bottom: 14px; }
+    .test__question { font-size: 15px; }
+    .sakinorva-example { font-size: 12px; }
+    .sakinorva-scale { gap: 5px; }
+    .sakinorva-option { height: 76px; min-height: 76px; padding: 6px 3px; border-radius: 12px; gap: 4px; }
+    .sakinorva-option-label { font-size: 10px; line-height: 1.15; }
+    .test__button { min-width: 140px; padding: 13px 16px; font-size: 14px; }
+    .result-test { padding: 18px 15px 78px; }
+    .result-test__flex { flex-direction: column; gap: 8px; }
+    .result-test__mbti { min-height: 170px; width: 100%; min-width: 0; }
+    .result-test__mbti svg { max-height: 170px; }
+    .result-test__about { text-align: center; margin: 0; padding: 0; }
+    .sakinorva-top3 { grid-template-columns: 1fr; }
+    .sakinorva-functions { grid-template-columns: 1fr; padding-bottom: 12px; }
+    .result-test__button { position: static; transform: none; display: block; width: 100%; margin-top: 20px; }
+    .result-test__button:active { transform: scale(0.97); }
+}
+
+.test__pagination {
+    position: absolute; left: -180px; top: 0; width: 150px; margin: 0; padding: 12px;
+    list-style: none; background: var(--col-bg-sections); border-radius: 18px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; align-content: start;
+    box-shadow: 0 8px 22px rgba(0,0,0,.08);
+}
+.test__pagination-item {
+    display: flex; align-items: center; justify-content: center;
+    border: 2px solid var(--col-highlight); border-radius: 10px; min-height: 34px;
+    color: var(--col-text-main); font: 700 13px Montserrat, sans-serif;
+    cursor: pointer; transition: background .15s ease, transform .15s ease;
+}
 .test__pagination-item:hover { transform: translateY(-1px); }
 .test__pagination-select { background: var(--col-highlight); color: var(--col-bg-main); }
 

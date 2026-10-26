@@ -395,3 +395,23 @@
         width: 100px;
     }
 }
+
+/* ===== Состояния (hover / active) ===== */
+.about__whatIs a,
+.about__COGNI a {
+  cursor: pointer;
+  transition: filter 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+}
+
+.about__whatIs a:hover,
+.about__COGNI a:hover {
+  filter: brightness(1.1);
+  text-decoration: underline;
+}
+
+.about__whatIs a:active,
+.about__COGNI a:active {
+  filter: brightness(var(--press-bright-link));
+  transform: scale(0.96);
+  box-shadow: 0 0 0 1px var(--col-text-main);
+}

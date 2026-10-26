@@ -44,10 +44,31 @@
   --col-addons-dark: #443d6c;
   --col-rights: linear-gradient(180deg, rgba(170,213,160,1) 0%, rgba(118,183,103,1) 100%);
   --col-highlight: #F063A7;
+
+  --online-blue: #beaeff;
+  --background-light: #443d6c;
+  --block-gray-dark: #75718c;
+  --text-white: #ffffff;
+  --main-blue-gradient: linear-gradient(180deg, #988bcd 0%, #7e6fbb 100%);
+  --blue-to-pink-gradient: linear-gradient(180deg, #8f69c4 0%, #727bc1 100%);
+  --dark-blue-gradient: linear-gradient(180deg, #8b7dc4 0%, #504784 100%);
+  --mbti-pink-gradient: linear-gradient(180deg, #f063a7 0%, #cb508b 100%);
+
+  --hover-bright: 1.15;       
+  --hover-bright-link: 1.25;  
+  --press-bright: 0.9;      
+  --press-bright-link: 0.85;  
 }
 
 html, body, #root {
     height: 100%;
     position: relative;
     z-index: 0;
+}
+
+button:disabled:hover,
+button:disabled:active {
+  filter: none;
+  transform: none;
+  cursor: not-allowed;
 }

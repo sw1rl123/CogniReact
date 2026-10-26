@@ -85,3 +85,18 @@
     cursor: pointer;
     margin-left: 20px;
   }
+
+  /* ===== Состояния (hover / active) ===== */
+.friends__item {
+  cursor: pointer;
+  transition: filter 0.2s ease, transform 0.15s ease;
+}
+
+.friends__item:hover {
+  filter: brightness(var(--hover-bright));
+}
+
+.friends__item:active {
+  filter: brightness(var(--press-bright));
+  transform: scale(0.98);
+}

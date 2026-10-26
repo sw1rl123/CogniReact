@@ -218,7 +218,7 @@ function Settings() {
         </section>
         <section className='settings__info'>
           <div className="settings__type">
-            <h2 className="settings__type-heading">Изменить тип личность</h2>
+            <h2 className="settings__type-heading">Изменить тип личности</h2>
             <div>
             <p className="settings__type-mbti">
               <span className="mbti-letter">{userTypeMBTI[0]}</span>

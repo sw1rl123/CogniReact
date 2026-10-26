@@ -1,7 +1,7 @@
 @keyframes tilt-shaking {
     0% { transform: rotate(0deg); }
     25% { transform: rotate(5deg); }
-    50% { transform: rotate(0eg); }
+    50% { transform: rotate(0deg); }
     75% { transform: rotate(-5deg); }
     100% { transform: rotate(0deg); }
 }
@@ -150,6 +150,7 @@
     border-radius: 20px;
     width: 100%;
     outline: none;
+    transition: box-shadow 0.2s ease, filter 0.2s ease;
 }
 
 .loginform__button {
@@ -270,6 +271,8 @@
     font-family: Montserrat;
     font-weight: bold;
     margin-bottom: 20px;
+    cursor: pointer;
+    transition: filter 0.2s ease, transform 0.1s ease;
 }
 
 .loginform__text {
@@ -315,10 +318,45 @@
     transform: translateY(-50%);
 }
 
-.loginform__error svg:hover ~ p{
+.loginform__error svg:hover ~ p {
     opacity: 1;
 }
 
+/* ===== Состояния (hover / active) из feature/button-states ===== */
+.loginform__button.loginform__button__register {
+    background: var(--main-blue-gradient);
+}
+
+.loginform__button.loginform__button__register:hover,
+.loginform .loginform__button-other:hover {
+    background: var(--background-light);
+}
+
+.loginform__button-other:active {
+    filter: brightness(var(--press-bright));
+    transform: scale(0.97);
+}
+
+.loginform__input:hover {
+    filter: brightness(0.8);
+}
+
+.loginform__input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--col-addons);
+}
+
+.loginform__link:hover {
+    color: var(--online-blue);
+}
+
+.loginform__link:active,
+.info__link:active {
+    filter: brightness(var(--press-bright-link));
+    transform: scale(0.96);
+}
+
+/* ===== Ошибки полей из main ===== */
 .loginform__password-error {
     margin: 0 0 14px;
     color: #ff8585;
@@ -362,7 +400,7 @@
     box-shadow: 0 0 0 2px #c04242;
 }
 
-
+/* ===== Кастомный select MBTI из main ===== */
 .mbti-select {
     position: relative;
     display: inline-block;
@@ -434,6 +472,7 @@
     color: var(--col-addons);
 }
 
+/* ===== Поле пароля с кнопкой «глаз» из main ===== */
 .loginform__password {
     position: relative;
     width: 100%;

@@ -1062,3 +1062,105 @@
         font-size: 30px;
     }
 }
+
+/* ===== Состояния (hover / active) ===== */
+.human__button-addFriend,
+.human__button-sendMessage,
+.addpost__button,
+.modal__button,
+.modal__button--close,
+.tags__button,
+.tags__pill,
+.tags__bookmark-button,
+.hobbies__button:last-child {
+  cursor: pointer;
+  transition: filter 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+}
+
+/* Наведение */
+.human__button-addFriend:hover,
+.addpost__button:hover,
+.tags__button:hover {
+  box-shadow: 0 0 0 1px var(--col-text-main);
+}
+
+.human__button-sendMessage:hover {
+  filter: brightness(1.5);
+}
+
+.modal__button:hover {
+  filter: brightness(var(--hover-bright));
+}
+
+.modal__button--close:hover {
+  filter: brightness(1.2);
+}
+
+.tags__bookmark-button:hover {
+  filter: brightness(var(--hover-bright-link));
+}
+
+.hobbies__button:last-child:hover {
+  transform: scale(1.01);
+  box-shadow: 0 0 0 2px var(--online-blue);
+}
+
+/* Нажатие: общее для кнопок */
+.human__button-addFriend:active,
+.human__button-sendMessage:active,
+.addpost__button:active,
+.modal__button:active,
+.tags__button:active,
+.tags__pill:active,
+.hobbies__button:last-child:active {
+  filter: brightness(var(--press-bright));
+  transform: scale(0.97);
+}
+
+/* Выбранная закладка не должна «прыгать» (у неё свой transform) */
+.tags__bookmark-button:not(.tags__bookmark-button--active):active {
+  filter: brightness(var(--press-bright-link));
+  transform: scale(0.96);
+}
+
+.addpost__button:active {
+  background: var(--col-bg-sections);
+  color: var(--col-text-main);
+}
+
+.hobbies__button:last-child:active {
+  background: var(--dark-blue-gradient);
+  border: none;
+}
+
+/* Крестик в плашке тега */
+.tags__pill .tags__pill-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  line-height: 1;
+  margin: -4px -4px -4px 2px;
+  transition: box-shadow 0.2s ease;
+}
+
+.tags__pill .tags__pill-action:hover {
+  box-shadow: 0 0 0 1px var(--text-white);
+}
+
+/* Друзья справа */
+.addons__item {
+  cursor: pointer;
+  transition: filter 0.2s ease, transform 0.15s ease;
+}
+
+.addons__item:hover {
+  transform: translateY(2px);
+}
+
+.addons__item:active {
+  filter: brightness(var(--press-bright));
+  transform: translateY(0) scale(0.98);
+}
