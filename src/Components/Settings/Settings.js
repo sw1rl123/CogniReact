@@ -181,7 +181,7 @@ function Settings() {
           <div className='modal__photos'>
             <label className='modal__photo'>Загрузить изображение<input onChange={(e) => setNewImage(Object.values(e.target.files))} ref={inputRef} type="file" className='modal__input--image'/></label>
           </div>
-          <button type="submit" className='modal__button'>Сохрнаить фото профиля</button>
+          <button type="submit" className='modal__button'>Сохранить фото профиля</button>
         </form>
         </div>
       }
