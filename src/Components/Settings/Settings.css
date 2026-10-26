@@ -25,6 +25,12 @@
 .settings__bg--img {
     position: relative;
     z-index: 1;
+
+    width: 100%;
+    height: 100%;
+    object-fit: cover;   
+    user-select: none;
+    -webkit-user-drag: none;
 }
 
 .settings__bg--text {
