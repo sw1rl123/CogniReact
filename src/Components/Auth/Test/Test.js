@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import './Test.css';
 import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Context } from '../../..';
 import Header from '../../Layouts/Header/Header';
 import { ReactComponent as Arrow } from './img/Arrow.svg';
@@ -10,200 +10,208 @@ import { ReactComponent as Ellipse } from './img/ellipse.svg';
 import { COGNI_API_URL } from '../../../services/globals';
 
 const QUESTIONS_PER_PAGE = 4;
+const SCALE = [
+    { value: 1, label: 'Совсем не про меня' },
+    { value: 2, label: 'Скорее не про меня' },
+    { value: 3, label: 'Бывает по-разному' },
+    { value: 4, label: 'Скорее про меня' },
+    { value: 5, label: 'Точно про меня' },
+];
 
 function Test() {
-
-    const [questions, setQuestions] = useState([]);
-
     const navigate = useNavigate();
-
-    const {store} = useContext(Context);
-
-    const [user, setUser] = React.useState({
-        name: '',
-        surname: '',
-        email: '',
-        password: '',
-        mbtiType: '',
-    });
-
-    const [tempMbti, setTempMbti] = useState('');
-
-    //Создание пользователя
-    const onCreate = async (user) => {
-        var response = await store.register(user);
-        if(response) {
-         navigate('/profile' + localStorage.getItem('userId'));
-        }
-	};
-
-    const changeMbti = async (newMbti) => {
-        var response = await store.updateMbti(newMbti);
-        if(response) {
-         navigate('/profile/' + localStorage.getItem('userId'));
-        }
-	};
-
-    //При отправке данных вызывается onCreate
-    const onSubmitTest = () => {
-        if (!(JP.indexOf(0) == -1)) {
-            console.log("Вы ответили не на все вопросы");
-        } else {
-
-            var sumEI = EI.reduce((sum, current) => sum + current, 0);
-            var sumSN = SN.reduce((sum, current) => sum + current, 0);
-            var sumFT = FT.reduce((sum, current) => sum + current, 0);
-            var sumJP = JP.reduce((sum, current) => sum + current, 0);
-
-            var mbtiResult = '';
-
-            if (sumEI < 0) {
-                mbtiResult += "I"
-            } else {
-                mbtiResult += "E"
-            }
-
-            if (sumSN < 0) {
-                mbtiResult += "S"
-            } else {
-                mbtiResult += "N"
-            }
-
-            if (sumFT < 0) {
-                mbtiResult += "F"
-            } else {
-                mbtiResult += "T"
-            }
-
-            if (sumJP < 0) {
-                mbtiResult += "P"
-            } else {
-                mbtiResult += "J"
-            }
-
-            if (!localStorage.getItem('onTestAgain')) {
-                setUser((user) => ({ ...user, name: localStorage.getItem('name')}));
-                setUser((user) => ({ ...user, surname: localStorage.getItem('surname')}));
-                setUser((user) => ({ ...user, email: localStorage.getItem('email')}));
-                setUser((user) => ({ ...user, password: localStorage.getItem('password')}));
-
-                if(user.mbtiType == mbtiResult) {
-                    onCreate(user);
-                }
-            } else {
-                setShowResult(true);
-                setTempMbti(mbtiResult);
-            }
-        }
-    };
-
-    useEffect(() => {
-
-        if (!localStorage.getItem('onTest')) {
-            navigate('/register');
-        }
-
-        axios.get(`${COGNI_API_URL}/Test/GetAllQuestions`)
-            .then((response) => {
-                setQuestions(response.data.questions);
-             })
-             .catch((err) => {
-                console.log(err);
-             }); 
-      }, []);
-
-    const [EI, setEI] = useState(Array(15).fill(0));
-    const [SN, setSN] = useState(Array(15).fill(0));
-    const [FT, setFT] = useState(Array(15).fill(0));
-    const [JP, setJP] = useState(Array(15).fill(0));
-
-    const [showResult, setShowResult] = useState(false);
-    const pageCount = Math.ceil(questions.length / QUESTIONS_PER_PAGE);
-
-    const setLetter = (id, number, operation) => {
-    if (id <= 15) {
-        setEI(prevState => {const newState = [...prevState]; newState[(id - 1) % 15] = number * operation; return newState })
-    } else if (id <= 30) {
-        setSN(prevState => {const newState = [...prevState]; newState[(id - 1) % 15] = number * operation; return newState })
-    } else if (id <= 45) {
-        setFT(prevState => {const newState = [...prevState]; newState[(id - 1) % 15] = number * operation; return newState })
-    } else {
-        setJP(prevState => {const newState = [...prevState]; newState[(id - 1) % 15] = number * operation; return newState })
-    }
-    };
-
+    const { store } = useContext(Context);
+    const [questions, setQuestions] = useState([]);
+    const [answers, setAnswers] = useState({});
     const [questPage, setQuestPage] = useState(1);
+    const [result, setResult] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [submitting, setSubmitting] = useState(false);
+    const [error, setError] = useState('');
+
+    const pageCount = Math.ceil(questions.length / QUESTIONS_PER_PAGE);
+    const visibleQuestions = useMemo(
+        () => questions.slice((questPage - 1) * QUESTIONS_PER_PAGE, questPage * QUESTIONS_PER_PAGE),
+        [questions, questPage]
+    );
 
     useEffect(() => {
-        document.getElementById("test").scrollTo(0, 0);
+        if (!localStorage.getItem('onTest') && !localStorage.getItem('onTestAgain')) {
+            navigate('/register');
+            return;
+        }
+        let active = true;
+        axios.get(`${COGNI_API_URL}/Sakinorva/GetQuestions`)
+            .then(({ data }) => {
+                if (!active) return;
+                const loadedQuestions = Array.isArray(data) ? data : data.questions;
+                if (!Array.isArray(loadedQuestions) || loadedQuestions.length !== 48) {
+                    throw new Error('Сервер должен вернуть 48 вопросов нового теста. Проверьте backend.');
+                }
+                setQuestions(loadedQuestions);
+            })
+            .catch((e) => setError(e.response?.data?.error || e.message || 'Не удалось загрузить вопросы теста.'))
+            .finally(() => { if (active) setLoading(false); });
+        return () => { active = false; };
+    }, [navigate]);
+
+    const previousPage = useRef(questPage);
+    useEffect(() => {
+        if (previousPage.current !== questPage) {
+            previousPage.current = questPage;
+            const questionsStart = document.querySelector('.test__wrapper');
+            if (questionsStart) {
+                questionsStart.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
     }, [questPage]);
 
     const changePage = (page, relative = false) => {
         const nextPage = relative ? questPage + page : page;
         if (nextPage < 1 || nextPage > pageCount) return;
+
+        if (nextPage > questPage) {
+            const questionsToComplete = questions.slice(
+                (questPage - 1) * QUESTIONS_PER_PAGE,
+                (nextPage - 1) * QUESTIONS_PER_PAGE
+            );
+            const firstMissing = questionsToComplete.find((q) => !Number.isInteger(answers[q.id]));
+            if (firstMissing) {
+                setError('Ответьте на все вопросы на текущей странице, прежде чем переходить дальше.');
+                return;
+            }
+        }
+
         setQuestPage(nextPage);
-    }
+        setError('');
+    };
+
+    const onSubmitTest = async () => {
+        const unanswered = questions.filter((q) => !Number.isInteger(answers[q.id]));
+        if (unanswered.length) {
+            const firstMissingPage = Math.floor(questions.findIndex((q) => q.id === unanswered[0].id) / QUESTIONS_PER_PAGE) + 1;
+            setError(`Ответьте на все вопросы. Осталось: ${unanswered.length}.`);
+            setQuestPage(firstMissingPage);
+            return;
+        }
+
+        setSubmitting(true);
+        setError('');
+        try {
+            const { data } = await axios.post(`${COGNI_API_URL}/Sakinorva/Calculate`, { answers });
+            setResult(data);
+            if (localStorage.getItem('onTestAgain')) {
+                return;
+            }
+
+            const newUser = {
+                name: localStorage.getItem('name') || '',
+                surname: localStorage.getItem('surname') || '',
+                email: localStorage.getItem('email') || '',
+                password: localStorage.getItem('password') || '',
+                mbtiType: data.result,
+            };
+            const created = await store.register(newUser);
+            if (created) {
+                localStorage.removeItem('onTest');
+            }
+        } catch (e) {
+            setError(e.response?.data?.error || e.message || 'Не удалось рассчитать результат. Попробуйте ещё раз.');
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
+    const saveResult = async () => {
+        setSubmitting(true);
+        setError('');
+        try {
+            const saved = await store.updateMbti(result.result);
+            if (saved) {
+                localStorage.removeItem('onTestAgain');
+                navigate('/profile/' + localStorage.getItem('userId'));
+            } else {
+                setError('Не удалось сохранить результат. Проверьте авторизацию и попробуйте ещё раз.');
+            }
+        } catch (e) {
+            setError(e.response?.data?.error || 'Не удалось сохранить результат.');
+        } finally {
+            setSubmitting(false);
+        }
+    };
 
     return (
-        <div className='test' id="test">
-            <Header></Header>
+        <div className="test" id="test">
+            <Header />
             <div className="test__bg">
-            {!showResult && 
-            <>
-            <div className="test__wrapper">
-            <ul className='test__pagination'>
-                {Array.from({ length: pageCount }, (_, index) => {
-                    const page = index + 1;
-                    return (
-                        <li
-                            key={page}
-                            className={"test__pagination-item " + (questPage === page ? "test__pagination-select" : "")}
-                            onClick={() => changePage(page)}
-                        >
-                            {page}
-                        </li>
-                    );
-                })}
-            </ul>
-            <button type="button" className={'test__button--page-prev' + (questPage > 1 ? ' test__button-show' : "")} onClick={() => changePage(-1, true)}><Arrow/></button>
-            <button type="button" className={'test__button--page-next' + (questPage < pageCount ? ' test__button-show' : "")} onClick={() => changePage(1, true)}><Arrow/></button>
-            <ul className="test__list">
-                {questions.slice((questPage - 1) * QUESTIONS_PER_PAGE, questPage * QUESTIONS_PER_PAGE).map(question =>
-                    <li key={question.idMbtiQuestion} className='test__item'>
-                        <p className='test__question'>
-                        {question.question}
-                        </p>
-                        <label className="test__label"><input onChange={() => setLetter(Number(question.idMbtiQuestion), 1, -1)} name={"question" + (Number(question.idMbtiQuestion))} className='test__input' type="radio"></input><span className='test__answer'>Нет</span></label>
-                        <label className="test__label"><input onChange={() => setLetter(Number(question.idMbtiQuestion), 0.5, -1)} name={"question" + (Number(question.idMbtiQuestion))} className='test__input' type="radio"></input><span className='test__answer'>Скорее<br/> нет, чем да</span></label>
-                        <label className="test__label"><input onChange={() => setLetter(Number(question.idMbtiQuestion), 0.5, 1)} name={"question" + (Number(question.idMbtiQuestion))} className='test__input' type="radio"></input><span className='test__answer'>Скореe<br/> да, чем нет</span></label>
-                        <label className="test__label"><input onChange={() => setLetter(Number(question.idMbtiQuestion), 1, 1)} name={"question" + (Number(question.idMbtiQuestion))} className='test__input' type="radio"></input><span className='test__answer'>Да</span></label>
-                    </li>
-                )}
-            </ul>
-            </div>
-            {pageCount > 0 && questPage === pageCount && <button onClick={(e) => onSubmitTest()} className='test__button'>Завершить тест</button>}
-            </>
-            }
-            {showResult && 
-                <div className="result-test">
-                    <h1 className="result-test__title">По результатам теста ваш тип личности:</h1>
+                {loading && <p className="sakinorva-status">Загружаем вопросы…</p>}
+                {!loading && !result && questions.length > 0 && <>
+                    <div className="sakinorva-intro">
+                        <h1>Тест на тип личности</h1>
+                        <p>Оцените, насколько каждое утверждение похоже на вас. Выберите один вариант ответа для каждого вопроса.</p>
+                        <p className="sakinorva-progress">Страница {questPage} из {pageCount} · Выполнено {Object.keys(answers).length} из {questions.length}</p>
+                    </div>
+                    <div className="test__wrapper">
+                        <ul className="test__pagination">
+                            {Array.from({ length: pageCount }, (_, index) => {
+                                const page = index + 1;
+                                return <li key={page} className={'test__pagination-item ' + (questPage === page ? 'test__pagination-select' : '')} onClick={() => changePage(page)}>{page}</li>;
+                            })}
+                        </ul>
+                        <button type="button" aria-label="Предыдущая страница" className={'test__button--page-prev' + (questPage > 1 ? ' test__button-show' : '')} onClick={() => changePage(-1, true)}><Arrow /></button>
+                        <button type="button" aria-label="Следующая страница" className={'test__button--page-next' + (questPage < pageCount ? ' test__button-show' : '')} onClick={() => changePage(1, true)}><Arrow /></button>
+                        <ul className="test__list sakinorva-list">
+                            {visibleQuestions.map((question, index) => (
+                                <li key={question.id} className="test__item sakinorva-item">
+                                    <p className="test__question">{(questPage - 1) * QUESTIONS_PER_PAGE + index + 1}. {question.question}</p>
+                                    {question.example && <p className="sakinorva-example">{question.example}</p>}
+                                    <div className="sakinorva-scale">
+                                        {SCALE.map((option) => (
+                                            <label key={option.value} className={'sakinorva-option' + (answers[question.id] === option.value ? ' sakinorva-option-selected' : '')}>
+                                                <input type="radio" name={question.id} value={option.value} checked={answers[question.id] === option.value} onChange={() => setAnswers((prev) => ({ ...prev, [question.id]: option.value }))} />
+                                                <span className="sakinorva-option-value">{option.value}</span>
+                                                <span className="sakinorva-option-label">{option.label}</span>
+                                            </label>
+                                        ))}
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                    {error && <p role="alert" className="sakinorva-error">{error}</p>}
+                    <div className="sakinorva-navigation">
+                        {questPage > 1 && <button type="button" className="test__button sakinorva-secondary" onClick={() => changePage(-1, true)}>Назад</button>}
+                        {questPage < pageCount
+                            ? <button type="button" className="test__button" onClick={() => changePage(1, true)}>Далее</button>
+                            : <button type="button" className="test__button" disabled={submitting} onClick={onSubmitTest}>{submitting ? 'Рассчитываем…' : 'Завершить тест'}</button>}
+                    </div>
+                </>}
+                {!loading && !result && questions.length === 0 && error && <p role="alert" className="sakinorva-error">{error}</p>}
+                {result && <div className="result-test sakinorva-result">
+                    <h1 className="result-test__title">Ваш результат</h1>
                     <div className="result-test__flex">
-                    <div className="result-test__mbti">
-                        <h1>{tempMbti}</h1>
-                        <Ellipse/>
+                        <div className="result-test__mbti"><h1>{result.result}</h1><Ellipse /></div>
+                        <div className="result-test__about">
+                            <Humster />
+                            <p>Предполагаемый тип личности по ответам на вопросы. Это ориентировочная модель самооценки, а не психологический диагноз.</p>
+                        </div>
                     </div>
-                    <div className="result-test__about">
-                        <Humster/>
-                        <p>INFP – глубокомысленные и чувствительные личности, большие мечтатели и идеалисты. Они вечно ищут смысл жизни и стремятся создать гармонию в своем внутреннем мире. INFP часто чувствуют себя...</p>
-                        <button>читать дальше</button>
+                    <h2>Топ-3 типа</h2>
+                    <ol className="sakinorva-top3">
+                        {(result.top3 || []).map((item) => <li key={item.type}><strong>{item.type}</strong><span>{item.matchPercent}% совпадения модели</span></li>)}
+                    </ol>
+                    <h2>Оценки когнитивных функций</h2>
+                    <div className="sakinorva-functions">
+                        {Object.entries(result.functionStrengthPercent || {}).map(([name, value]) => <div key={name} className="sakinorva-function"><div><strong>{name}</strong><span>{value}%</span></div><div className="sakinorva-bar"><span style={{ width: `${Math.max(0, Math.min(100, value))}%` }} /></div></div>)}
                     </div>
-                    </div>
-                    <button className="result-test__button" onClick={() => changeMbti(tempMbti)}>Сохранить результат</button>
-                </div>
-            }
+                    {error && <p role="alert" className="sakinorva-error">{error}</p>}
+                    <button className="result-test__button" disabled={submitting} onClick={localStorage.getItem('onTestAgain') ? saveResult : () => navigate('/profile/' + localStorage.getItem('userId'))}>{submitting ? 'Сохраняем…' : localStorage.getItem('onTestAgain') ? 'Сохранить результат' : 'Продолжить'}</button>
+                </div>}
             </div>
         </div>
-      );
-    };
-    
+    );
+}
+
 export default Test;
