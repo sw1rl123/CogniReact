@@ -6,6 +6,8 @@ import { isFormValid, isFormMbtiValid } from "../../../services/auth.js";
 import {observer} from "mobx-react-lite";
 import {Context} from "../../../index";
 import maskot from "../../../assets/images/maskot-hi.png"
+import { ReactComponent as EyeIcon } from '../../../assets/images/visibility.svg';
+import { ReactComponent as EyeOffIcon } from '../../../assets/images/visibility-off.svg';
 import './RegisterForm.css';
 
 
@@ -98,6 +100,9 @@ function RegisterForm() {
 
     const [passwordRepeat, setPasswordRepeat] = React.useState('');
 
+    const [showPassword, setShowPassword] = React.useState(false);
+    const [showPasswordRepeat, setShowPasswordRepeat] = React.useState(false);
+
     const [validName, setValidName] = React.useState(false);
     const [validSurname, setValidSurname] = React.useState(false);
     const [validEmail, setValidEmail] = React.useState(false);
@@ -162,15 +167,37 @@ function RegisterForm() {
                         type="text" placeholder='Введите e-mail' className='loginform__input'/>
                     {(validEmail) && <span className='loginform__error'><InfoIcon></InfoIcon><p>Email указан не верно</p></span>}
 
-                    <input
-                        value={user?.password}
-                        onChange={(e) => setUser({ ...user, password: e.target.value })}
-                        type="password" placeholder='Придумайте пароль' className='loginform__input'/>
+                    <div className='loginform__password'>
+                        <input
+                            value={user?.password}
+                            onChange={(e) => setUser({ ...user, password: e.target.value })}
+                            type={showPassword ? 'text' : 'password'}
+                            placeholder='Придумайте пароль'
+                            className='loginform__input loginform__input--password'/>
+                        <button
+                            type="button"
+                            className='loginform__eye'
+                            onClick={() => setShowPassword((prev) => !prev)}
+                            aria-label={showPassword ? 'Скрыть пароль' : 'Показать пароль'}>
+                            {showPassword ? <EyeOffIcon fill="currentColor" /> : <EyeIcon fill="currentColor" />}
+                        </button>
+                    </div>
                     {(validPassword) && <span className='loginform__error'><InfoIcon></InfoIcon><p>Пароль должен состоять минимум из 8 символов и содержать хотя бы одну цифру/букву и один из символов: !@#$%^&*</p></span>}
 
-                    <input
-                    onChange={(e) => setPasswordRepeat(e.target.value)}
-                    type="password" placeholder='Подтвердите пароль' className='loginform__input'/>
+                    <div className='loginform__password'>
+                        <input
+                            onChange={(e) => setPasswordRepeat(e.target.value)}
+                            type={showPasswordRepeat ? 'text' : 'password'}
+                            placeholder='Подтвердите пароль'
+                            className='loginform__input loginform__input--password'/>
+                        <button
+                            type="button"
+                            className='loginform__eye'
+                            onClick={() => setShowPasswordRepeat((prev) => !prev)}
+                            aria-label={showPasswordRepeat ? 'Скрыть пароль' : 'Показать пароль'}>
+                            {showPasswordRepeat ? <EyeOffIcon fill="currentColor" /> : <EyeIcon fill="currentColor" />}
+                        </button>
+                    </div>
                     {(validPasswordRepeat) && <span className='loginform__error'><InfoIcon></InfoIcon><p>Пароли не совпадают</p></span>}
 
                     <label htmlFor="agreeRadio" className='loginform__label'>
