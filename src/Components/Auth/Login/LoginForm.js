@@ -29,7 +29,7 @@ function LoginForm() {
       if(response) {
         navigate('/profile/' + localStorage.getItem('userId'));
       } else {
-        setLoginError('Неверный логин или пароль');
+        setLoginError('Неверный e-mail или пароль');
       }
     } catch (e) {
       setLoginError(e.response
@@ -72,7 +72,6 @@ function LoginForm() {
             <img className="login__maskot-image" src={maskot} alt="" />
         </div>
 
-          {loginError && <span className='loginform__error--enter'><p>{loginError}</p></span>}
           <form onSubmit={onSubmit} className='login__form loginform'>
               <h1 className='loginform__header'>Вход в «COGNI»</h1>
               <input
@@ -80,23 +79,23 @@ function LoginForm() {
                       onChange={(e) => setUser({ ...user, email: e.target.value })}
                       type="text" placeholder='Введите e-mail' className='loginform__input'/>
 
-              <div className='loginform__password'>
-                  <input
-                      value={user?.password}
-                      onChange={(e) => setUser({ ...user, password: e.target.value })}
-                      type={showPassword ? 'text' : 'password'}
-                      placeholder='Введите пароль'
-                      className='loginform__input loginform__input--password'/>
-                  <button
-                      type="button"
-                      className='loginform__eye'
-                      onClick={() => setShowPassword((prev) => !prev)}
-                      aria-label={showPassword ? 'Скрыть пароль' : 'Показать пароль'}>
-                      {showPassword ? <EyeOffIcon fill="currentColor" /> : <EyeIcon fill="currentColor" />}
-                  </button>
-              </div>
-
-              <button type="submit" className='loginform__button'>Войти</button>
+                      <div className='loginform__password'>
+                          <input
+                              value={user?.password}
+                              onChange={(e) => setUser({ ...user, password: e.target.value })}
+                              type={showPassword ? 'text' : 'password'}
+                              placeholder='Введите пароль'
+                              className='loginform__input loginform__input--password'/>
+                          <button
+                              type="button"
+                              className='loginform__eye'
+                              onClick={() => setShowPassword((prev) => !prev)}
+                              aria-label={showPassword ? 'Скрыть пароль' : 'Показать пароль'}>
+                              {showPassword ? <EyeOffIcon fill="currentColor" /> : <EyeIcon fill="currentColor" />}
+                          </button>
+                          {loginError && <span className='loginform__error--enter'><p>{loginError}</p></span>}
+                      </div>
+                      <button type="submit" className='loginform__button'>Войти</button>
               <Link to="/register" className='loginform__link'>Зарегистрироваться</Link>
           </form>
         
