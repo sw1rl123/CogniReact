@@ -5,6 +5,7 @@ import { ReactComponent as StarSvg } from './img/star.svg';
 import { Context } from '../..';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import Placeholder from './img/placeholder.png';
+import bannerPlaceholder from '../Settings/img/banner-placeholder.png';
 
 function GetPostTimeStrSincePublication(timeStr) {
     const publishedAt = new Date(timeStr);
@@ -718,7 +719,7 @@ const sendMessage = async (friendId) => {
       }
       <div className="profile__main">
         <section className="profile__bg">
-          <img className="profile__bg--img" src={userBannerImage}/>
+          <img className="profile__bg--img" src={userBannerImage || bannerPlaceholder} alt=""/>
           <span className="profile__bg--text">COGNI</span>
         </section>
         <section className="profile__human human">
