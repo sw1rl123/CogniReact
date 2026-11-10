@@ -317,12 +317,12 @@ export const updateUserPassword = async (userOldPassword, userNewPassword) => {
 
 export const updateUserMbti = async (mbti) => {
     try {
-        let formData = new FormData();
-        formData.append("mbtiType", mbti);
-
-        let response = await $api.post("/User/SetTestResult", formData);
+        let response = await $api.post("/User/SetTestResult", {
+            mbtiType: mbti
+        });
         return response;
     } catch(e) {
-        console.log(e);
+        console.error("Ощибка сохранения MBTI:", e);
+        throw e;
     }
 }

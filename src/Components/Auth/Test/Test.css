@@ -169,15 +169,15 @@
 }
 
 .test__pagination {
-    position: absolute; left: -180px; top: 0; width: 150px; margin: 0; padding: 12px;
+    position: absolute; left: -260px; top: 0; width: 234px; margin: 0; padding: 25px;
     list-style: none; background: var(--col-bg-sections); border-radius: 18px;
     display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; align-content: start;
     box-shadow: 0 8px 22px rgba(0,0,0,.08);
 }
 .test__pagination-item {
     display: flex; align-items: center; justify-content: center;
-    border: 2px solid var(--col-highlight); border-radius: 10px; min-height: 34px;
-    color: var(--col-text-main); font: 700 13px Montserrat, sans-serif;
+    border: 4px solid var(--col-highlight); border-radius: 10px; min-height: 40px; min-width: 40px;
+    color: var(--col-text-main); font: 700 17px Montserrat, sans-serif;
     cursor: pointer; transition: background .15s ease, transform .15s ease;
 }
 .test__pagination-item:hover { transform: translateY(-1px); }

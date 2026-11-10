@@ -231,9 +231,10 @@ export default class Store {
     async updateMbti(mbti) {
         try {
             const response = await updateUserMbti(mbti);
-            return true;
+            return response.data;
         } catch (e) {
-            console.log(e);
+            console.error("Ошибка обновления MBTI:", e);
+            throw e;
         }
     }
 }
