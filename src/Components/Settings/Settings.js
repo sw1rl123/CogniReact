@@ -34,6 +34,9 @@ function Settings() {
 
   const [newImage, setNewImage] = useState([]);
 
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+
   const inputRef = useRef();
 
   const setNewName = (e) => {
@@ -110,25 +113,113 @@ function Settings() {
   };
 
   const onUpdateImageBanner = async (Image) => {
-    var response = await store.updateImageBanner(Image);
-    if(response) {
-      hideModel();
-      window.location.reload();
+    setIsUploading(true);
+    setUploadProgress(0);
+
+    try {
+        const bannerUrl = await store.updateImageBanner(
+            Image,
+            (progress) => setUploadProgress(progress)
+        );
+
+        if (!bannerUrl || typeof bannerUrl !== 'string') {
+            throw new Error('Сервер не вернул ссылку на баннер.');
+        }
+
+        setUserBannerImage(bannerUrl);
+
+        setNewImage([]);
+        hideModel();
+
+        alert('Обложка успешно обновлена!');
+    } catch (error) {
+        console.error('Ошибка загрузки обложки:', error);
+
+        const serverMessage =
+            error.response?.data?.message ||
+            (typeof error.response?.data === 'string'
+                ? error.response.data
+                : null);
+
+        if (error.response) {
+            alert(serverMessage || 'Не удалось загрузить обложку. Проверьте файл и попробуйте снова.');
+        } else if (error.request) {
+            alert('Не удалось связаться с сервером. Проверьте подключение к интернету.');
+        } else {
+            alert(error.message || 'Произошла ошибка при загрузке обложки.');
+        }
+    } finally {
+        setIsUploading(false);
+        setUploadProgress(0);
     }
-  };
+};
+
+  const onRemoveImageBanner = async () => {
+    if (!window.confirm('Вы действительно хотите удалить обложку?')) {
+        return;
+    }
+
+    setIsUploading(true);
+
+    try {
+        await store.removeImageBanner();
+
+        setUserBannerImage(null);
+        setNewImage([]);
+        hideModel();
+
+        alert('Обложка удалена. Установлена стандартная тема.');
+    } catch (error) {
+        console.error('Ошибка удаления обложки:', error);
+
+        if (error.response) {
+            alert('Не удалось удалить обложку. Попробуйте ещё раз.');
+        } else {
+            alert('Не удалось связаться с сервером. Проверьте подключение.');
+        }
+    } finally {
+        setIsUploading(false);
+    }
+};
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+
+    if (!file) return;
+
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    const maxSize = 10 * 1024 * 1024;
+
+    if (!allowedTypes.includes(file.type)) {
+        alert('Допустимые форматы изображения: JPEG, PNG, WEBP.');
+        e.target.value = '';
+        return;
+    }
+
+    if (file.size > maxSize) {
+        alert('Размер изображения не должен превышать 10 МБ.');
+        e.target.value = '';
+        return;
+    }
+
+    setNewImage([file]);
+    e.target.value = '';
+};
 
   const onSubmitImage = (e) => {
     e.preventDefault();
+    if (isUploading) return;
     if (imageSpec == 1 && newImage.length > 0) {
       onUpdateImageAvatar(newImage);
       setImageSpec(0);
     }
     else if (imageSpec == 2 && newImage.length > 0) {
       onUpdateImageBanner(newImage);
-      setImageSpec(0);
     }
-    
-}
+    else {
+      alert('Сначала выберите изображение');
+    }
+};
 
   const openTest = (e) => {
     localStorage.setItem('onTestAgain', true);
@@ -177,16 +268,43 @@ function Settings() {
         <form onSubmit={onSubmitImage} className='profile__modal modal'>
           <div className='modal__header'>
             <h2 className='modal__heading'>Изменить изображение</h2>
-            <button onClick={hideModel} type="button" className='modal__button--close'><CloseSvg className='modal__icon'/></button>
+            <button onClick={hideModel} type="button" className='modal__button--close' disabled={isUploading}><CloseSvg className='modal__icon'/></button>
           </div>
           <div className='modal__photos'>
             <label className='modal__photo'>
               Загрузить изображение
-              <input onChange={(e) => setNewImage(Object.values(e.target.files))} ref={inputRef} type="file" accept="image/*" className='modal__input--image'/>
+              <input onChange={handleImageChange} ref={inputRef} type="file" accept="image/jpeg, image/png, image/webp" className='modal__input--image' disabled={isUploading} />
               {newImage.length > 0 && <span className='modal__photo-selected'>Выбрано: {newImage[0].name}</span>}
             </label>
           </div>
-          <button type="submit" className='modal__button'>Сохранить фото профиля</button>
+          {imageSpec == 2 && isUploading && (
+            <div className="settings__upload">
+                <div className="settings__upload-info">
+                    <span>Загрузка обложки...</span>
+                    <span>{uploadProgress}%</span>
+                </div>
+
+                <div className="settings__upload-track">
+                    <div
+                        className="settings__upload-progress"
+                        style={{ width: `${uploadProgress}%` }}
+                    />
+                </div>
+            </div>
+        )}
+
+        <button
+            type="submit"
+            className="modal__button"
+            disabled={isUploading}
+        >
+            {isUploading ? 'Загрузка...' : 'Сохранить изображение'}
+        </button>
+        {imageSpec === 2 && (
+              <button type="button" className="modal__button" onClick={onRemoveImageBanner} disabled={isUploading}>
+                  Удалить обложку
+              </button>
+            )}
         </form>
         </div>
       }
@@ -204,7 +322,7 @@ function Settings() {
             alt=""
           />
           <span className="settings__bg--text">COGNI</span>
-          <span hidden className="settings__bg-edit" onClick={(e) => showModel(2)}>Изменить обложку</span>
+          <span className="settings__bg-edit" onClick={(e) => showModel(2)}>Изменить обложку</span>
         </section>
         <section className="settings__human human">
           <div className="human__left">

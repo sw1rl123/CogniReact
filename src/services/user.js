@@ -261,18 +261,26 @@ export const updateImageAvatar = async (Img) => {
     }
 }
 
-export const updateImageBanner = async (Img) => {
-    try {
-        let formData = new FormData();
+export const updateImageBanner = async (Img, onUploadProgress) => {
+    let formData = new FormData();
 
-        formData.append('Picture', Img[0]);
+    formData.append('Picture', Img[0]);
 
-        let response = await $api.put("/User/ChangeBanner", formData, { headers: { "Content-type": "multipart/form-data" },});
-        return response;
-    } catch(e) {
-        console.log(e);
-    }
+    let response = await $api.put("/User/ChangeBanner", formData, { headers: { "Content-type": "multipart/form-data" },
+        onUploadProgress: (progressEvent) => {
+            if (progressEvent.total) {const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                onUploadProgress?.(percent);
+            }
+        }
+    });
+    
+    return response.data;
 }
+
+export const removeImageBanner = async () => {
+    const response = await $api.delete("/User/RemoveBanner/RemoveBanner");
+    return response;
+};
 
 export const updateUserNickname = async (userName, userSurname) => {
     try {

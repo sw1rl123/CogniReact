@@ -391,3 +391,38 @@
   outline: none;
   box-shadow: 0 0 0 2px var(--col-addons);
 }
+
+.settings__upload {
+    width: 100%;
+    margin: 15px 0;
+    font-family: Montserrat;
+    color: var(--col-text-main);
+}
+
+.settings__upload-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.settings__upload-track {
+    width: 100%;
+    height: 8px;
+    background: var(--col-bg-edit);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.settings__upload-progress {
+    height: 100%;
+    background: var(--col-addons);
+    border-radius: 10px;
+    transition: width 0.2s ease;
+}
+
+.modal__button:disabled,
+.modal__button--close:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

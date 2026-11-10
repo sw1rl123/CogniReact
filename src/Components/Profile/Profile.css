@@ -24,10 +24,12 @@
 
 .profile__bg--img {
     position: relative;
-    object-fit: fill;
+    object-fit: cover;
     height: 100%;
     width: 100%;
     z-index: 1;
+    user-select: none;
+    -webkit-user-drag: none;
 }
 
 .profile__bg--text {
@@ -533,7 +535,7 @@
     width: max-content;
     min-height: 25px;
     padding: 2px 24px;
-    margin: 0 auto;
+    margin: 15px auto 0;
     border: none;
     border-radius: 20px;
     background: linear-gradient(180deg, rgba(152, 139, 205, 0.3) 0%, rgba(126, 111, 187, 0.3) 100%);

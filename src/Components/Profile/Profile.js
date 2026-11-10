@@ -444,6 +444,7 @@ const sendMessage = async (friendId) => {
     return <></>;
 }
 
+
   return (
     <div className='profile__wrapper'>
       {isModalShow && 
@@ -719,7 +720,7 @@ const sendMessage = async (friendId) => {
       }
       <div className="profile__main">
         <section className="profile__bg">
-          <img className="profile__bg--img" src={userBannerImage || bannerPlaceholder} alt=""/>
+          <img className="profile__bg--img" src={userBannerImage || bannerPlaceholder} onError={(e) => {e.currentTarget.onerror = null; e.currentTarget.src = bannerPlaceholder;}} alt=""/>
           <span className="profile__bg--text">COGNI</span>
         </section>
         <section className="profile__human human">

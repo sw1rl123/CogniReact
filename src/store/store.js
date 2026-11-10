@@ -3,6 +3,7 @@ import { checkSubscribe, getAllUsersChats, getCurrentArticle, getTagCatalog, get
 import { getAllArticles } from "../services/user.js";
 import { createNewArticle } from "../services/user.js";
 import { getUserById, getUserPosts, getUserFriends, getAllUsers, updateUserNickname, getUserFriendsFull, getUsersFromName, getUserFriendsAmount, createPost, updateImageAvatar, updateImageBanner, updateUserDescription, updateUserPassword, updateUserMbti } from "../services/user.js";
+import { removeImageBanner } from "../services/user.js";
 
 export default class Store {
 
@@ -192,13 +193,12 @@ export default class Store {
         }
     }
 
-    async updateImageBanner(newImage) {
-        try {
-            const response = await updateImageBanner(newImage);
-            return true;
-        } catch (e) {
-            console.log(e);
-        }
+    async updateImageBanner(newImage, onUploadProgress) {
+        return await updateImageBanner(newImage, onUploadProgress);
+    }
+
+    async removeImageBanner() {
+        return await removeImageBanner();
     }
 
     async updateUserName(userName, userSurname) {
