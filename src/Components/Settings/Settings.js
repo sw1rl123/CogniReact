@@ -26,6 +26,8 @@ function Settings() {
 
   const [userOldPassword, setUserOldPassword] = useState("");
   const [userNewPassword, setUserNewPassword] = useState("");
+  const [saveError, setSaveError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -40,13 +42,15 @@ function Settings() {
   const inputRef = useRef();
 
   const setNewName = (e) => {
-    if (e.indexOf(' ') != -1) {
-      setSpace(" ");
-      setUserSurname(e.substr(e.indexOf(' ') + 1));
-    } else {
-      setSpace("");
-      setUserName(e.substr(0));
-    }
+      if (e.indexOf(' ') !== -1) {
+          setSpace(" ");
+          setUserName(e.substring(0, e.indexOf(' ')));
+          setUserSurname(e.substring(e.indexOf(' ') + 1));
+      } else {
+          setSpace("");
+          setUserName(e);
+          setUserSurname("");
+      }
   }
 
   const setNewDesc = (e) => {
@@ -83,25 +87,53 @@ function Settings() {
     setIsModalShow(false);
   }
 
+  const getSaveError = (error, fallback) => {
+      const data = error.response?.data;
+      const status = error.response?.status;
+      const message = typeof data === "string" ? data.trim() : data?.message?.trim();
+
+      if (message === "Old password is invalid") {
+          return "Неверный старый пароль.";
+      }
+
+      if (status >= 400 && status < 500 && message) {
+          return message;
+      }
+
+      return fallback;
+  };
+
   const updateUserName = async (userName, userSurname) => {
-    var response = await store.updateUserName(userName, userSurname);
-    if(response) {
-      window.location.reload();
-    }
+      setSaveError("");
+
+      try {
+          const saved = await store.updateUserName(userName, userSurname);
+          if (saved) window.location.reload();
+      } catch (error) {
+          setSaveError(getSaveError(error, "Не удалось сохранить имя и фамилию."));
+      }
   };
 
   const updateUserDesc = async (userDesc) => {
-    var response = await store.updateUserDesc(userDesc);
-    if(response) {
-      window.location.reload();
-    }
+      setSaveError("");
+
+      try {
+          const saved = await store.updateUserDesc(userDesc);
+          if (saved) window.location.reload();
+      } catch (error) {
+          setSaveError(getSaveError(error, "Не удалось сохранить описание."));
+      }
   };
 
   const updatePassword = async () => {
-    var response = await store.updatePassword(userOldPassword, userNewPassword);
-    if(response) {
-      window.location.reload();
-    }
+      setPasswordError("");
+
+      try {
+          const saved = await store.updatePassword(userOldPassword, userNewPassword);
+          if (saved) window.location.reload();
+      } catch (error) {
+          setPasswordError(getSaveError(error, "Не удалось изменить пароль."));
+      }
   };
 
   const onUpdateImageAvatar = async (Image) => {
@@ -324,16 +356,19 @@ function Settings() {
           <span className="settings__bg--text">COGNI</span>
           <span className="settings__bg-edit" onClick={(e) => showModel(2)}>Изменить обложку</span>
         </section>
-        <section className="settings__human human">
-          <div className="human__left">
-            <span className="human__avatar-border"><img onClick={(e) => showModel(1)} src={userImage} alt=" " className="human__avatar"/><span className="human__avatar-edit">+</span></span>
-            <span className="human__mbti"></span>
-          </div>
-          <div className="human__right">
-            <h1 className='human__name'><input className="human__name-input" onChange={(e) => setNewName(e.target.value)} id="human-name-edit" value={userName + space + userSurname }></input><label onClick={setStatusName} htmlFor="human-name-edit" className='human__name-edit'>{editNameStatus}</label></h1>
-            <p className='human__description'><span className='human__description-text'><textarea autoComplete="none" className="human__description-input" onChange={(e) => setNewDesc(e.target.value)} id="human-desc-edit" value={userDescription}></textarea></span><label onClick={setStatusDesc} htmlFor="human-desc-edit" className='human__description-edit'>{editDescStatus}</label></p>
-          </div>
-        </section>
+        <div className="settings__profile">
+          <section className="settings__human human">
+            <div className="human__left">
+              <span className="human__avatar-border"><img onClick={(e) => showModel(1)} src={userImage} alt=" " className="human__avatar"/><span className="human__avatar-edit">+</span></span>
+              <span className="human__mbti"></span>
+            </div>
+            <div className="human__right">
+              <h1 className='human__name'><input className="human__name-input" onChange={(e) => setNewName(e.target.value)} id="human-name-edit" value={userName + space + userSurname }></input><label onClick={setStatusName} htmlFor="human-name-edit" className='human__name-edit'>{editNameStatus}</label></h1>
+              <p className='human__description'><span className='human__description-text'><textarea autoComplete="none" className="human__description-input" onChange={(e) => setNewDesc(e.target.value)} id="human-desc-edit" value={userDescription}></textarea></span><label onClick={setStatusDesc} htmlFor="human-desc-edit" className='human__description-edit'>{editDescStatus}</label></p>
+            </div>
+          </section>
+        {saveError && <p className="settings__profile-error" role="alert">{saveError}</p>}
+        </div>
         <section className='settings__info'>
           <div className="settings__type">
             <h2 className="settings__type-heading">Изменить тип личности</h2>
@@ -352,6 +387,7 @@ function Settings() {
             <div className="settings__password-edit">
               <input className="settings__password-input" type="password" placeholder="Старый пароль" value={userOldPassword} onChange={(e) => setUserOldPassword(e.target.value)}></input>
               <input className="settings__password-input" type="password" placeholder="Новый пароль" value={userNewPassword} onChange={(e) => setUserNewPassword(e.target.value)}></input>
+              {passwordError && <p className="settings__password-error" role="alert">{passwordError}</p>}
             </div>
           </div>
           <button className="settings__save-button" onClick={updatePassword} type="button">Сохранить пароль</button>
