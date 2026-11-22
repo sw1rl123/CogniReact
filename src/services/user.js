@@ -248,6 +248,31 @@ export const getCurrentArticle = async (id) => {
     }
 }
 
+export const updateArticle = async (idArticle, articleName, articleBody) => {
+    try {
+        const formData = new FormData();
+
+        formData.append("IdArticle", idArticle);
+        formData.append("ArticleName", articleName);
+        formData.append("ArticleBody", articleBody);
+
+        const response = await $api.put(
+            "/Article/UpdateArticle",
+            formData,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            }
+        );
+
+        return response;
+    } catch (e) {
+        console.error("Ошибка обновления статьи:", e);
+        throw e;
+    }
+};
+
 export const updateImageAvatar = async (Img) => {
     try {
         let formData = new FormData();
