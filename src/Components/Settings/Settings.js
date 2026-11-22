@@ -4,6 +4,7 @@ import { Context } from '../..';
 import { ReactComponent as CloseSvg } from './img/close.svg';
 import { useNavigate } from 'react-router-dom';
 import bannerPlaceholder from './img/banner-placeholder.png';
+import Placeholder from '../Profile/img/placeholder.png';
 
 function Settings() {
 
@@ -36,6 +37,8 @@ function Settings() {
 
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+
+  const [isRemovingAvatar, setIsRemovingAvatar] = useState(false);
 
   const inputRef = useRef();
 
@@ -105,12 +108,60 @@ function Settings() {
   };
 
   const onUpdateImageAvatar = async (Image) => {
-    var response = await store.updateImageAvatar(Image);
-    if(response) {
-      hideModel();
-      window.location.reload();
+    setIsUploading(true);
+    setUploadProgress(0);
+    try {
+        const response = await store.updateImageAvatar(Image, (progress) => {
+            setUploadProgress(progress);
+        });
+        const avatarUrl = response.data;
+        setUserImage(avatarUrl);
+        setNewImage([]);
+        hideModel();
+        window.dispatchEvent(new CustomEvent('avatarUpdated', {detail: avatarUrl}));
+
+        alert('Аватарка успешно обновлена.');
+    } catch (error) {
+        console.error('Ошибка загрузки аватарки:', error);
+
+        if (error.response) {
+            alert(error.response.data?.error || 'Не удалось загрузить аватарку. Проверьте файл и попробуйте ещё раз.');
+        } else {
+            alert('Ошибка сети. Проверьте подключение к интернету.');
+        }
+    } finally {
+        setIsUploading(false);
+        setUploadProgress(0);
     }
   };
+
+  const onRemoveImageAvatar = async () => {
+    if (!window.confirm('Вы действительно хотите удалить аватарку?')) {
+        return;
+    }
+    setIsRemovingAvatar(true);
+    try {
+        const response = await store.removeImageAvatar();
+        if (response.status !== 204) {
+            throw new Error('Не удалось удалить аватарку.');
+        }
+        setUserImage(null);
+        setNewImage([]);
+        hideModel();
+        window.dispatchEvent(new CustomEvent('avatarUpdated', {detail: null}));
+        alert('Аватарка успешно удалена.');
+
+    } catch (error) {
+        console.error('Ошибка удаления аватарки:', error);
+        if (error.response) {
+            alert('Не удалось удалить аватарку. Попробуйте ещё раз.');
+        } else {
+            alert('Не удалось связаться с сервером. Проверьте подключение.');
+        }
+    } finally {
+        setIsRemovingAvatar(false);
+    }
+};
 
   const onUpdateImageBanner = async (Image) => {
     setIsUploading(true);
@@ -211,7 +262,6 @@ function Settings() {
     if (isUploading) return;
     if (imageSpec == 1 && newImage.length > 0) {
       onUpdateImageAvatar(newImage);
-      setImageSpec(0);
     }
     else if (imageSpec == 2 && newImage.length > 0) {
       onUpdateImageBanner(newImage);
@@ -268,7 +318,7 @@ function Settings() {
         <form onSubmit={onSubmitImage} className='profile__modal modal'>
           <div className='modal__header'>
             <h2 className='modal__heading'>Изменить изображение</h2>
-            <button onClick={hideModel} type="button" className='modal__button--close' disabled={isUploading}><CloseSvg className='modal__icon'/></button>
+            <button onClick={hideModel} type="button" className='modal__button--close' disabled={isUploading || isRemovingAvatar}><CloseSvg className='modal__icon'/></button>
           </div>
           <div className='modal__photos'>
             <label className='modal__photo'>
@@ -285,36 +335,42 @@ function Settings() {
                 </div>
 
                 <div className="settings__upload-track">
-                    <div
-                        className="settings__upload-progress"
-                        style={{ width: `${uploadProgress}%` }}
-                    />
+                    <div className="settings__upload-progress" style={{ width: `${uploadProgress}%` }}/>
                 </div>
             </div>
-        )}
+          )}
+          {imageSpec === 1 && isUploading && (
+            <div className="settings__upload">
+                <div className="settings__upload-info">
+                    <span>Загрузка аватарки...</span>
+                    <span>{uploadProgress}%</span>
+                </div>
 
-        <button
-            type="submit"
-            className="modal__button"
-            disabled={isUploading}
-        >
+                <div className="settings__upload-track">
+                    <div className="settings__upload-progress" style={{ width: `${uploadProgress}%` }}/>
+                </div>
+            </div>
+          )}
+
+        <button type="submit" className="modal__button" disabled={isUploading || isRemovingAvatar}>
             {isUploading ? 'Загрузка...' : 'Сохранить изображение'}
         </button>
         {imageSpec === 2 && (
-              <button type="button" className="modal__button" onClick={onRemoveImageBanner} disabled={isUploading}>
-                  Удалить обложку
-              </button>
-            )}
+          <button type="button" className="modal__button" onClick={onRemoveImageBanner} disabled={isUploading}>
+              Удалить обложку
+          </button>
+        )}
+        {imageSpec === 1 && (
+          <button type="button" className="modal__button" onClick={onRemoveImageAvatar} disabled={isUploading || isRemovingAvatar}>
+              {isRemovingAvatar ? 'Удаление...' : 'Удалить аватарку'}
+          </button>
+        )}
         </form>
         </div>
       }
       <form className="settings__main" autoComplete="off">
         <section className="settings__bg">
-          <img
-            className="settings__bg--img"
-            src={userBannerImage || bannerPlaceholder}
-            draggable={false}
-          
+          <img className="settings__bg--img" src={userBannerImage || bannerPlaceholder} draggable={false}
             onError={(e) => {
               e.currentTarget.onerror = null; 
               e.currentTarget.src = bannerPlaceholder;
@@ -326,7 +382,7 @@ function Settings() {
         </section>
         <section className="settings__human human">
           <div className="human__left">
-            <span className="human__avatar-border"><img onClick={(e) => showModel(1)} src={userImage} alt=" " className="human__avatar"/><span className="human__avatar-edit">+</span></span>
+            <span className="human__avatar-border"><img onClick={(e) => showModel(1)} src={userImage || Placeholder} alt=" " className="human__avatar"/><span className="human__avatar-edit">+</span></span>
             <span className="human__mbti"></span>
           </div>
           <div className="human__right">

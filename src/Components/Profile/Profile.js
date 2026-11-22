@@ -282,6 +282,18 @@ function Profile() {
     };
   }, [params.userId, store]);
 
+  useEffect(() => {
+    const handleAvatarUpdated = (event) => {
+        setUserImage(event.detail);
+    };
+
+    window.addEventListener('avatarUpdated', handleAvatarUpdated);
+
+    return () => {
+        window.removeEventListener('avatarUpdated', handleAvatarUpdated);
+    };
+  }, []);
+
   const [isModalShow, setIsModalShow] = useState(false);
 
   const showModel = () => {
