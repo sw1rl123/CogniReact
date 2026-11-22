@@ -248,18 +248,54 @@ export const getCurrentArticle = async (id) => {
     }
 }
 
-export const updateImageAvatar = async (Img) => {
+export const updateArticle = async (idArticle, articleName, articleBody) => {
     try {
-        let formData = new FormData();
+        const formData = new FormData();
 
-        formData.append('Picture', Img[0]);
+        formData.append("IdArticle", idArticle);
+        formData.append("ArticleName", articleName);
+        formData.append("ArticleBody", articleBody);
 
-        let response = await $api.put("/User/ChangeAvatar", formData, { headers: { "Content-type": "multipart/form-data" },});
+        const response = await $api.put(
+            "/Article/UpdateArticle",
+            formData,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            }
+        );
+
         return response;
-    } catch(e) {
-        console.log(e);
+    } catch (e) {
+        console.error("Ошибка обновления статьи:", e);
+        throw e;
     }
-}
+};
+
+export const updateImageAvatar = async (Img, onUploadProgress) => {
+    let formData = new FormData();
+    formData.append('Picture', Img[0]);
+    const response = await $api.put("/User/ChangeAvatar", formData, {
+            headers: {"Content-type": "multipart/form-data"},
+            onUploadProgress: (event) => {
+                if (event.total) {
+                    const progress = Math.round(
+                        (event.loaded * 100) / event.total
+                    );
+                    onUploadProgress?.(progress);
+                }
+            }
+        }
+    );
+
+    return response;
+};
+
+export const removeAvatar = async () => {
+    const response = await $api.delete("/User/RemoveAvatar/RemoveAvatar");
+    return response;
+};
 
 export const updateImageBanner = async (Img, onUploadProgress) => {
     let formData = new FormData();

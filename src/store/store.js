@@ -2,8 +2,8 @@ import { createUser, loginUser } from "../services/auth.js";
 import { checkSubscribe, getAllUsersChats, getCurrentArticle, getTagCatalog, getUserTagSelection, setUserTagSelection, subscribe, unSubscribe } from "../services/user.js";
 import { getAllArticles } from "../services/user.js";
 import { createNewArticle } from "../services/user.js";
-import { getUserById, getUserPosts, getUserFriends, getAllUsers, updateUserNickname, getUserFriendsFull, getUsersFromName, getUserFriendsAmount, createPost, updateImageAvatar, updateImageBanner, updateUserDescription, updateUserPassword, updateUserMbti } from "../services/user.js";
-import { removeImageBanner } from "../services/user.js";
+import { getUserById, getUserPosts, getUserFriends, getAllUsers, updateUserNickname, getUserFriendsFull, getUsersFromName, getUserFriendsAmount, createPost, updateImageAvatar, updateImageBanner, updateUserDescription, updateUserPassword, updateUserMbti, updateArticle} from "../services/user.js";
+import { removeImageBanner, removeAvatar} from "../services/user.js";
 
 export default class Store {
 
@@ -184,13 +184,22 @@ export default class Store {
         }
     }
 
-    async updateImageAvatar(newImage) {
+    async updateArticle(idArticle, articleName, articleBody) {
         try {
-            const response = await updateImageAvatar(newImage);
-            return true;
+            const response = await updateArticle(idArticle, articleName, articleBody);
+            return response.data;
         } catch (e) {
-            console.log(e);
+            console.error("Ошибка обновления статьи:", e);
+            throw e;
         }
+    }
+
+    async updateImageAvatar(newImage, onUploadProgress) {
+        return await updateImageAvatar(newImage, onUploadProgress);
+    }
+
+    async removeImageAvatar() {
+        return await removeAvatar();
     }
 
     async updateImageBanner(newImage, onUploadProgress) {

@@ -53,6 +53,11 @@ function Header() {
 
     const userId = localStorage.getItem('userId');
 
+    const handleAvatarUpdated = (event) => {
+        setUserImage(event.detail);
+    };
+    window.addEventListener('avatarUpdated', handleAvatarUpdated);
+
     const fetchUserImage = async () => {
       try {
         const userInfo = await store.userInfo(userId);
@@ -63,8 +68,12 @@ function Header() {
     };
 
     fetchUserImage();
+
+    return () => {
+        window.removeEventListener('avatarUpdated', handleAvatarUpdated);
+    };
       
-    }, [])
+  }, [])
 
   return (
     <header className='header'>
