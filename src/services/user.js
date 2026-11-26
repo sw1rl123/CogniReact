@@ -295,7 +295,7 @@ export const updateImageBanner = async (Img, onUploadProgress) => {
 }
 
 export const removeImageBanner = async () => {
-    const response = await $api.delete("/User/RemoveBanner/RemoveBanner");
+    const response = await $api.delete("/User/RemoveBanner");
     return response;
 };
 
