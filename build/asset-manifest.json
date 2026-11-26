@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.0251a884.css",
-    "main.js": "/static/js/main.fb480dc7.js",
+    "main.css": "/static/css/main.e3d593db.css",
+    "main.js": "/static/js/main.e77328a2.js",
     "static/media/logo.svg": "/static/media/logo.f99b7b5e81912aa5f7609aadf95f1f6f.svg",
     "static/media/evolventa.ttf": "/static/media/evolventa.bdd876d18c8ec79d6fbf.ttf",
     "static/media/image16.png": "/static/media/image16.fe01625fa300a8159d48.png",
@@ -57,11 +57,11 @@
     "index.html": "/index.html",
     "static/media/close.svg": "/static/media/close.a9c869e6996d96871e62a956cba6b427.svg",
     "static/media/arrow.svg": "/static/media/arrow.39a6173db50ed25276258450fcac6073.svg",
-    "main.0251a884.css.map": "/static/css/main.0251a884.css.map",
-    "main.fb480dc7.js.map": "/static/js/main.fb480dc7.js.map"
+    "main.e3d593db.css.map": "/static/css/main.e3d593db.css.map",
+    "main.e77328a2.js.map": "/static/js/main.e77328a2.js.map"
   },
   "entrypoints": [
-    "static/css/main.0251a884.css",
-    "static/js/main.fb480dc7.js"
+    "static/css/main.e3d593db.css",
+    "static/js/main.e77328a2.js"
   ]
 }

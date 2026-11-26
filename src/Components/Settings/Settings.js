@@ -90,7 +90,12 @@ function Settings() {
   const getSaveError = (error, fallback) => {
       const data = error.response?.data;
       const status = error.response?.status;
-      const message = typeof data === "string" ? data.trim() : data?.message?.trim();
+      const serverMessage = typeof data === "string" ? data : data?.message;
+      const message = typeof serverMessage === "string" ? serverMessage.trim() : "";
+
+      if (status === 401) {
+          return "Сессия истекла. Войдите снова, чтобы сохранить изменения.";
+      }
 
       if (message === "Old password is invalid") {
           return "Неверный старый пароль.";

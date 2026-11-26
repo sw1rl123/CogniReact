@@ -27,41 +27,33 @@ $api.interceptors.request.use((config) => {
 });
 
 const refreshAccessToken = async () => {
-    try {
-        const response = await $api.get(`${COGNI_API_URL}/Token/Refresh`);
-        var aToken = response.data.accessToken;
-        var rToken = response.data.refreshToken;
-        localStorage.setItem("aToken", aToken);
-        localStorage.setItem("rToken", rToken);
-        return aToken;
-    } catch (error) {
-        console.error("Ошибка при обновлении токена:", error);
-        localStorage.removeItem("aToken");
-        localStorage.removeItem("rToken");
-        window.location.reload();
-    }
+    const { data } = await $api.get("/Token/Refresh", { skipAuthRefresh: true });
+    localStorage.setItem("aToken", data.accessToken);
+    localStorage.setItem("rToken", data.refreshToken);
+    return data.accessToken;
 };
 
-$api.interceptors.response.use((config) => {
-    if(config) {
-        return config;
-    };
-}, async (error) => {
+$api.interceptors.response.use((response) => response, async (error) => {
     const originalRequest = error.config;
-    if (error.response?.status === 401 && error.config && !error.config._isRetry) {
-        originalRequest._isRetry = true;
-        try {
-            const newAccessToken = await refreshAccessToken();
-            originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-            return $api.request(originalRequest);
-        } catch (e) {
-            console.error("Не удалось обновить токен. Переход на логин.");
-            return Promise.reject(e);
-        } 
-    } else {
-        return Promise.reject(error);
+    if (error.response?.status !== 401 || !originalRequest || originalRequest.skipAuthRefresh) {
+        throw error;
     }
-    
+
+    originalRequest.skipAuthRefresh = true;
+    try {
+        const newAccessToken = await refreshAccessToken();
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+    } catch (refreshError) {
+        if (!originalRequest.preservePageOnAuthError) {
+            console.error("Ошибка при обновлении токена:", refreshError);
+            localStorage.removeItem("aToken");
+            localStorage.removeItem("rToken");
+            window.location.reload();
+        }
+        throw refreshError;
+    }
+
+    return $api.request(originalRequest);
 });
 
 export const getTagCatalog = () => $api.get("/UserTag/GetTagCatalog");
@@ -282,24 +274,26 @@ export const removeImageBanner = async () => {
     return response;
 };
 
+const profileUpdateConfig = { preservePageOnAuthError: true };
+
 export const updateUserNickname = (userName, userSurname) => {
     return $api.put("/User/ChangeName", {
         name: userName,
         surname: userSurname,
-    });
+    }, profileUpdateConfig);
 };
 
 export const updateUserDescription = (userDesc) => {
     return $api.put("/User/ChangeDescription", {
         description: userDesc,
-    });
+    }, profileUpdateConfig);
 };
 
 export const updateUserPassword = (userOldPassword, userNewPassword) => {
     return $api.put("/User/ChangePassword", {
         oldPassword: userOldPassword,
         newPassword: userNewPassword,
-    });
+    }, profileUpdateConfig);
 };
 
 export const updateUserMbti = async (mbti) => {
