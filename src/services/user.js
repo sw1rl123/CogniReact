@@ -307,46 +307,25 @@ export const removeImageBanner = async () => {
     return response;
 };
 
-export const updateUserNickname = async (userName, userSurname) => {
-    try {
-        let formData = new FormData();
+export const updateUserNickname = (userName, userSurname) => {
+    return $api.put("/User/ChangeName", {
+        name: userName,
+        surname: userSurname,
+    });
+};
 
-        formData.append("name", userName);
-        formData.append("surname", userSurname);
+export const updateUserDescription = (userDesc) => {
+    return $api.put("/User/ChangeDescription", {
+        description: userDesc,
+    });
+};
 
-        let response = await $api.put("/User/ChangeName", formData);
-        return response;
-    } catch(e) {
-        console.log(e);
-    }
-}
-
-export const updateUserDescription = async (userDesc) => {
-    try {
-        let formData = new FormData();
-
-        formData.append("description", userDesc);
-
-        let response = await $api.put("/User/ChangeDescription", formData);
-        return response;
-    } catch(e) {
-        console.log(e);
-    }
-}
-
-export const updateUserPassword = async (userOldPassword, userNewPassword) => {
-    try {
-        let formData = new FormData();
-
-        formData.append("oldPassword", userOldPassword);
-        formData.append("newPassword", userNewPassword);
-
-        let response = await $api.put("/User/ChangePassword", formData);
-        return response;
-    } catch(e) {
-        console.log(e);
-    }
-}
+export const updateUserPassword = (userOldPassword, userNewPassword) => {
+    return $api.put("/User/ChangePassword", {
+        oldPassword: userOldPassword,
+        newPassword: userNewPassword,
+    });
+};
 
 export const updateUserMbti = async (mbti) => {
     try {

@@ -212,30 +212,18 @@ export default class Store {
     }
 
     async updateUserName(userName, userSurname) {
-        try {
-            const response = await updateUserNickname(userName, userSurname);
-            return true;
-        } catch (e) {
-            console.log(e);
-        }
+        await updateUserNickname(userName, userSurname);
+        return true;
     }
 
     async updateUserDesc(userDesc) {
-        try {
-            const response = await updateUserDescription(userDesc);
-            return true;
-        } catch (e) {
-            console.log(e);
-        }
+        await updateUserDescription(userDesc);
+        return true;
     }
 
     async updatePassword(userOldPassword, userNewPassword) {
-        try {
-            const response = await updateUserPassword(userOldPassword, userNewPassword);
-            return true;
-        } catch (e) {
-            console.log(e);
-        }
+        await updateUserPassword(userOldPassword, userNewPassword);
+        return true;
     }
 
     async updateMbti(mbti) {
