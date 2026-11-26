@@ -21,7 +21,7 @@ function RegisterForm() {
     //2 шага регистрации
     const [formStep, setFormStep] = React.useState(0);
 
-    const completeFormStep = () => {
+    const completeFormStep = async () => {
         let validStatus = isFormValid(user, passwordRepeat);
         setValidName(false);
         setValidSurname(false);
@@ -29,8 +29,16 @@ function RegisterForm() {
         setValidPassword(false);
         setValidPasswordRepeat(false);
         setValidAgree(false);
+        setValidEmailTaken(false);
 
-        if (validStatus.status && agree) {
+        let emailTaken = false;
+        if (!validStatus.email) {
+            try {
+                emailTaken = await store.checkUser(user.email);
+            } catch (e) {}
+        }
+
+        if (validStatus.status && agree && !emailTaken) {
             setUser({
                 ...user,
                 name: user.name.charAt(0).toUpperCase() + user.name.slice(1),
@@ -56,6 +64,9 @@ function RegisterForm() {
             }
             if (!agree) {
                 setValidAgree(true);
+            }
+            if (emailTaken) {
+                setValidEmailTaken(true);
             }
         }
     };
@@ -124,6 +135,8 @@ function RegisterForm() {
     const [mbtiOpen, setMbtiOpen] = React.useState(false);
     const mbtiTypes = ['ISTJ', 'ISFJ', 'INFJ', 'INTJ', 'ISTP', 'ISFP', 'INFP', 'INTP', 'ESTP', 'ESFP', 'ENFP', 'ENTP', 'ESTJ', 'ESFJ', 'ENFJ', 'ENTJ'];
 
+    const [validEmailTaken, setValidEmailTaken] = React.useState(false);
+
     useEffect(() => {
 
         localStorage.removeItem('name');
@@ -177,6 +190,7 @@ function RegisterForm() {
                         onChange={(e) => setUser({ ...user, email: e.target.value })}
                         type="text" placeholder='Введите e-mail' className='loginform__input'/>
                     {(validEmail) && <span className='loginform__error'><InfoIcon></InfoIcon><p>Email указан не верно</p></span>}
+                    {(validEmailTaken) && <span className='loginform__error'><InfoIcon></InfoIcon><p>Email уже занят</p></span>}
 
                     <div className='loginform__password'>
                         <input

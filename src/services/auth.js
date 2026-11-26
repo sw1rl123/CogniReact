@@ -16,6 +16,10 @@ export const loginUser = async (user) => {
     return await api.post("/User/LoginByEmail", user);
 }
 
+export const checkUser = async (email) => {
+    return await api.get("/User/ChekUser", { params: { login: email } });
+}
+
 //Валидация
 export const isFormValid = (user, passwordRepeat) => {
     var reply = {status: true, name: false, surname: false, email: false, password: false, passwordRepeat: false};
